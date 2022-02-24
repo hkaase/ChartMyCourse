@@ -1,15 +1,15 @@
-## Welcome to GitHub Pages
+## ChartMyCourse
+![Image](assets/logo.png)
 
-You can use the [editor on GitHub](https://github.com/hkaase/ChartMyCourse/edit/gh-pages/index.md) to maintain and preview the content for your website in Markdown files.
+This page contains information related to our project, ChartMyCourse.
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+### Project Summary
 
-### Markdown
+Navigating college is hard. Navigating the choices of classes is even harder. Chart My Course seeks to simplify a Baylor Computer Science student’s choices of courses to take, as well as professors that teach them.
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+### Project Goals
+We intend to create a utility similar to the now defunct [BUBooks](http://bubooks.com/) that aggregates reviews of not just the course offerings, but also professor/course pairings. This utility is intended to give potential students a realistic look at what sort of coursework or workload they can expect in a class.
 
-```markdown
-Syntax highlighted code block
 
 # Header 1
 ## Header 2
@@ -23,7 +23,7 @@ Syntax highlighted code block
 
 **Bold** and _Italic_ and `Code` text
 
-[Link](url) and ![Image](src)
+[Link](url) and 
 ```
 
 For more details see [Basic writing and formatting syntax](https://docs.github.com/en/github/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax).
