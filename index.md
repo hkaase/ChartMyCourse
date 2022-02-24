@@ -16,4 +16,3 @@ ChartMyCourse is currently closing up its first iteration. We aim to have this p
 
 ### Issue Tracking
 Our time management page can be found at our [Jira](https://chartmycourse.atlassian.net/).
-
