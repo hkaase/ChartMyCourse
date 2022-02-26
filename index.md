@@ -13,6 +13,7 @@ We intend to create a utility similar to the now defunct [BUBooks](http://bubook
 
 ### Project Status
 ChartMyCourse is currently closing up its first iteration. We aim to have this project completed by the end of Spring 2022.
+#Download [Iteration 1 Packet](https://github.com/hkaase/ChartMyCourse/raw/main/Iteration%201/Chart%20My%20Course%20-%20Iteration%201%20Deliverable.pdf)
 
 ### Issue Tracking
 Our time management page can be found at our [Jira](https://chartmycourse.atlassian.net/).
