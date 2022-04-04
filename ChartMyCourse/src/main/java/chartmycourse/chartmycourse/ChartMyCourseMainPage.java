@@ -789,20 +789,25 @@ public class ChartMyCourseMainPage extends JFrame {
         //If everything is populated, create a new user.
         else {
         	
-        	
+        	//Create new User with given fields
         	User userToRegister = new User(readRealName, readUserName, readEmail, readPassword);
         	
+        	//We start by assuming the user is unique.
         	boolean isUniqueUser = true;
         	
-        	
+        	//Iterate through the known users, making sure we don't already have this user
+        	//registered.
         	for (User iterUser : userArray) {
+        		//If we find it, it must not be a unique user. Tell the user this.
         		if (iterUser.equals(userToRegister)) {
                 	JOptionPane.showMessageDialog(null, "Error: user already exists!");
                 	isUniqueUser = false;
                 	break;
         		}
         	}
-        	
+        	//If it is indeed unique, add it to the user array.
+        	//NOTE: this does not add the user to the users.txt file!
+        	//TODO: add user persistence
         	if (isUniqueUser) {
         		userArray.add(userToRegister);
             	JOptionPane.showMessageDialog(null, "User created successfully!");
@@ -815,7 +820,9 @@ public class ChartMyCourseMainPage extends JFrame {
     }
     
    
-    
+    //This is the initialization function that populates internal "databases".
+    //We also set the frame as visible here, and display the login dialog.
+    //TODO: enforce user login (make sure they can't close the window until they are logged in)
     public void initialize() {
         this.setVisible(true);
         loginDialog.setVisible(true);
@@ -824,7 +831,14 @@ public class ChartMyCourseMainPage extends JFrame {
         initTestPosts();
     }
     
-    
+    //In order to understand this function, you need to understand how
+    //our frame is rendered. The frame is essentially modeled after an HTML canvas
+    // - all the tabs (planning, reviews, etc.) are already created, we just choose 
+    //which one we want the user to see. They are all layered on top of each other.
+    //This means when we want to show a "tab", we just hide all the JPanels with this
+    //function, then explicitly set the panel we want as visible.
+    //All this function does is set all tabs to be not visible.
+    //We leave the setting of visible to the function that called this one.
     public void hideAll() {
         homePanel.setVisible(false);
         reviewsPanel.setVisible(false);
@@ -832,35 +846,46 @@ public class ChartMyCourseMainPage extends JFrame {
         qAndAPanel.setVisible(false);
     }
     
+    //This function loads reviews from the reviews.txt file. 
+    
+    //TODO: add "make a review" functionality
     public void initTestReviews() {
+    	//Open the reviews file and a scanner for it.
     	File reviewFile = new File("reviews.txt");
     	Scanner reviewScanner;
 		try {
 			reviewScanner = new Scanner(reviewFile);
 			while (reviewScanner.hasNextLine()) {
-	    		
+	    		//call createReviewFromLine on read line, which does exactly as it says
 	    		reviewArray.add(createReviewFromLine(reviewScanner.nextLine()));
 	    	}
-	    	
+	    	//Call table creation function
 	    	initReviewTable();
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-    	
-    	
     }
+    
+    //This function creates our tablemodel from our review array.
     public void initReviewTable() {
     	DefaultTableModel model = (DefaultTableModel) reviewsTable.getModel();
     	
+    	//Iterate through review array, and create a row in our table for each
     	for (Review iterReview : reviewArray) {
     		model.insertRow(reviewsTable.getRowCount(), new Object[] {iterReview.getAuthor(), iterReview.getCRN(), iterReview.getCourse(), iterReview.getProfessor(), iterReview.getRating(),iterReview.getReviewBody()});
     	}
+    	//Make sure and tell the table we changed things
     	model.fireTableDataChanged();
     	
     }
+    
+    //This function takes a line of input, and makes a review object from it.
+    //The format is as follows: 
+    //NAME,CLASS,CRN,PROF,RATING,DESCRIPTION
     public Review createReviewFromLine(String line) {
     	Review readReview = new Review();
+    	//Split the line by commas, then use the array to create the user
     	List<String> result = Arrays.asList(line.split(","));
     	readReview.setAuthor(result.get(0));
     	readReview.setCourse(result.get(1));
@@ -872,6 +897,7 @@ public class ChartMyCourseMainPage extends JFrame {
     	return readReview;
     }
     
+    //
     public void initTestUsers() {
     	File userFile = new File("users.txt");
     	Scanner userScanner;
