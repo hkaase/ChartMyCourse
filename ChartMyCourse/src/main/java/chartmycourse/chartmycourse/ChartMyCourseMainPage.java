@@ -71,11 +71,11 @@ public class ChartMyCourseMainPage extends JFrame {
     private JScrollPane welcomeSplashTextPane;
     private String curUser = "not logged in";
     //This array holds the list of reviews.
-    private ArrayList<review> reviewArray = new ArrayList<review>();
+    private ArrayList<Review> reviewArray = new ArrayList<Review>();
     //This array holds the list of users.
-    private ArrayList<user> userArray = new ArrayList<user>();
+    private ArrayList<User> userArray = new ArrayList<User>();
     //This array holds the list of posts.
-    private ArrayList<post> postsArray = new ArrayList<post>();
+    private ArrayList<Post> postsArray = new ArrayList<Post>();
     
     //Constructor function, makes declaration of instance display.
     public ChartMyCourseMainPage() {
@@ -156,9 +156,9 @@ public class ChartMyCourseMainPage extends JFrame {
         
         //Create listener to actually log in.
         loginButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
+            public void actionPerformed(ActionEvent eventHappens) {
                 //Call the function for when the button is pressed.
-            	loginButtonActionPerformed(evt);
+            	loginButtonActionPerformed(eventHappens);
             }
         });
 
@@ -175,16 +175,16 @@ public class ChartMyCourseMainPage extends JFrame {
         forgotPasswordButton.setText("forgot my password");
         
         forgotPasswordButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                forgotPasswordButtonActionPerformed(evt);
+            public void actionPerformed(ActionEvent eventHappens) {
+                forgotPasswordButtonActionPerformed(eventHappens);
             }
         });
 
         signupFormButton.setFont(new Font("sansserif", 0, 8));
         signupFormButton.setText("sign up");
         signupFormButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                signupFormButtonActionPerformed(evt);
+            public void actionPerformed(ActionEvent eventHappens) {
+                signupFormButtonActionPerformed(eventHappens);
             }
         });
 
@@ -256,22 +256,22 @@ public class ChartMyCourseMainPage extends JFrame {
 
         nameTextField.setText("Tomas Cerny");
         nameTextField.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                nameTextFieldActionPerformed(evt);
+            public void actionPerformed(ActionEvent eventHappens) {
+                nameTextFieldActionPerformed(eventHappens);
             }
         });
 
         loginReturnButton.setText("return to login");
         loginReturnButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                loginReturnButtonActionPerformed(evt);
+            public void actionPerformed(ActionEvent eventHappens) {
+                loginReturnButtonActionPerformed(eventHappens);
             }
         });
 
         registerButton.setText("register");
         registerButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                registerButtonActionPerformed(evt);
+            public void actionPerformed(ActionEvent eventHappens) {
+                registerButtonActionPerformed(eventHappens);
             }
         });
 
@@ -375,48 +375,48 @@ public class ChartMyCourseMainPage extends JFrame {
         homeButton.setFont(new Font("sansserif", 0, 8));
         homeButton.setText("home");
         homeButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                homeButtonActionPerformed(evt);
+            public void actionPerformed(ActionEvent eventHappens) {
+                homeButtonActionPerformed(eventHappens);
             }
         });
 
         reviewsButton.setFont(new Font("sansserif", 0, 8));
         reviewsButton.setText("reviews");
         reviewsButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                reviewsButtonActionPerformed(evt);
+            public void actionPerformed(ActionEvent eventHappens) {
+                reviewsButtonActionPerformed(eventHappens);
             }
         });
 
         qAndAButton.setFont(new Font("sansserif", 0, 8));
         qAndAButton.setText("Q&A");
         qAndAButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                qAndAButtonActionPerformed(evt);
+            public void actionPerformed(ActionEvent eventHappens) {
+                qAndAButtonActionPerformed(eventHappens);
             }
         });
 
         planningButton.setFont(new Font("sansserif", 0, 8));
         planningButton.setText("planning");
         planningButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                planningButtonActionPerformed(evt);
+            public void actionPerformed(ActionEvent eventHappens) {
+                planningButtonActionPerformed(eventHappens);
             }
         });
 
         loginRequestButton.setFont(new Font("sansserif", 0, 8));
         loginRequestButton.setText("login");
         loginRequestButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                loginRequestButtonActionPerformed(evt);
+            public void actionPerformed(ActionEvent eventHappens) {
+                loginRequestButtonActionPerformed(eventHappens);
             }
         });
 
         signupButton.setFont(new Font("sansserif", 0, 8));
         signupButton.setText("signup");
         signupButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                signupButtonActionPerformed(evt);
+            public void actionPerformed(ActionEvent eventHappens) {
+                signupButtonActionPerformed(eventHappens);
             }
         });
 
@@ -424,15 +424,15 @@ public class ChartMyCourseMainPage extends JFrame {
 
         selectProfButton.setText("Select Professor");
         selectProfButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                selectProfButtonActionPerformed(evt);
+            public void actionPerformed(ActionEvent eventHappens) {
+                selectProfButtonActionPerformed(eventHappens);
             }
         });
 
         selectFilterButton.setText("Select Filter");
         selectFilterButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                selectFilterButtonActionPerformed(evt);
+            public void actionPerformed(ActionEvent eventHappens) {
+                selectFilterButtonActionPerformed(eventHappens);
             }
         });
 
@@ -501,8 +501,8 @@ public class ChartMyCourseMainPage extends JFrame {
 
         recommendedCoursesButton.setText("Recommended Courses");
         recommendedCoursesButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                recommendedCoursesButtonActionPerformed(evt);
+            public void actionPerformed(ActionEvent eventHappens) {
+                recommendedCoursesButtonActionPerformed(eventHappens);
             }
         });
 
@@ -542,8 +542,8 @@ public class ChartMyCourseMainPage extends JFrame {
 
         searchText.setText("search text");
         searchText.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                searchTextActionPerformed(evt);
+            public void actionPerformed(ActionEvent eventHappens) {
+                searchTextActionPerformed(eventHappens);
             }
         });
 
@@ -676,28 +676,28 @@ public class ChartMyCourseMainPage extends JFrame {
         pack();
     }
 
-    private void homeButtonActionPerformed(ActionEvent evt) {
+    private void homeButtonActionPerformed(ActionEvent eventHappens) {
         hideAll();
         homePanel.setVisible(true);
     }
 
-    private void forgotPasswordButtonActionPerformed(ActionEvent evt) {
+    private void forgotPasswordButtonActionPerformed(ActionEvent eventHappens) {
         // TODO add forgot password functionality
     }
 
-    private void loginRequestButtonActionPerformed(ActionEvent evt) {
+    private void loginRequestButtonActionPerformed(ActionEvent eventHappens) {
         loginDialog.setVisible(true);
     }
 
-    private void loginButtonActionPerformed(ActionEvent evt) {
-        user inputUser = new user();
+    private void loginButtonActionPerformed(ActionEvent eventHappens) {
+        User inputUser = new User();
         inputUser.setEmail(usernameField.getText());
         inputUser.setUserName(usernameField.getText());
         inputUser.setPassword(new String(passwordField.getPassword()));
         
         boolean userFound = false;
         
-        for (user iterUser : userArray) {
+        for (User iterUser : userArray) {
         	if (iterUser.compare(inputUser)) {
         		userFound = true;
         		inputUser.setRealName(iterUser.getRealName());
@@ -717,76 +717,85 @@ public class ChartMyCourseMainPage extends JFrame {
         
     }
 
-    private void recommendedCoursesButtonActionPerformed(ActionEvent evt) {
+    private void recommendedCoursesButtonActionPerformed(ActionEvent eventHappens) {
     	//TODO add recommended courses button functionality
     }
 
-    private void planningButtonActionPerformed(ActionEvent evt) {
+    private void planningButtonActionPerformed(ActionEvent eventHappens) {
         hideAll();
         planningPanel.setVisible(true);
     }
 
-    private void selectProfButtonActionPerformed(ActionEvent evt) {
+    private void selectProfButtonActionPerformed(ActionEvent eventHappens) {
         // TODO add professor filter
     }
 
-    private void selectFilterButtonActionPerformed(ActionEvent evt) {
+    private void selectFilterButtonActionPerformed(ActionEvent eventHappens) {
         // TODO add filter functionality
     }
 
-    private void reviewsButtonActionPerformed(ActionEvent evt) {
+    private void reviewsButtonActionPerformed(ActionEvent eventHappens) {
         hideAll();
         reviewsPanel.setVisible(true);
         
     }
 
-    private void nameTextFieldActionPerformed(ActionEvent evt) {
+    private void nameTextFieldActionPerformed(ActionEvent eventHappens) {
         // TODO add name text field functionality
     }
 
-    private void loginReturnButtonActionPerformed(ActionEvent evt) {
+    private void loginReturnButtonActionPerformed(ActionEvent eventHappens) {
         signupDialog.setVisible(false);
         loginDialog.setVisible(true);
         
     }
 
-    private void signupButtonActionPerformed(ActionEvent evt) {
+    private void signupButtonActionPerformed(ActionEvent eventHappens) {
         signupDialog.setVisible(true);
     }
 
-    private void signupFormButtonActionPerformed(ActionEvent evt) {
+    private void signupFormButtonActionPerformed(ActionEvent eventHappens) {
         loginDialog.setVisible(false);
         signupDialog.setVisible(true);
 
     }
 
-    private void searchTextActionPerformed(ActionEvent evt) {
+    private void searchTextActionPerformed(ActionEvent eventHappens) {
         // TODO Add search functionality
     }
 
-    private void qAndAButtonActionPerformed(ActionEvent evt) {
+    private void qAndAButtonActionPerformed(ActionEvent eventHappens) {
        hideAll();
         qAndAPanel.setVisible(true);
     }
 
-    private void registerButtonActionPerformed(ActionEvent evt) {
+    //This is the event for when the register button is pressed
+    private void registerButtonActionPerformed(ActionEvent eventHappens) {
+    	
+    	//Initialize variables to hold the values of the text fields.
     	String readRealName, readUserName, readEmail, readPassword;
+    	
+    	//We set the values of the variables to what is in the corresponding fields.
         readRealName = nameTextField.getText();
         readUserName = usernameTextField.getText();
         readEmail = emailField.getText();
         readPassword = (new String(passwordField1.getPassword()));
+        
+        //If any of them are empty, the user is alerted that they cannot continue.
         if (readRealName.isEmpty() || readUserName.isEmpty() || readEmail.isEmpty() || readPassword.isEmpty()) {
         	JOptionPane.showMessageDialog(null, "Error: no fields can be blank");
         }
+        
+        //If everything is populated, create a new user.
         else {
         	
         	
-        	user userToRegister = new user(readRealName, readUserName, readEmail, readPassword);
+        	User userToRegister = new User(readRealName, readUserName, readEmail, readPassword);
         	
         	boolean isUniqueUser = true;
         	
         	
-        	for (user iterUser : userArray) {
+        	for (User iterUser : userArray) {
         		if (iterUser.equals(userToRegister)) {
                 	JOptionPane.showMessageDialog(null, "Error: user already exists!");
                 	isUniqueUser = false;
@@ -844,14 +853,14 @@ public class ChartMyCourseMainPage extends JFrame {
     public void initReviewTable() {
     	DefaultTableModel model = (DefaultTableModel) reviewsTable.getModel();
     	
-    	for (review iterReview : reviewArray) {
+    	for (Review iterReview : reviewArray) {
     		model.insertRow(reviewsTable.getRowCount(), new Object[] {iterReview.getAuthor(), iterReview.getCRN(), iterReview.getCourse(), iterReview.getProfessor(), iterReview.getRating(),iterReview.getReviewBody()});
     	}
     	model.fireTableDataChanged();
     	
     }
-    public review createReviewFromLine(String line) {
-    	review readReview = new review();
+    public Review createReviewFromLine(String line) {
+    	Review readReview = new Review();
     	List<String> result = Arrays.asList(line.split(","));
     	readReview.setAuthor(result.get(0));
     	readReview.setCourse(result.get(1));
@@ -881,8 +890,8 @@ public class ChartMyCourseMainPage extends JFrame {
     	
     }
     
-    public user createUserFromLine(String line) {
-    	user readUser = new user();
+    public User createUserFromLine(String line) {
+    	User readUser = new User();
     	List<String> result = Arrays.asList(line.split(","));
     	readUser.setRealName(result.get(0));
     	readUser.setUserName(result.get(1));
@@ -915,15 +924,15 @@ public class ChartMyCourseMainPage extends JFrame {
     public void initQAndATable() {
     	DefaultTableModel model = (DefaultTableModel) qAndATable.getModel();
     	
-    	for (post iterPost : postsArray) {
+    	for (Post iterPost : postsArray) {
     		model.insertRow(qAndATable.getRowCount(), new Object[] {iterPost.getAuthor(), iterPost.getReplies(), iterPost.getUpvotes(), iterPost.getPostContents()});
     	}
     	model.fireTableDataChanged();
     	
     }
     
-    public post createPostFromLine(String line) {
-    	post readPost = new post();
+    public Post createPostFromLine(String line) {
+    	Post readPost = new Post();
     	List<String> result = Arrays.asList(line.split(","));
     	readPost.setAuthor(result.get(0));
     	readPost.setReplies(Integer.parseInt(result.get(1)));
