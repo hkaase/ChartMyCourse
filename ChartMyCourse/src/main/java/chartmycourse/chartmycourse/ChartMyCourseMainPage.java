@@ -17,7 +17,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.event.ActionListener;
 
-
+//Main UI class.
 public class ChartMyCourseMainPage extends JFrame {
 
 	private JLabel chartmycoursewatermark;
@@ -69,11 +69,17 @@ public class ChartMyCourseMainPage extends JFrame {
     private JTextArea welcomeSplashTextArea;
     private JScrollPane welcomeSplashTextPane;
     private String curUser = "not logged in";
+    //This array holds the list of reviews.
     private ArrayList<review> reviewArray = new ArrayList<review>();
+    //This array holds the list of users.
     private ArrayList<user> userArray = new ArrayList<user>();
+    //This array holds the list of posts.
     private ArrayList<post> postsArray = new ArrayList<post>();
     
+    //Constructor function, makes declaration of instance display.
     public ChartMyCourseMainPage() {
+    	
+    	//This function initializes all of the interactable objects.
         createInteractables();
         initialize();
     }
