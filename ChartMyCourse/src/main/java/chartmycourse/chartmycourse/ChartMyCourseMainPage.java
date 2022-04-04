@@ -20,6 +20,7 @@ import java.awt.event.ActionListener;
 //Main UI class.
 public class ChartMyCourseMainPage extends JFrame {
 
+	//These are the required buttons, labels, and other swing elements.
 	private JLabel chartmycoursewatermark;
     private JLabel curUserHeading;
     private JLabel curUserLabel;
@@ -79,12 +80,12 @@ public class ChartMyCourseMainPage extends JFrame {
     //Constructor function, makes declaration of instance display.
     public ChartMyCourseMainPage() {
     	
-    	//This function initializes all of the interactable objects.
         createInteractables();
+        
         initialize();
     }
 
-    
+	//This function initializes all of the interactable objects.
     private void createInteractables() {
 
         loginDialog = new JDialog();
@@ -136,6 +137,7 @@ public class ChartMyCourseMainPage extends JFrame {
         qAndATable = new JTable();
         postReplyButton = new JButton();
 
+        
         loginDialog.setTitle("login");
         loginDialog.setBackground(new Color(0, 88, 5));
         loginDialog.setForeground(new Color(40, 151, 21));
@@ -143,23 +145,35 @@ public class ChartMyCourseMainPage extends JFrame {
 
         loginLabel.setText("login");
 
-        passwordField.setText("jPasswordField1");
-
+        //The text in this field is not visible, so it doesn't matter.
+        passwordField.setText("password");
+        
+        //Default username is the following
         usernameField.setText("tomas_cerny@baylor.edu");
 
+        //Set the text of the login button.
         loginButton.setText("login");
+        
+        //Create listener to actually log in.
         loginButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
-                loginButtonActionPerformed(evt);
+                //Call the function for when the button is pressed.
+            	loginButtonActionPerformed(evt);
             }
         });
 
+        
+        //Set text of label for login field.
         emailLabel.setText("email:");
 
+        //Set text of label for password field.
         passwordLabel.setText("password:");
 
+        //setFont is needed in order to reduce the size of the font.
         forgotPasswordButton.setFont(new Font("sansserif", 0, 8));
+        //Create the text for the forgot my password button
         forgotPasswordButton.setText("forgot my password");
+        
         forgotPasswordButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
                 forgotPasswordButtonActionPerformed(evt);
