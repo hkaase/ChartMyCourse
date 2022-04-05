@@ -676,19 +676,23 @@ public class ChartMyCourseMainPage extends JFrame {
         pack();
     }
 
+    //This switches to the home tab
     private void homeButtonActionPerformed(ActionEvent eventHappens) {
         hideAll();
         homePanel.setVisible(true);
     }
 
+    //This is the forgot password listener
     private void forgotPasswordButtonActionPerformed(ActionEvent eventHappens) {
         // TODO add forgot password functionality
     }
 
+    //This is the login button at the top right
     private void loginRequestButtonActionPerformed(ActionEvent eventHappens) {
         loginDialog.setVisible(true);
     }
 
+    //This is the login button within the login dialog
     private void loginButtonActionPerformed(ActionEvent eventHappens) {
         User inputUser = new User();
         inputUser.setEmail(usernameField.getText());
@@ -717,6 +721,7 @@ public class ChartMyCourseMainPage extends JFrame {
         
     }
 
+    //This is the recommended courses button, on the 
     private void recommendedCoursesButtonActionPerformed(ActionEvent eventHappens) {
     	//TODO add recommended courses button functionality
     }
@@ -897,7 +902,7 @@ public class ChartMyCourseMainPage extends JFrame {
     	return readReview;
     }
     
-    //
+    //This is just like the initTestReviews function, for users.
     public void initTestUsers() {
     	File userFile = new File("users.txt");
     	Scanner userScanner;
@@ -916,6 +921,7 @@ public class ChartMyCourseMainPage extends JFrame {
     	
     }
     
+    //This function creates a user from a line.
     public User createUserFromLine(String line) {
     	User readUser = new User();
     	List<String> result = Arrays.asList(line.split(","));
@@ -927,6 +933,7 @@ public class ChartMyCourseMainPage extends JFrame {
     	return readUser;
     }
     
+    //See other init() functions
     public void initTestPosts() {
     	File postsFile = new File("posts.txt");
     	Scanner postScanner;
@@ -947,6 +954,7 @@ public class ChartMyCourseMainPage extends JFrame {
     	
     }
     
+    //See other init() functions
     public void initQAndATable() {
     	DefaultTableModel model = (DefaultTableModel) qAndATable.getModel();
     	
@@ -957,6 +965,7 @@ public class ChartMyCourseMainPage extends JFrame {
     	
     }
     
+    //See createUserFromLine or createReviewFromLine
     public Post createPostFromLine(String line) {
     	Post readPost = new Post();
     	List<String> result = Arrays.asList(line.split(","));
