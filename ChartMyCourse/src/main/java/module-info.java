@@ -3,4 +3,5 @@ module ChartMyCourse {
 
 	requires java.desktop;
 	requires java.logging;
+    requires tablefilter.swing;
 }

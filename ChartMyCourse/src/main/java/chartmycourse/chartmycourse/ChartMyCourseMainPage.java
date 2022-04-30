@@ -12,10 +12,14 @@ import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.table.*;
+import java.io.FileWriter;
 
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.event.ActionListener;
+
+import net.coderazzi.filters.gui.AutoChoices;
+import net.coderazzi.filters.gui.TableFilterHeader;
 
 //Main UI class.
 
@@ -485,6 +489,10 @@ public class ChartMyCourseMainPage extends JFrame {
             reviewsTable.getColumnModel().getColumn(1).setMaxWidth(50);
         }
 
+        new TableFilterHeader(reviewsTable, AutoChoices.ENABLED);
+        TableRowSorter<TableModel> sorter = new TableRowSorter(reviewsTable.getModel());
+        reviewsTable.setRowSorter(sorter);
+
         GroupLayout reviewsPanelLayout = new GroupLayout(reviewsPanel);
         reviewsPanel.setLayout(reviewsPanelLayout);
         reviewsPanelLayout.setHorizontalGroup(
@@ -585,6 +593,10 @@ public class ChartMyCourseMainPage extends JFrame {
             }
         });
         qAndATableScrollPane.setViewportView(qAndATable);
+
+        new TableFilterHeader(qAndATable, AutoChoices.ENABLED);
+        TableRowSorter<TableModel> QnAsorter = new TableRowSorter(qAndATable.getModel());
+        qAndATable.setRowSorter(QnAsorter);
 
         postReplyButton.setFont(new Font("Segoe UI", 0, 8));
         postReplyButton.setText("Post New Discussion");
@@ -852,6 +864,16 @@ public class ChartMyCourseMainPage extends JFrame {
         	//TODO: add user persistence
         	if (isUniqueUser) {
         		userArray.add(userToRegister);
+		try {
+            		FileWriter myWriter = new FileWriter("users.txt", true);
+			myWriter.write("\n");
+            		myWriter.write(readRealName + "," + readUserName + "," + readEmail + "," + readPassword);
+        
+            		myWriter.close();
+            	}
+            	catch (Exception e) {
+        			e.printStackTrace();
+        		}
             	JOptionPane.showMessageDialog(null, "User created successfully!");
                 signupDialog.setVisible(false);
                 loginDialog.setVisible(true);
@@ -912,7 +934,7 @@ public class ChartMyCourseMainPage extends JFrame {
     //This function creates our tablemodel from our review array.
     public void initReviewTable() {
     	DefaultTableModel model = (DefaultTableModel) reviewsTable.getModel();
-    	
+
     	//Iterate through review array, and create a row in our table for each
     	for (Review iterReview : reviewArray) {
     		model.insertRow(reviewsTable.getRowCount(), new Object[] {iterReview.getAuthor(), iterReview.getCRN(), iterReview.getCourse(), iterReview.getProfessor(), iterReview.getRating(),iterReview.getReviewBody()});
