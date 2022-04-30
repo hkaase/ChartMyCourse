@@ -795,7 +795,12 @@ public class ChartMyCourseMainPage extends JFrame {
         
     }
 
-    //This is the recommended courses button, on the 
+    /**
+     * This is the recommended courses button, on the
+     * @author Harm Drenth
+     * @version 1.0
+     * @since 1.0
+     */
     private void recommendedCoursesButtonActionPerformed(ActionEvent eventHappens) {
     	//TODO add recommended courses button functionality
     }
