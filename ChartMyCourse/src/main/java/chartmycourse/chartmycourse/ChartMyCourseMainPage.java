@@ -12,12 +12,24 @@ import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.table.*;
+import java.io.FileWriter;
 
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.event.ActionListener;
 
+import net.coderazzi.filters.gui.AutoChoices;
+import net.coderazzi.filters.gui.TableFilterHeader;
+
 //Main UI class.
+
+/**
+ * This is the main class for ChartMyCourse
+ * 
+ * @author Harm Drenth
+ * @version 1.0
+ * @since 1.0
+ */
 public class ChartMyCourseMainPage extends JFrame {
 
 	//These are the required buttons, labels, and other swing elements.
@@ -58,8 +70,8 @@ public class ChartMyCourseMainPage extends JFrame {
     private JPanel reviewsPanel;
     private JTable reviewsTable;
     private JScrollPane reviewsTableScrollPane;
-    private JLabel searchLabel;
-    private JTextField searchText;
+    //private JLabel searchLabel;
+    //private JTextField searchText;
     private JButton selectFilterButton;
     private JButton selectProfButton;
     private JButton signupButton;
@@ -78,7 +90,13 @@ public class ChartMyCourseMainPage extends JFrame {
     //This array holds the list of posts.
     private ArrayList<Post> postsArray = new ArrayList<Post>();
     
-    //Constructor function, makes declaration of instance display.
+    
+    /**
+     * Constructor function, makes declaration of instance display. 
+     * @author Harm Drenth
+     * @version 1.0
+     * @since 1.0
+     */
     public ChartMyCourseMainPage() {
     	
         createInteractables();
@@ -86,7 +104,13 @@ public class ChartMyCourseMainPage extends JFrame {
         initialize();
     }
 
-	//This function initializes all of the interactable objects.
+    /**
+     * This function initializes all of the interactable objects.
+     * @author Harm Drenth
+     * @version 1.0
+     * @since 1.0
+     */
+	
     private void createInteractables() {
 
         loginDialog = new JDialog();
@@ -133,8 +157,8 @@ public class ChartMyCourseMainPage extends JFrame {
         recommendedCoursesButton = new JButton();
         recommendedProfessorsButton = new JButton();
         qAndAPanel = new JPanel();
-        searchLabel = new JLabel();
-        searchText = new JTextField();
+        //searchLabel = new JLabel();
+        //searchText = new JTextField();
         qAndATableScrollPane = new JScrollPane();
         qAndATable = new JTable();
         postReplyButton = new JButton();
@@ -473,6 +497,10 @@ public class ChartMyCourseMainPage extends JFrame {
             reviewsTable.getColumnModel().getColumn(1).setMaxWidth(50);
         }
 
+        new TableFilterHeader(reviewsTable, AutoChoices.ENABLED);
+        TableRowSorter<TableModel> sorter = new TableRowSorter(reviewsTable.getModel());
+        reviewsTable.setRowSorter(sorter);
+
         GroupLayout reviewsPanelLayout = new GroupLayout(reviewsPanel);
         reviewsPanel.setLayout(reviewsPanelLayout);
         reviewsPanelLayout.setHorizontalGroup(
@@ -549,15 +577,15 @@ public class ChartMyCourseMainPage extends JFrame {
 
         qAndAPanel.setPreferredSize(new Dimension(589, 332));
 
-        searchLabel.setFont(new Font("sansserif", 0, 24));
-        searchLabel.setText("Search:");
+        //searchLabel.setFont(new Font("sansserif", 0, 24));
+        //searchLabel.setText("Search:");
 
-        searchText.setText("search text");
+        /*searchText.setText("search text");
         searchText.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent eventHappens) {
                 searchTextActionPerformed(eventHappens);
             }
-        });
+        });*/
 
         qAndATable.setAutoCreateRowSorter(true);
         qAndATable.setModel(new DefaultTableModel(
@@ -578,6 +606,10 @@ public class ChartMyCourseMainPage extends JFrame {
         });
         qAndATableScrollPane.setViewportView(qAndATable);
 
+        new TableFilterHeader(qAndATable, AutoChoices.ENABLED);
+        TableRowSorter<TableModel> QnAsorter = new TableRowSorter(qAndATable.getModel());
+        qAndATable.setRowSorter(QnAsorter);
+
         postReplyButton.setFont(new Font("Segoe UI", 0, 8));
         postReplyButton.setText("Post New Discussion");
 
@@ -589,9 +621,9 @@ public class ChartMyCourseMainPage extends JFrame {
                 .addContainerGap(28, Short.MAX_VALUE)
                 .addGroup(qAndAPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
                     .addGroup(qAndAPanelLayout.createSequentialGroup()
-                        .addComponent(searchLabel, GroupLayout.PREFERRED_SIZE, 93, GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(searchText, GroupLayout.PREFERRED_SIZE, 238, GroupLayout.PREFERRED_SIZE)
+                        //.addComponent(searchLabel, GroupLayout.PREFERRED_SIZE, 93, GroupLayout.PREFERRED_SIZE)
+                        //.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                        //.addComponent(searchText, GroupLayout.PREFERRED_SIZE, 238, GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(postReplyButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addComponent(qAndATableScrollPane, GroupLayout.PREFERRED_SIZE, 452, GroupLayout.PREFERRED_SIZE))
@@ -602,8 +634,8 @@ public class ChartMyCourseMainPage extends JFrame {
             .addGroup(qAndAPanelLayout.createSequentialGroup()
                 .addContainerGap(38, Short.MAX_VALUE)
                 .addGroup(qAndAPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
-                    .addComponent(searchLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(searchText)
+                    //.addComponent(searchLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    //.addComponent(searchText)
                     .addComponent(postReplyButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(qAndATableScrollPane, GroupLayout.PREFERRED_SIZE, 237, GroupLayout.PREFERRED_SIZE)
@@ -687,19 +719,36 @@ public class ChartMyCourseMainPage extends JFrame {
 
         pack();
     }
+    
+    /**
+     * This switches to the home tab
+     * @author Harm Drenth
+     * @version 1.0
+     * @since 1.0
+     */
 
-    //This switches to the home tab
     private void homeButtonActionPerformed(ActionEvent eventHappens) {
         hideAll();
         homePanel.setVisible(true);
     }
 
-    //This is the forgot password listener
+    
+    /**
+     * This is the forgot password listener
+     * @author Harm Drenth
+     * @version 1.0
+     * @since 1.0
+     */
     private void forgotPasswordButtonActionPerformed(ActionEvent eventHappens) {
         // TODO add forgot password functionality
     }
 
-    //This is the login button at the top right
+    /**
+     * This is the login button at the top right
+     * @author Harm Drenth
+     * @version 1.0
+     * @since 1.0
+     */
     private void loginRequestButtonActionPerformed(ActionEvent eventHappens) {
         loginDialog.setVisible(true);
     }
@@ -780,9 +829,9 @@ public class ChartMyCourseMainPage extends JFrame {
 
     }
 
-    private void searchTextActionPerformed(ActionEvent eventHappens) {
-        // TODO Add search functionality
-    }
+    /*private void searchTextActionPerformed(ActionEvent eventHappens) {
+        String input = searchText.getText();
+    }*/
 
     private void qAndAButtonActionPerformed(ActionEvent eventHappens) {
        hideAll();
@@ -830,6 +879,16 @@ public class ChartMyCourseMainPage extends JFrame {
         	//TODO: add user persistence
         	if (isUniqueUser) {
         		userArray.add(userToRegister);
+		try {
+            		FileWriter myWriter = new FileWriter("users.txt", true);
+			myWriter.write("\n");
+            		myWriter.write(readRealName + "," + readUserName + "," + readEmail + "," + readPassword);
+        
+            		myWriter.close();
+            	}
+            	catch (Exception e) {
+        			e.printStackTrace();
+        		}
             	JOptionPane.showMessageDialog(null, "User created successfully!");
                 signupDialog.setVisible(false);
                 loginDialog.setVisible(true);
@@ -890,7 +949,7 @@ public class ChartMyCourseMainPage extends JFrame {
     //This function creates our tablemodel from our review array.
     public void initReviewTable() {
     	DefaultTableModel model = (DefaultTableModel) reviewsTable.getModel();
-    	
+
     	//Iterate through review array, and create a row in our table for each
     	for (Review iterReview : reviewArray) {
     		model.insertRow(reviewsTable.getRowCount(), new Object[] {iterReview.getAuthor(), iterReview.getCRN(), iterReview.getCourse(), iterReview.getProfessor(), iterReview.getRating(),iterReview.getReviewBody()});

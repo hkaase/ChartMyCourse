@@ -1,0 +1,1 @@
+typeSearchIndex = [{"l":"All Classes and Interfaces","u":"allclasses-index.html"},{"p":"chartmycourse.chartmycourse","l":"ChartMyCourseMainPage"}];updateSearchResults();
