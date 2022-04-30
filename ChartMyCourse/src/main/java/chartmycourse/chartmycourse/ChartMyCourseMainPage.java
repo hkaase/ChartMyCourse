@@ -593,6 +593,23 @@ public class ChartMyCourseMainPage extends JFrame {
         });*/
 
         qAndATable.setAutoCreateRowSorter(true);
+
+        viewPostButton.setText("View Post");
+        viewRepliesButton.setText("View Replies");
+
+        viewPostButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent eventHappens) {
+                viewPostActionPerformed(eventHappens);
+            }
+        });
+
+        viewRepliesButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent eventHappens) {
+                viewRepliesActionPerformed(eventHappens);
+            }
+        });
+
+
         qAndATable.setModel(new DefaultTableModel(
             new Object [][] {
 
@@ -909,6 +926,17 @@ public class ChartMyCourseMainPage extends JFrame {
         	
         }
     }
+
+    private void viewPostActionPerformed(ActionEvent eventHappens) {
+        JTextArea postField = new JTextArea();
+        DefaultTableModel model = (DefaultTableModel) qAndATable.getModel();
+        postField.setBounds(10, 10, 10, 10);
+        postField.append(postsArray.get(qAndATable.getSelectedRow()).getPostContents());
+    }
+
+    private void viewRepliesActionPerformed(ActionEvent eventHappens) {
+
+    }
     
    
     //This is the initialization function that populates internal "databases".
@@ -1044,10 +1072,8 @@ public class ChartMyCourseMainPage extends JFrame {
     public void initQAndATable() {
     	DefaultTableModel model = (DefaultTableModel) qAndATable.getModel();
 
-
-    	
     	for (Post iterPost : postsArray) {
-    		model.insertRow(qAndATable.getRowCount(), new Object[] {iterPost.getAuthor(), iterPost.getReplyNum(), iterPost.getUpvotes(), });
+    		model.insertRow(qAndATable.getRowCount(), new Object[] {iterPost.getAuthor(), iterPost.getReplies(), iterPost.getUpvotes(), viewPostButton, viewRepliesButton});
     	}
     	model.fireTableDataChanged();
     	
@@ -1058,7 +1084,7 @@ public class ChartMyCourseMainPage extends JFrame {
     	Post readPost = new Post();
     	List<String> result = Arrays.asList(line.split(","));
     	readPost.setAuthor(result.get(0));
-    	readPost.setReplyNum(Integer.parseInt(result.get(1)));
+    	readPost.setReplies(Integer.parseInt(result.get(1)));
     	readPost.setUpvotes(Integer.parseInt(result.get(2)));
     	readPost.setPostContents(result.get(3));
 

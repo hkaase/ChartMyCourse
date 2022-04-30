@@ -62,5 +62,4 @@ public class Post {
 		this.upvotes = upvotes;
 	}
 	
-	
 }
