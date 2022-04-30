@@ -1,12 +1,6 @@
-
-*.class
-*.class
-*.class
-*.class
-*.class
-ChartMyCourse/.classpath
+ChartMyCourse/.idea
 ChartMyCourse/.project
+ChartMyCourse/.settings
 *.class
 *.lst
 ChartMyCourse/.project
-*.lst
