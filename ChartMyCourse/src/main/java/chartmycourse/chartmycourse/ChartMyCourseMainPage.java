@@ -759,7 +759,12 @@ public class ChartMyCourseMainPage extends JFrame {
         loginDialog.setVisible(true);
     }
 
-    //This is the login button within the login dialog
+    /**
+     * This is the login button within the login dialog
+     * @author Harm Drenth
+     * @version 1.0
+     * @since 1.0
+     */
     private void loginButtonActionPerformed(ActionEvent eventHappens) {
         User inputUser = new User();
         inputUser.setEmail(usernameField.getText());
