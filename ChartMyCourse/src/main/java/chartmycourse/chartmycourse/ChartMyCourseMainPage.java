@@ -69,8 +69,8 @@ public class ChartMyCourseMainPage extends JFrame {
     private JPanel reviewsPanel;
     private JTable reviewsTable;
     private JScrollPane reviewsTableScrollPane;
-    private JLabel searchLabel;
-    private JTextField searchText;
+    //private JLabel searchLabel;
+    //private JTextField searchText;
     private JButton selectFilterButton;
     private JButton selectProfButton;
     private JButton signupButton;
@@ -155,8 +155,8 @@ public class ChartMyCourseMainPage extends JFrame {
         recommendedCoursesButton = new JButton();
         recommendedProfessorsButton = new JButton();
         qAndAPanel = new JPanel();
-        searchLabel = new JLabel();
-        searchText = new JTextField();
+        //searchLabel = new JLabel();
+        //searchText = new JTextField();
         qAndATableScrollPane = new JScrollPane();
         qAndATable = new JTable();
         postReplyButton = new JButton();
@@ -565,15 +565,15 @@ public class ChartMyCourseMainPage extends JFrame {
 
         qAndAPanel.setPreferredSize(new Dimension(589, 332));
 
-        searchLabel.setFont(new Font("sansserif", 0, 24));
-        searchLabel.setText("Search:");
+        //searchLabel.setFont(new Font("sansserif", 0, 24));
+        //searchLabel.setText("Search:");
 
-        searchText.setText("search text");
+        /*searchText.setText("search text");
         searchText.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent eventHappens) {
                 searchTextActionPerformed(eventHappens);
             }
-        });
+        });*/
 
         qAndATable.setAutoCreateRowSorter(true);
         qAndATable.setModel(new DefaultTableModel(
@@ -609,9 +609,9 @@ public class ChartMyCourseMainPage extends JFrame {
                 .addContainerGap(28, Short.MAX_VALUE)
                 .addGroup(qAndAPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
                     .addGroup(qAndAPanelLayout.createSequentialGroup()
-                        .addComponent(searchLabel, GroupLayout.PREFERRED_SIZE, 93, GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(searchText, GroupLayout.PREFERRED_SIZE, 238, GroupLayout.PREFERRED_SIZE)
+                        //.addComponent(searchLabel, GroupLayout.PREFERRED_SIZE, 93, GroupLayout.PREFERRED_SIZE)
+                        //.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                        //.addComponent(searchText, GroupLayout.PREFERRED_SIZE, 238, GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(postReplyButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addComponent(qAndATableScrollPane, GroupLayout.PREFERRED_SIZE, 452, GroupLayout.PREFERRED_SIZE))
@@ -622,8 +622,8 @@ public class ChartMyCourseMainPage extends JFrame {
             .addGroup(qAndAPanelLayout.createSequentialGroup()
                 .addContainerGap(38, Short.MAX_VALUE)
                 .addGroup(qAndAPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
-                    .addComponent(searchLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(searchText)
+                    //.addComponent(searchLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    //.addComponent(searchText)
                     .addComponent(postReplyButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(qAndATableScrollPane, GroupLayout.PREFERRED_SIZE, 237, GroupLayout.PREFERRED_SIZE)
@@ -814,9 +814,9 @@ public class ChartMyCourseMainPage extends JFrame {
 
     }
 
-    private void searchTextActionPerformed(ActionEvent eventHappens) {
-        // TODO Add search functionality
-    }
+    /*private void searchTextActionPerformed(ActionEvent eventHappens) {
+        String input = searchText.getText();
+    }*/
 
     private void qAndAButtonActionPerformed(ActionEvent eventHappens) {
        hideAll();
