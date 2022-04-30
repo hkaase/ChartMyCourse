@@ -12,6 +12,7 @@ import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.table.*;
+import java.io.FileWriter;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -826,6 +827,16 @@ public class ChartMyCourseMainPage extends JFrame {
         	//TODO: add user persistence
         	if (isUniqueUser) {
         		userArray.add(userToRegister);
+		try {
+            		FileWriter myWriter = new FileWriter("users.txt", true);
+			myWriter.write("\n");
+            		myWriter.write(readRealName + "," + readUserName + "," + readEmail + "," + readPassword);
+        
+            		myWriter.close();
+            	}
+            	catch (Exception e) {
+        			e.printStackTrace();
+        		}
             	JOptionPane.showMessageDialog(null, "User created successfully!");
                 signupDialog.setVisible(false);
                 loginDialog.setVisible(true);
