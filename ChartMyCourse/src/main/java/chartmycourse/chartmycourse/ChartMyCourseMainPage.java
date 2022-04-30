@@ -17,6 +17,9 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.event.ActionListener;
 
+import net.coderazzi.filters.gui.AutoChoices;
+import net.coderazzi.filters.gui.TableFilterHeader;
+
 //Main UI class.
 public class ChartMyCourseMainPage extends JFrame {
 
@@ -465,6 +468,10 @@ public class ChartMyCourseMainPage extends JFrame {
             reviewsTable.getColumnModel().getColumn(1).setMaxWidth(50);
         }
 
+        new TableFilterHeader(reviewsTable, AutoChoices.ENABLED);
+        TableRowSorter<TableModel> sorter = new TableRowSorter(reviewsTable.getModel());
+        reviewsTable.setRowSorter(sorter);
+
         GroupLayout reviewsPanelLayout = new GroupLayout(reviewsPanel);
         reviewsPanel.setLayout(reviewsPanelLayout);
         reviewsPanelLayout.setHorizontalGroup(
@@ -875,7 +882,7 @@ public class ChartMyCourseMainPage extends JFrame {
     //This function creates our tablemodel from our review array.
     public void initReviewTable() {
     	DefaultTableModel model = (DefaultTableModel) reviewsTable.getModel();
-    	
+
     	//Iterate through review array, and create a row in our table for each
     	for (Review iterReview : reviewArray) {
     		model.insertRow(reviewsTable.getRowCount(), new Object[] {iterReview.getAuthor(), iterReview.getCRN(), iterReview.getCourse(), iterReview.getProfessor(), iterReview.getRating(),iterReview.getReviewBody()});
