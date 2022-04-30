@@ -33,6 +33,7 @@ import net.coderazzi.filters.gui.TableFilterHeader;
 public class ChartMyCourseMainPage extends JFrame {
 
 	//These are the required buttons, labels, and other swing elements.
+    private JDialog addReviewDialog;
 	private JLabel chartmycoursewatermark;
     private JLabel curUserHeading;
     private JLabel curUserLabel;
@@ -67,6 +68,13 @@ public class ChartMyCourseMainPage extends JFrame {
     private JButton reviewsButton;
     private JLabel reviewsHeader;
     private JButton addReview;
+    private JTextField addReviewCRN;
+    private JTextField addReviewAuthor;
+    private JTextField addReviewCourse;
+    private JTextField addReviewProfessor;
+    private JTextField addReviewText;
+    private JTextField addReviewRating;
+
     private JPanel reviewsPanel;
     private JTable reviewsTable;
     private JScrollPane reviewsTableScrollPane;
@@ -162,6 +170,13 @@ public class ChartMyCourseMainPage extends JFrame {
         qAndATableScrollPane = new JScrollPane();
         qAndATable = new JTable();
         postReplyButton = new JButton();
+        addReviewDialog = new JDialog();
+        addReviewCRN = new JTextField();
+        addReviewAuthor = new JTextField();
+        addReviewCourse = new JTextField();
+        addReviewProfessor = new JTextField();
+        addReviewText = new JTextField();
+        addReviewRating = new JTextField();
 
         
         loginDialog.setTitle("login");
@@ -800,6 +815,20 @@ public class ChartMyCourseMainPage extends JFrame {
         // TODO add filter functionality
     }
     private void addReviewButtonActionPerformed(ActionEvent eventHappens){
+        addReviewText.setColumns(50);
+        Object [] message = {
+                "CRN:", addReviewCRN,
+                "Author:", addReviewAuthor,
+                "Course:", addReviewCourse,
+                "Professor:", addReviewProfessor,
+                "Rating 1-10:", addReviewRating,
+                "Review Text:", addReviewText
+        };
+        int option = JOptionPane.showConfirmDialog(null,message,"Add Review",JOptionPane.OK_CANCEL_OPTION);
+        //model.insertRow(reviewsTable.getRowCount(), new Object[] {iterReview.getAuthor(), iterReview.getCRN(), iterReview.getCourse(), iterReview.getProfessor(), iterReview.getRating(),iterReview.getReviewBody()});
+        ((DefaultTableModel) reviewsTable.getModel()).insertRow(reviewsTable.getRowCount(),
+                new Object[]{addReviewAuthor.getText(), addReviewCRN.getText(),addReviewCourse.getText(),addReviewProfessor.getText(),Integer.parseInt(addReviewRating.getText()),addReviewText.getText()});
+
 
     }
 
