@@ -573,6 +573,10 @@ public class ChartMyCourseMainPage extends JFrame {
         });
         qAndATableScrollPane.setViewportView(qAndATable);
 
+        new TableFilterHeader(qAndATable, AutoChoices.ENABLED);
+        TableRowSorter<TableModel> QnAsorter = new TableRowSorter(qAndATable.getModel());
+        qAndATable.setRowSorter(QnAsorter);
+
         postReplyButton.setFont(new Font("Segoe UI", 0, 8));
         postReplyButton.setText("Post New Discussion");
 
