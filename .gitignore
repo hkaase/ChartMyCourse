@@ -1,6 +1,6 @@
 ChartMyCourse/.idea
 ChartMyCourse/.project
 ChartMyCourse/.settings
+ChartMyCourse/target/
 *.class
-*.lst
-ChartMyCourse/.project
+ChartMyCourse/target/classes/chartmycourse/chartmycourse/ChartMyCourseMainPage.class
