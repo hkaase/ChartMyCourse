@@ -83,6 +83,9 @@ public class ChartMyCourseMainPage extends JFrame {
     private JTextArea welcomeSplashTextArea;
     private JScrollPane welcomeSplashTextPane;
     private String curUser = "not logged in";
+    private JButton viewPostButton;
+    private JButton viewRepliesButton;
+
     //This array holds the list of reviews.
     private ArrayList<Review> reviewArray = new ArrayList<Review>();
     //This array holds the list of users.
@@ -163,7 +166,8 @@ public class ChartMyCourseMainPage extends JFrame {
         qAndATableScrollPane = new JScrollPane();
         qAndATable = new JTable();
         postReplyButton = new JButton();
-
+        viewPostButton = new JButton();
+        viewRepliesButton = new JButton();
         
         loginDialog.setTitle("login");
         loginDialog.setBackground(new Color(0, 88, 5));
@@ -594,11 +598,11 @@ public class ChartMyCourseMainPage extends JFrame {
 
             },
             new String [] {
-                "Author", "Replies", "Upvotes", "View Post"
+                "Author", "Replies", "Upvotes", "View Post", "View Replies"
             }
         ) {
             Class[] types = new Class [] {
-                String.class, Integer.class, Integer.class, String.class
+                String.class, Integer.class, Integer.class, JButton.class, JButton.class
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -1039,9 +1043,11 @@ public class ChartMyCourseMainPage extends JFrame {
     //See other init() functions
     public void initQAndATable() {
     	DefaultTableModel model = (DefaultTableModel) qAndATable.getModel();
+
+
     	
     	for (Post iterPost : postsArray) {
-    		model.insertRow(qAndATable.getRowCount(), new Object[] {iterPost.getAuthor(), iterPost.getReplies(), iterPost.getUpvotes(), iterPost.getPostContents()});
+    		model.insertRow(qAndATable.getRowCount(), new Object[] {iterPost.getAuthor(), iterPost.getReplyNum(), iterPost.getUpvotes(), });
     	}
     	model.fireTableDataChanged();
     	
@@ -1052,7 +1058,7 @@ public class ChartMyCourseMainPage extends JFrame {
     	Post readPost = new Post();
     	List<String> result = Arrays.asList(line.split(","));
     	readPost.setAuthor(result.get(0));
-    	readPost.setReplies(Integer.parseInt(result.get(1)));
+    	readPost.setReplyNum(Integer.parseInt(result.get(1)));
     	readPost.setUpvotes(Integer.parseInt(result.get(2)));
     	readPost.setPostContents(result.get(3));
 
