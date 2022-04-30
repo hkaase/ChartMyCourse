@@ -796,7 +796,7 @@ public class ChartMyCourseMainPage extends JFrame {
     }
 
     /**
-     * This is the recommended courses button, on the
+     * This is the recommended courses action performed button
      * @author Harm Drenth
      * @version 1.0
      * @since 1.0
@@ -805,38 +805,87 @@ public class ChartMyCourseMainPage extends JFrame {
     	//TODO add recommended courses button functionality
     }
 
+    /**
+     * This is the planning action performed button
+     * @author Harm Drenth
+     * @version 1.0
+     * @since 1.0
+     */
     private void planningButtonActionPerformed(ActionEvent eventHappens) {
         hideAll();
         planningPanel.setVisible(true);
     }
 
+    /**
+     * This is the select professors action performed button
+     * @author Harm Drenth
+     * @version 1.0
+     * @since 1.0
+     */
     private void selectProfButtonActionPerformed(ActionEvent eventHappens) {
         // TODO add professor filter
     }
 
+    /**
+     * This is the select filter action performed button
+     * @author Harm Drenth
+     * @version 1.0
+     * @since 1.0
+     */
     private void selectFilterButtonActionPerformed(ActionEvent eventHappens) {
         // TODO add filter functionality
     }
+    
+    /**
+     * This is the add review action performed button
+     * @author Harm Drenth
+     * @version 1.0
+     * @since 1.0
+     */
     private void addReviewButtonActionPerformed(ActionEvent eventHappens){
 
     }
 
+    /**
+     * This is the review action performed button
+     * @author Harm Drenth
+     * @version 1.0
+     * @since 1.0
+     */
     private void reviewsButtonActionPerformed(ActionEvent eventHappens) {
         hideAll();
         reviewsPanel.setVisible(true);
         
     }
 
+    /**
+     * This is the name text action performed button
+     * @author Harm Drenth
+     * @version 1.0
+     * @since 1.0
+     */
     private void nameTextFieldActionPerformed(ActionEvent eventHappens) {
         // TODO add name text field functionality
     }
 
+    /**
+     * This is the login action performed button
+     * @author Harm Drenth
+     * @version 1.0
+     * @since 1.0
+     */
     private void loginReturnButtonActionPerformed(ActionEvent eventHappens) {
         signupDialog.setVisible(false);
         loginDialog.setVisible(true);
         
     }
 
+    /**
+     * This is the signup button courses action performed button
+     * @author Harm Drenth
+     * @version 1.0
+     * @since 1.0
+     */
     private void signupButtonActionPerformed(ActionEvent eventHappens) {
         signupDialog.setVisible(true);
     }
