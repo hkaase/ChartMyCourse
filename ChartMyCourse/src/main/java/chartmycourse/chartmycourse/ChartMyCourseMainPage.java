@@ -18,6 +18,14 @@ import java.awt.event.*;
 import java.awt.event.ActionListener;
 
 //Main UI class.
+
+/**
+ * This is the main class for ChartMyCourse
+ * 
+ * @author Harm Drenth
+ * @version 1.0
+ * @since 1.0
+ */
 public class ChartMyCourseMainPage extends JFrame {
 
 	//These are the required buttons, labels, and other swing elements.
@@ -77,7 +85,13 @@ public class ChartMyCourseMainPage extends JFrame {
     //This array holds the list of posts.
     private ArrayList<Post> postsArray = new ArrayList<Post>();
     
-    //Constructor function, makes declaration of instance display.
+    
+    /**
+     * Constructor function, makes declaration of instance display. 
+     * @author Harm Drenth
+     * @version 1.0
+     * @since 1.0
+     */
     public ChartMyCourseMainPage() {
     	
         createInteractables();
@@ -85,7 +99,13 @@ public class ChartMyCourseMainPage extends JFrame {
         initialize();
     }
 
-	//This function initializes all of the interactable objects.
+    /**
+     * This function initializes all of the interactable objects.
+     * @author Harm Drenth
+     * @version 1.0
+     * @since 1.0
+     */
+	
     private void createInteractables() {
 
         loginDialog = new JDialog();
@@ -675,19 +695,36 @@ public class ChartMyCourseMainPage extends JFrame {
 
         pack();
     }
+    
+    /**
+     * This switches to the home tab
+     * @author Harm Drenth
+     * @version 1.0
+     * @since 1.0
+     */
 
-    //This switches to the home tab
     private void homeButtonActionPerformed(ActionEvent eventHappens) {
         hideAll();
         homePanel.setVisible(true);
     }
 
-    //This is the forgot password listener
+    
+    /**
+     * This is the forgot password listener
+     * @author Harm Drenth
+     * @version 1.0
+     * @since 1.0
+     */
     private void forgotPasswordButtonActionPerformed(ActionEvent eventHappens) {
         // TODO add forgot password functionality
     }
 
-    //This is the login button at the top right
+    /**
+     * This is the login button at the top right
+     * @author Harm Drenth
+     * @version 1.0
+     * @since 1.0
+     */
     private void loginRequestButtonActionPerformed(ActionEvent eventHappens) {
         loginDialog.setVisible(true);
     }
