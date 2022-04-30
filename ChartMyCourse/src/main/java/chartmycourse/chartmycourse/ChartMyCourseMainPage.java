@@ -829,8 +829,9 @@ public class ChartMyCourseMainPage extends JFrame {
         		userArray.add(userToRegister);
 		try {
             		FileWriter myWriter = new FileWriter("users.txt", true);
+			myWriter.write("\n");
             		myWriter.write(readRealName + "," + readUserName + "," + readEmail + "," + readPassword);
-            		myWriter.write("\n");
+        
             		myWriter.close();
             	}
             	catch (Exception e) {
