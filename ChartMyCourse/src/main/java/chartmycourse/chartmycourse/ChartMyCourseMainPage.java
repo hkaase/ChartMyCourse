@@ -66,6 +66,7 @@ public class ChartMyCourseMainPage extends JFrame {
     private JButton registerButton;
     private JButton reviewsButton;
     private JLabel reviewsHeader;
+    private JButton addReview;
     private JPanel reviewsPanel;
     private JTable reviewsTable;
     private JScrollPane reviewsTableScrollPane;
@@ -147,6 +148,7 @@ public class ChartMyCourseMainPage extends JFrame {
         reviewsPanel = new JPanel();
         selectProfButton = new JButton();
         selectFilterButton = new JButton();
+        addReview = new JButton();
         reviewsHeader = new JLabel();
         reviewsTableScrollPane = new JScrollPane();
         reviewsTable = new JTable();
@@ -459,7 +461,13 @@ public class ChartMyCourseMainPage extends JFrame {
                 selectFilterButtonActionPerformed(eventHappens);
             }
         });
-
+        addReview.setText("Add a Course Review");
+        addReview.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent eventHappens) {
+                addReviewButtonActionPerformed(eventHappens);
+            }
+        });
         reviewsHeader.setFont(new Font("sansserif", 0, 24));
         reviewsHeader.setText("Reviews");
 
@@ -502,7 +510,9 @@ public class ChartMyCourseMainPage extends JFrame {
                 .addGroup(reviewsPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
                     .addComponent(reviewsHeader, GroupLayout.PREFERRED_SIZE, 118, GroupLayout.PREFERRED_SIZE)
                     .addComponent(selectProfButton)
-                    .addComponent(selectFilterButton, GroupLayout.PREFERRED_SIZE, 118, GroupLayout.PREFERRED_SIZE))
+                    .addComponent(selectFilterButton, GroupLayout.PREFERRED_SIZE, 118, GroupLayout.PREFERRED_SIZE)
+                        .addComponent(addReview,GroupLayout.PREFERRED_SIZE,118,GroupLayout.PREFERRED_SIZE))
+
                 .addGap(18, 18, 18)
                 .addComponent(reviewsTableScrollPane, GroupLayout.DEFAULT_SIZE, 593, Short.MAX_VALUE))
         );
@@ -515,6 +525,8 @@ public class ChartMyCourseMainPage extends JFrame {
                 .addComponent(selectProfButton)
                 .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(selectFilterButton)
+                    .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addComponent(addReview)
                 .addContainerGap(210, Short.MAX_VALUE))
             .addGroup(GroupLayout.Alignment.TRAILING, reviewsPanelLayout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
@@ -786,6 +798,9 @@ public class ChartMyCourseMainPage extends JFrame {
 
     private void selectFilterButtonActionPerformed(ActionEvent eventHappens) {
         // TODO add filter functionality
+    }
+    private void addReviewButtonActionPerformed(ActionEvent eventHappens){
+
     }
 
     private void reviewsButtonActionPerformed(ActionEvent eventHappens) {
