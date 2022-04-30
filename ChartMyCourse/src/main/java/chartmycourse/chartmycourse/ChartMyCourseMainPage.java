@@ -89,6 +89,7 @@ public class ChartMyCourseMainPage extends JFrame {
     private ArrayList<User> userArray = new ArrayList<User>();
     //This array holds the list of posts.
     private ArrayList<Post> postsArray = new ArrayList<Post>();
+    private Boolean loggedIn = false;
     
     
     /**
@@ -750,6 +751,11 @@ public class ChartMyCourseMainPage extends JFrame {
      * @since 1.0
      */
     private void loginRequestButtonActionPerformed(ActionEvent eventHappens) {
+	 if(loggedIn) {
+    		curUserLabel.setText("not logged in");
+    		loggedIn = false;
+    		loginRequestButton.setText("login");
+    	}
         loginDialog.setVisible(true);
     }
 
@@ -774,6 +780,8 @@ public class ChartMyCourseMainPage extends JFrame {
         	loginDialog.setVisible(false);
             curUser = inputUser.getRealName();
             curUserLabel.setText(curUser);
+	    loggedIn = true;
+            loginRequestButton.setText("logout");
         }
         else {
         	JOptionPane.showMessageDialog(null, "Account information not found.");
