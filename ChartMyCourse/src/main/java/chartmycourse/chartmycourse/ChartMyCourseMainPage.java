@@ -717,7 +717,6 @@ public class ChartMyCourseMainPage extends JFrame {
 
         reviewsPanel.setVisible(false);
         planningPanel.setVisible(false);
-        qAndAPanel.setVisible(false);
 
         pack();
     }
