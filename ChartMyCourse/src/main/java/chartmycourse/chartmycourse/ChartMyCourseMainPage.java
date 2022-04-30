@@ -595,7 +595,11 @@ public class ChartMyCourseMainPage extends JFrame {
         qAndATable.setAutoCreateRowSorter(true);
 
         viewPostButton.setText("View Post");
+        viewPostButton.setFont(new Font("sansserif", 0, 8));
         viewRepliesButton.setText("View Replies");
+        viewRepliesButton.setFont(new Font("sansserif", 0, 8));
+
+        qAndATable.setDefaultRenderer(JButton.class, new JTableButtonRenderer());
 
         viewPostButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent eventHappens) {
@@ -1033,6 +1037,14 @@ public class ChartMyCourseMainPage extends JFrame {
 		}
     	
     	
+    }
+
+    // This class defines the button renderer.
+    static class JTableButtonRenderer implements TableCellRenderer {
+        @Override public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
+                                                                 boolean hasFocus, int row, int column) {
+            return (JButton) value;
+        }
     }
     
     //This function creates a user from a line.
