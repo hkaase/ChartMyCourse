@@ -889,6 +889,13 @@ public class ChartMyCourseMainPage extends JFrame {
     private void signupButtonActionPerformed(ActionEvent eventHappens) {
         signupDialog.setVisible(true);
     }
+    
+    /**
+     * This is the recommended courses action performed button
+     * @author Harm Drenth
+     * @version 1.0
+     * @since 1.0
+     */
 
     private void signupFormButtonActionPerformed(ActionEvent eventHappens) {
         loginDialog.setVisible(false);
@@ -900,6 +907,13 @@ public class ChartMyCourseMainPage extends JFrame {
         String input = searchText.getText();
     }*/
 
+    
+    /**
+     * This is the recommended courses action performed button
+     * @author Harm Drenth
+     * @version 1.0
+     * @since 1.0
+     */
     private void qAndAButtonActionPerformed(ActionEvent eventHappens) {
        hideAll();
         qAndAPanel.setVisible(true);
