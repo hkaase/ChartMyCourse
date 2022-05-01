@@ -1,5 +1,7 @@
 package chartmycourse.chartmycourse;
 
+import java.util.Objects;
+
 public class Reply {
 
     String author, postContents;
@@ -27,5 +29,17 @@ public class Reply {
 
     public void setUpvotes(int upvotes) {
         this.upvotes = upvotes;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Reply reply)) return false;
+        return upvotes == reply.upvotes && Objects.equals(author, reply.author) && Objects.equals(postContents, reply.postContents);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(author, postContents, upvotes);
     }
 }

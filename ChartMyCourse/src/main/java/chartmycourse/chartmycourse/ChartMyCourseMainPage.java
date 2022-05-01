@@ -87,11 +87,11 @@ public class ChartMyCourseMainPage extends JFrame {
     private JButton viewRepliesButton;
 
     //This array holds the list of reviews.
-    private ArrayList<Review> reviewArray = new ArrayList<Review>();
+    private final ArrayList<Review> reviewArray = new ArrayList<>();
     //This array holds the list of users.
-    private ArrayList<User> userArray = new ArrayList<User>();
+    private final ArrayList<User> userArray = new ArrayList<>();
     //This array holds the list of posts.
-    private ArrayList<Post> postsArray = new ArrayList<Post>();
+    private final ArrayList<Post> postsArray = new ArrayList<>();
     private Boolean loggedIn = false;
     
     
@@ -869,7 +869,7 @@ public class ChartMyCourseMainPage extends JFrame {
 
     private void qAndAButtonActionPerformed(ActionEvent eventHappens) {
        hideAll();
-        qAndAPanel.setVisible(true);
+       qAndAPanel.setVisible(true);
     }
 
     //This is the event for when the register button is pressed
@@ -937,9 +937,64 @@ public class ChartMyCourseMainPage extends JFrame {
         DefaultTableModel model = (DefaultTableModel) qAndATable.getModel();
         postField.setBounds(10, 10, 10, 10);
         postField.append(postsArray.get(qAndATable.getSelectedRow()).getPostContents());
+        postField.setVisible(true);
     }
 
     private void viewRepliesActionPerformed(ActionEvent eventHappens) {
+        JTable replyTable = new JTable();
+        JScrollPane replyScrollPane = new JScrollPane();
+        replyTable.setModel(new DefaultTableModel(
+                new Object [][] {
+
+                },
+                new String [] {
+                        "Author", "Upvotes", "View Post"
+                }
+        ) {
+            Class[] types = new Class [] {
+                    String.class, Integer.class, JButton.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
+        replyScrollPane.setViewportView(replyTable);
+
+        new TableFilterHeader(replyTable, AutoChoices.ENABLED);
+        TableRowSorter<TableModel> replySorter = new TableRowSorter(replyTable.getModel());
+        replyTable.setRowSorter(replySorter);
+
+        GroupLayout replyLayout = new GroupLayout(replyTable);
+        replyTable.setLayout(replyLayout);
+        replyLayout.setHorizontalGroup(
+                replyLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGroup(GroupLayout.Alignment.TRAILING, replyLayout.createSequentialGroup()
+                                .addContainerGap(28, Short.MAX_VALUE)
+                                .addGroup(replyLayout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
+                                        .addGroup(replyLayout.createSequentialGroup()
+                                                //.addComponent(searchLabel, GroupLayout.PREFERRED_SIZE, 93, GroupLayout.PREFERRED_SIZE)
+                                                //.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                                                //.addComponent(searchText, GroupLayout.PREFERRED_SIZE, 238, GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                                //.addComponent(postReplyButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                        .addComponent(replyScrollPane, GroupLayout.PREFERRED_SIZE, 452, GroupLayout.PREFERRED_SIZE))
+                                .addGap(109, 109, 109))
+        ));
+        replyLayout.setVerticalGroup(
+                replyLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGroup(replyLayout.createSequentialGroup()
+                                .addContainerGap(38, Short.MAX_VALUE)
+                                .addGroup(replyLayout.createParallelGroup(GroupLayout.Alignment.LEADING, false))
+                                        //.addComponent(searchLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        //.addComponent(searchText)
+                                        //.addComponent(postReplyButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(replyScrollPane, GroupLayout.PREFERRED_SIZE, 237, GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap())
+        );
+
+        replyScrollPane.setVisible(true);
 
     }
     
@@ -981,8 +1036,8 @@ public class ChartMyCourseMainPage extends JFrame {
 			reviewScanner = new Scanner(reviewFile);
 			while (reviewScanner.hasNextLine()) {
 	    		//call createReviewFromLine on read line, which does exactly as it says
-	    		reviewArray.add(createReviewFromLine(reviewScanner.nextLine()));
-	    	}
+                reviewArray.add(createReviewFromLine(reviewScanner.nextLine()));
+            }
 	    	//Call table creation function
 	    	initReviewTable();
 		} catch (FileNotFoundException e) {
@@ -1028,7 +1083,6 @@ public class ChartMyCourseMainPage extends JFrame {
 		try {
 			userScanner = new Scanner(userFile);
 			while (userScanner.hasNextLine()) {
-	    		
 	    		userArray.add(createUserFromLine(userScanner.nextLine()));
 	    	}
 	    	
@@ -1067,7 +1121,6 @@ public class ChartMyCourseMainPage extends JFrame {
 		try {
 			postScanner = new Scanner(postsFile);
 			while (postScanner.hasNextLine()) {
-	    		
 	    		postsArray.add(createPostFromLine(postScanner.nextLine()));
 	    	}
 			
@@ -1077,8 +1130,6 @@ public class ChartMyCourseMainPage extends JFrame {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-    	
-    	
     }
     
     //See other init() functions

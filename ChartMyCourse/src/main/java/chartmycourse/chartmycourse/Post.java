@@ -2,6 +2,7 @@ package chartmycourse.chartmycourse;
 
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import java.util.Objects;
 
 public class Post {
 	String author, postContents;
@@ -61,5 +62,16 @@ public class Post {
 	public void setUpvotes(int upvotes) {
 		this.upvotes = upvotes;
 	}
-	
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof Post post)) return false;
+		return replyCount == post.replyCount && upvotes == post.upvotes && Objects.equals(author, post.author) && Objects.equals(postContents, post.postContents);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(author, postContents, replyCount, upvotes);
+	}
 }
