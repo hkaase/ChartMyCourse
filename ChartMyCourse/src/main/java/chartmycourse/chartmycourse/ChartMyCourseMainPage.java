@@ -3,13 +3,9 @@ package chartmycourse.chartmycourse;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.List;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.table.*;
 import java.io.FileWriter;
@@ -82,7 +78,7 @@ public class ChartMyCourseMainPage extends JFrame {
     private JTextField usernameTextField;
     private JTextArea welcomeSplashTextArea;
     private JScrollPane welcomeSplashTextPane;
-    private String curUser = "not logged in";
+    private String curUserString = "not logged in";
     private JButton viewPostButton;
     private JButton viewRepliesButton;
 
@@ -95,6 +91,7 @@ public class ChartMyCourseMainPage extends JFrame {
     private Boolean loggedIn = false;
     private DefaultTableModel reviewtablemodel;
     private JButton removeReviewButton;
+    private User curUser;
     
     
     /**
@@ -373,7 +370,7 @@ public class ChartMyCourseMainPage extends JFrame {
 
         curUserHeading.setText("Current User: ");
 
-        curUserLabel.setText(curUser);
+        curUserLabel.setText(curUserString);
 
         GroupLayout homePanelLayout = new GroupLayout(homePanel);
         homePanel.setLayout(homePanelLayout);
@@ -617,7 +614,7 @@ public class ChartMyCourseMainPage extends JFrame {
 
         viewPostButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent eventHappens) {
-                viewPostActionPerformed(eventHappens);
+                viewRepliesActionPerformed(eventHappens);
             }
         });
 
@@ -813,17 +810,18 @@ public class ChartMyCourseMainPage extends JFrame {
         	if (iterUser.compare(inputUser)) {
         		userFound = true;
         		inputUser.setRealName(iterUser.getRealName());
+                curUser = iterUser;
         		break;
         	}
         }
         
         if (userFound) {
         	loginDialog.setVisible(false);
-            curUser = inputUser.getRealName();
-            curUserLabel.setText(curUser);
+            curUserString = inputUser.getRealName();
+            curUserLabel.setText(curUserString);
 	    loggedIn = true;
             loginRequestButton.setText("logout");
-	    if(curUser.equalsIgnoreCase("admin")) {
+	    if(curUserString.equalsIgnoreCase("admin")) {
             	removeReviewButton.setVisible(true);
             }
         }
@@ -978,11 +976,7 @@ public class ChartMyCourseMainPage extends JFrame {
     }
 
     private void viewPostActionPerformed(ActionEvent eventHappens) {
-        JTextArea postField = new JTextArea();
-        DefaultTableModel model = (DefaultTableModel) qAndATable.getModel();
-        postField.setBounds(10, 10, 10, 10);
-        postField.append(postsArray.get(qAndATable.getSelectedRow()).getPostContents());
-        postField.setVisible(true);
+        PostFrame pf = new PostFrame(postsArray.get(qAndATable.getSelectedRow()), qAndATable, curUser);
     }
 
     private void viewRepliesActionPerformed(ActionEvent eventHappens) {

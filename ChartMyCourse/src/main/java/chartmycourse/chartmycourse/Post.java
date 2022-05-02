@@ -1,6 +1,6 @@
 package chartmycourse.chartmycourse;
 
-import javax.swing.JTable;
+import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.util.Objects;
 
