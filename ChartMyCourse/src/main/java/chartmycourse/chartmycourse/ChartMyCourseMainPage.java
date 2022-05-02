@@ -93,6 +93,8 @@ public class ChartMyCourseMainPage extends JFrame {
     //This array holds the list of posts.
     private final ArrayList<Post> postsArray = new ArrayList<>();
     private Boolean loggedIn = false;
+    private DefaultTableModel reviewtablemodel;
+    private JButton removeReviewButton;
     
     
     /**
@@ -168,6 +170,7 @@ public class ChartMyCourseMainPage extends JFrame {
         postReplyButton = new JButton();
         viewPostButton = new JButton();
         viewRepliesButton = new JButton();
+	removeReviewButton = new JButton();
         
         loginDialog.setTitle("login");
         loginDialog.setBackground(new Color(0, 88, 5));
@@ -452,6 +455,13 @@ public class ChartMyCourseMainPage extends JFrame {
         });
 
         reviewsPanel.setPreferredSize(new Dimension(589, 332));
+	    
+	removeReviewButton.setText("Remove Review");
+        removeReviewButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent eventHappens) {
+                removeReviewActionPerformed(eventHappens);
+            }
+        });
 
         selectProfButton.setText("Select Professor");
         selectProfButton.addActionListener(new ActionListener() {
@@ -476,7 +486,7 @@ public class ChartMyCourseMainPage extends JFrame {
         reviewsHeader.setFont(new Font("sansserif", 0, 24));
         reviewsHeader.setText("Reviews");
 
-        reviewsTable.setModel(new DefaultTableModel(
+        reviewtablemodel = new DefaultTableModel(
             new Object [][] {
 
             },
@@ -491,7 +501,8 @@ public class ChartMyCourseMainPage extends JFrame {
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
             }
-        });
+        };
+        reviewsTable.setModel(reviewtablemodel);
         reviewsTable.setColumnSelectionAllowed(true);
         reviewsTable.getTableHeader().setReorderingAllowed(false);
         reviewsTableScrollPane.setViewportView(reviewsTable);
@@ -515,6 +526,7 @@ public class ChartMyCourseMainPage extends JFrame {
                 .addGroup(reviewsPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
                     .addComponent(reviewsHeader, GroupLayout.PREFERRED_SIZE, 118, GroupLayout.PREFERRED_SIZE)
                     .addComponent(selectProfButton)
+		    .addComponent(removeReviewButton)
                     .addComponent(selectFilterButton, GroupLayout.PREFERRED_SIZE, 118, GroupLayout.PREFERRED_SIZE)
                         .addComponent(addReview,GroupLayout.PREFERRED_SIZE,118,GroupLayout.PREFERRED_SIZE))
 
@@ -528,6 +540,8 @@ public class ChartMyCourseMainPage extends JFrame {
                 .addComponent(reviewsHeader)
                 .addGap(12, 12, 12)
                 .addComponent(selectProfButton)
+		.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(removeReviewButton)
                 .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(selectFilterButton)
                     .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
@@ -537,7 +551,7 @@ public class ChartMyCourseMainPage extends JFrame {
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(reviewsTableScrollPane, GroupLayout.PREFERRED_SIZE, 300, GroupLayout.PREFERRED_SIZE))
         );
-
+        removeReviewButton.setVisible(false);
         planningPanel.setPreferredSize(new Dimension(589, 332));
         planningPanel.setVisible(false);
 
@@ -781,6 +795,7 @@ public class ChartMyCourseMainPage extends JFrame {
     		curUserLabel.setText("not logged in");
     		loggedIn = false;
     		loginRequestButton.setText("login");
+		removeReviewButton.setVisible(false);
     	}
         loginDialog.setVisible(true);
     }
@@ -808,6 +823,9 @@ public class ChartMyCourseMainPage extends JFrame {
             curUserLabel.setText(curUser);
 	    loggedIn = true;
             loginRequestButton.setText("logout");
+	    if(curUser.equalsIgnoreCase("admin")) {
+            	removeReviewButton.setVisible(true);
+            }
         }
         else {
         	JOptionPane.showMessageDialog(null, "Account information not found.");
@@ -836,7 +854,34 @@ public class ChartMyCourseMainPage extends JFrame {
     private void addReviewButtonActionPerformed(ActionEvent eventHappens){
 
     }
+	
+    private void removeReviewActionPerformed(ActionEvent eventHappens){
+    	//TODO removeReview
+    	
+    	
+    	int i = reviewsTable.getSelectedRow();
+    
+    	reviewtablemodel.removeRow(i);
 
+    		try {
+        		FileWriter myWriter = new FileWriter("reviews.txt");
+        		for(int k = 0; k < reviewtablemodel.getRowCount(); k++) {
+        			for(int l = 0; l < reviewtablemodel.getColumnCount(); l++) {
+        				myWriter.write(reviewtablemodel.getValueAt(k, l).toString());
+        				if(l != reviewtablemodel.getColumnCount()-1) {
+        					myWriter.write(",");
+        				}
+        			}
+        			myWriter.write("\n");
+        		}
+        	
+        		myWriter.close();
+        	}
+        	catch (Exception e) {
+    			e.printStackTrace();
+    		}	
+    }	
+	
     private void reviewsButtonActionPerformed(ActionEvent eventHappens) {
         hideAll();
         reviewsPanel.setVisible(true);
