@@ -1187,7 +1187,7 @@ public class ChartMyCourseMainPage extends JFrame {
     	Post readPost = new Post();
     	List<String> result = Arrays.asList(line.split(","));
     	readPost.setAuthor(result.get(0));
-    	readPost.setReplies(Integer.parseInt(result.get(1)));
+    	readPost.setReplyCount(Integer.parseInt(result.get(1)));
     	readPost.setUpvotes(Integer.parseInt(result.get(2)));
     	readPost.setPostContents(result.get(3));
 
