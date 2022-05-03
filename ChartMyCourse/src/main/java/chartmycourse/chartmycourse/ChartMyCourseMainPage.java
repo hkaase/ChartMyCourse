@@ -1000,11 +1000,27 @@ public class ChartMyCourseMainPage extends JFrame {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         postsArray.get(index).setUpvotes(curPost.getUpvotes() + 1);
-
-                        // TODO Get Table to change when adding upvotes
+                        qAndATable.getModel().setValueAt(postsArray.get(index).getUpvotes(), index, 2);
                         model.fireTableDataChanged();
                         removeUpvoteButton.setEnabled(true);
                         upvoteButton.setEnabled(false);
+
+                        try {
+                            FileWriter myWriter = new FileWriter("posts.txt");
+                            for(int k = 0; k < qAndATable.getRowCount(); k++) {
+                                for(int l = 0; l < qAndATable.getColumnCount(); l++) {
+                                    myWriter.write(qAndATable.getModel().getValueAt(k, l).toString());
+                                    if(l != qAndATable.getColumnCount() - 1) {
+                                        myWriter.write(",");
+                                    }
+                                }
+                                myWriter.write("\n");
+                            }
+
+                            myWriter.close();
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                        }
                     }
                 });
                 addReplyButton.addActionListener(new ActionListener() {
@@ -1025,20 +1041,53 @@ public class ChartMyCourseMainPage extends JFrame {
                         curPost.getReplies().add(reply);
                         curPost.setReplyCount(curPost.getReplyCount() + 1);
 
+                        qAndATable.getModel().setValueAt(curPost.getReplyCount(), index, 1);
+
                         model.fireTableDataChanged();
 
-                        // TODO get table to change when updating num replies
+                        try {
+                            FileWriter myWriter = new FileWriter("posts.txt");
+                            for(int k = 0; k < qAndATable.getRowCount(); k++) {
+                                for(int l = 0; l < qAndATable.getColumnCount(); l++) {
+                                    myWriter.write(qAndATable.getModel().getValueAt(k, l).toString());
+                                    if(l != qAndATable.getColumnCount() - 1) {
+                                        myWriter.write(",");
+                                    }
+                                }
+                                myWriter.write("\n");
+                            }
+
+                            myWriter.close();
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                        }
                     }
                 });
                 removeUpvoteButton.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         postsArray.get(index).setUpvotes(curPost.getUpvotes() - 1);
-
-                        // TODO Get table to change when removing upvotes
+                        qAndATable.getModel().setValueAt(postsArray.get(index).getUpvotes(), index, 2);
                         model.fireTableDataChanged();
                         upvoteButton.setEnabled(true);
                         removeUpvoteButton.setEnabled(false);
+
+                        try {
+                            FileWriter myWriter = new FileWriter("posts.txt");
+                            for(int k = 0; k < qAndATable.getRowCount(); k++) {
+                                for(int l = 0; l < qAndATable.getColumnCount(); l++) {
+                                    myWriter.write(qAndATable.getModel().getValueAt(k, l).toString());
+                                    if(l != qAndATable.getColumnCount() - 1) {
+                                        myWriter.write(",");
+                                    }
+                                }
+                                myWriter.write("\n");
+                            }
+
+                            myWriter.close();
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                        }
                     }
                 });
 
@@ -1078,8 +1127,7 @@ public class ChartMyCourseMainPage extends JFrame {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         reply.setUpvotes(reply.getUpvotes() + 1);
-
-                        // TODO Get Table to change when adding upvotes
+                        replyTable.getModel().setValueAt(reply.getUpvotes(), index, 1);
                         model.fireTableDataChanged();
                         removeUpvoteButton.setEnabled(true);
                         upvoteButton.setEnabled(false);
@@ -1090,8 +1138,7 @@ public class ChartMyCourseMainPage extends JFrame {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         reply.setUpvotes(reply.getUpvotes() - 1);
-
-                        // TODO Get table to change when removing upvotes
+                        replyTable.getModel().setValueAt(reply.getUpvotes(), index, 1);
                         model.fireTableDataChanged();
                         upvoteButton.setEnabled(true);
                         removeUpvoteButton.setEnabled(false);
@@ -1843,12 +1890,9 @@ public class ChartMyCourseMainPage extends JFrame {
 	        } else {
 	            JOptionPane.showMessageDialog(null,"You can't remove discussions that you didn't write!","Alert",JOptionPane.WARNING_MESSAGE);
 	        }
-    	}
-    	else {
+    	} else {
             JOptionPane.showMessageDialog(null,"No discussion selected!","Alert",JOptionPane.WARNING_MESSAGE);
-
     	}
-    	
     }
 
     /*private void searchTextActionPerformed(ActionEvent eventHappens) {
