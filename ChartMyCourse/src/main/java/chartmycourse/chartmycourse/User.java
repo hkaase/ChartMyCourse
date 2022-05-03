@@ -1,5 +1,8 @@
 package chartmycourse.chartmycourse;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class User {
 	
 	public String realName;
@@ -7,8 +10,9 @@ public class User {
 	public String email;
 	public String password;
 	int year;
-	
-	
+
+	public Set<String> professorList;
+	public Set<String> courseList;
 	
 	
 	public boolean compare(User testUser) {
@@ -30,6 +34,8 @@ public class User {
 		this.userName = userName;
 		this.email = email;
 		this.password = password;
+		this.professorList = new HashSet<>();
+		this.courseList = new HashSet<>();
 	}
 	
 	public User() {
@@ -75,5 +81,37 @@ public class User {
 	public void setYear(int year) {
 		this.year = year;
 	}
-	
+
+	public Set<String> getProfessorList() {
+		return professorList;
+	}
+
+	public void setProfessorList(Set<String> professorList) {
+		this.professorList = professorList;
+	}
+
+	public boolean saveProfessor(String professorName) {
+		return this.professorList.add(professorName);
+	}
+
+	public void removeProfessor(String professorName) {
+		this.professorList.remove(professorName);
+	}
+
+	public Set<String> getCourseList() {
+		return courseList;
+	}
+
+	public void setCourseList(Set<String> courseList) {
+		this.courseList = courseList;
+	}
+
+	public boolean saveCourse(String courseName) {
+		return this.courseList.add(courseName);
+	}
+
+	public void removeCourse(String courseName) {
+		this.courseList.remove(courseName);
+	}
+
 }
