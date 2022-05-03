@@ -59,7 +59,7 @@ public class ChartMyCourseMainPage extends JFrame {
     private JButton recommendedCoursesButton;
     private JDialog recommendedCourseDialog;
     private JButton recommendedProfessorsButton;
-    private JDialog recommendedProfessorsDialog;
+    private JDialog recommendedProfessorDialog;
     private JButton registerButton;
     private JButton reviewsButton;
     private JLabel reviewsHeader;
@@ -1282,8 +1282,8 @@ public class ChartMyCourseMainPage extends JFrame {
      */
     private void recommendedProfessorsButtonActionPerformed(ActionEvent eventHappens) {
         System.out.println("HERLLLO");
-        recommendedProfessorsDialog = new JDialog(this, "Recommended Professor");
-        recommendedProfessorsDialog.setLayout(new GridLayout(3, 1));
+        recommendedProfessorDialog = new JDialog(this, "Recommended Professor");
+        recommendedProfessorDialog.setLayout(new GridLayout(3, 1));
 
         List<String> courses = new ArrayList<>();
         courses.add("--");
@@ -1307,15 +1307,22 @@ public class ChartMyCourseMainPage extends JFrame {
 
         JButton refresh = new JButton("Refresh");
 
-        recommendedProfessorsDialog.add(refresh);
-        recommendedProfessorsDialog.add(courseList);
+        recommendedProfessorDialog.add(refresh);
+        recommendedProfessorDialog.add(courseList);
 
         JPanel professorPanel = new JPanel();
         professorPanel.setLayout(new BoxLayout(professorPanel, BoxLayout.Y_AXIS));
-        recommendedProfessorsDialog.add(professorPanel);
+        recommendedProfessorDialog.add(professorPanel);
 
-        recommendedProfessorsDialog.setSize(250,300);
-        recommendedProfessorsDialog.setVisible(true);
+        refresh.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+
+        recommendedProfessorDialog.setSize(250,300);
+        recommendedProfessorDialog.setVisible(true);
 
     }
 
@@ -1520,6 +1527,9 @@ public class ChartMyCourseMainPage extends JFrame {
         // change made by Rico
         if(recommendedCourseDialog != null){
             recommendedCourseDialog.setVisible(false);
+        }
+        if(recommendedProfessorDialog != null) {
+            recommendedProfessorDialog.setVisible(false);
         }
     }
     
