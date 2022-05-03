@@ -1427,10 +1427,12 @@ public class ChartMyCourseMainPage extends JFrame {
         reviewsPanel.setVisible(false);
         planningPanel.setVisible(false);
         qAndAPanel.setVisible(false);
+
+        // used for recommended Course Dialog box
+        // change made by Rico
         if(recommendedCourseDialog != null){
             recommendedCourseDialog.setVisible(false);
         }
-
     }
     
     //This function loads reviews from the reviews.txt file. 
