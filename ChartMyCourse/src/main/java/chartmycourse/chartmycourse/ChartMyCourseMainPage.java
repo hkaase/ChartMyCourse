@@ -767,8 +767,8 @@ public class ChartMyCourseMainPage extends JFrame {
                     .addComponent(reviewsHeader, GroupLayout.PREFERRED_SIZE, 118, GroupLayout.PREFERRED_SIZE)
                     .addComponent(saveCourseButton)
 		    .addComponent(removeReviewButton)
-                    .addComponent(saveProfButton, GroupLayout.PREFERRED_SIZE, 125, GroupLayout.PREFERRED_SIZE)
-                        .addComponent(addReview,GroupLayout.PREFERRED_SIZE,125,GroupLayout.PREFERRED_SIZE))
+                    .addComponent(saveProfButton, GroupLayout.PREFERRED_SIZE, 130, GroupLayout.PREFERRED_SIZE)
+                        .addComponent(addReview,GroupLayout.PREFERRED_SIZE,130,GroupLayout.PREFERRED_SIZE))
 
                 .addGap(5, 5, 5)
                 .addComponent(reviewsTableScrollPane, GroupLayout.DEFAULT_SIZE, 593, Short.MAX_VALUE))
