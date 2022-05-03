@@ -60,6 +60,14 @@ public class ChartMyCourseMainPage extends JFrame {
     private JDialog recommendedCourseDialog;
     private JButton recommendedProfessorsButton;
     private JDialog recommendedProfessorDialog;
+    private JLabel courseListLabel;
+    private JLabel profListLabel;
+    private JTable courseListTable;
+    private JTable profListTable;
+    private JScrollPane courseListScrollPane;
+    private JScrollPane profListScrollPane;
+    private JButton removeCourseButton;
+    private JButton removeProfButton;
     private JButton registerButton;
     private JButton reviewsButton;
     private JLabel reviewsHeader;
@@ -71,8 +79,8 @@ public class ChartMyCourseMainPage extends JFrame {
     private JScrollPane reviewsTableScrollPane;
     //private JLabel searchLabel;
     //private JTextField searchText;
-    private JButton selectFilterButton;
-    private JButton selectProfButton;
+    private JButton saveCourseButton;
+    private JButton saveProfButton;
     private JButton signupButton;
     private JDialog signupDialog;
     private JButton signupFormButton;
@@ -365,8 +373,8 @@ public class ChartMyCourseMainPage extends JFrame {
         loginRequestButton = new JButton();
         signupButton = new JButton();
         reviewsPanel = new JPanel();
-        selectProfButton = new JButton();
-        selectFilterButton = new JButton();
+        saveCourseButton = new JButton();
+        saveProfButton = new JButton();
         addReview = new JButton();
         reviewsHeader = new JLabel();
         reviewsTableScrollPane = new JScrollPane();
@@ -375,6 +383,14 @@ public class ChartMyCourseMainPage extends JFrame {
         planningHeading = new JLabel();
         recommendedCoursesButton = new JButton();
         recommendedProfessorsButton = new JButton();
+        courseListLabel = new JLabel();
+        profListLabel = new JLabel();
+        courseListTable = new JTable();
+        profListTable = new JTable();
+        courseListScrollPane = new JScrollPane();
+        profListScrollPane = new JScrollPane();
+        removeCourseButton = new JButton();
+        removeProfButton = new JButton();
         qAndAPanel = new JPanel();
         //searchLabel = new JLabel();
         //searchText = new JTextField();
@@ -684,19 +700,7 @@ public class ChartMyCourseMainPage extends JFrame {
             }
         });
 
-        selectProfButton.setText("Select Professor");
-        selectProfButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent eventHappens) {
-                selectProfButtonActionPerformed(eventHappens);
-            }
-        });
 
-        selectFilterButton.setText("Select Filter");
-        selectFilterButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent eventHappens) {
-                selectFilterButtonActionPerformed(eventHappens);
-            }
-        });
         addReview.setText("Add a Course Review");
         addReview.addActionListener(new ActionListener() {
             @Override
@@ -706,6 +710,22 @@ public class ChartMyCourseMainPage extends JFrame {
         });
         reviewsHeader.setFont(new Font("sansserif", 0, 24));
         reviewsHeader.setText("Reviews");
+
+        saveCourseButton.setText("Save Course");
+        saveCourseButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                saveCourseButtonActionPerformed(e);
+            }
+        });
+
+        saveProfButton.setText("Save Professor");
+        saveProfButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                saveProfButtonActionPerformed(e);
+            }
+        });
 
         reviewtablemodel = new DefaultTableModel(
             new Object [][] {
@@ -746,9 +766,9 @@ public class ChartMyCourseMainPage extends JFrame {
                 .addContainerGap()
                 .addGroup(reviewsPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
                     .addComponent(reviewsHeader, GroupLayout.PREFERRED_SIZE, 118, GroupLayout.PREFERRED_SIZE)
-                    .addComponent(selectProfButton)
+                    .addComponent(saveCourseButton)
 		    .addComponent(removeReviewButton)
-                    .addComponent(selectFilterButton, GroupLayout.PREFERRED_SIZE, 118, GroupLayout.PREFERRED_SIZE)
+                    .addComponent(saveProfButton, GroupLayout.PREFERRED_SIZE, 118, GroupLayout.PREFERRED_SIZE)
                         .addComponent(addReview,GroupLayout.PREFERRED_SIZE,118,GroupLayout.PREFERRED_SIZE))
 
                 .addGap(18, 18, 18)
@@ -760,11 +780,11 @@ public class ChartMyCourseMainPage extends JFrame {
                 .addGap(22, 22, 22)
                 .addComponent(reviewsHeader)
                 .addGap(12, 12, 12)
-                .addComponent(selectProfButton)
+                .addComponent(saveCourseButton)
 		.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(removeReviewButton)
                 .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(selectFilterButton)
+                .addComponent(saveProfButton)
                     .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
                     .addComponent(addReview)
                 .addContainerGap(210, Short.MAX_VALUE))
@@ -793,6 +813,75 @@ public class ChartMyCourseMainPage extends JFrame {
             }
         });
 
+        courseListLabel.setText("Saved Courses");
+        profListLabel.setText("Saved Professors");
+
+        removeCourseButton.setText("Remove Course");
+        removeCourseButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent eventHappens) {
+                removeCourseButtonActionPerformed(eventHappens);
+            }
+        });
+
+        removeProfButton.setText("Remove Professor");
+        removeProfButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent eventHappens) {
+                removeProfButtonActionPerformed(eventHappens);
+            }
+        });
+
+        courseListTable.setModel(new DefaultTableModel(
+                new Object [][] {
+
+                },
+                new String [] {
+                        "Courses"
+                }
+        ) {
+            Class[] types = new Class [] {
+                    String.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
+        courseListTable.setColumnSelectionAllowed(true);
+        courseListTable.getTableHeader().setReorderingAllowed(false);
+        courseListScrollPane.setViewportView(courseListTable);
+        courseListTable.getColumnModel().getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        if (courseListTable.getColumnModel().getColumnCount() > 0) {
+            courseListTable.getColumnModel().getColumn(0).setMinWidth(150);
+            courseListTable.getColumnModel().getColumn(0).setPreferredWidth(150);
+            courseListTable.getColumnModel().getColumn(0).setMaxWidth(150);
+        }
+
+        profListTable.setModel(new DefaultTableModel(
+                new Object [][] {
+
+                },
+                new String [] {
+                        "Professors"
+                }
+        ) {
+            Class[] types = new Class [] {
+                    String.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
+        profListTable.setColumnSelectionAllowed(true);
+        profListTable.getTableHeader().setReorderingAllowed(false);
+        profListScrollPane.setViewportView(profListTable);
+        profListTable.getColumnModel().getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        if (profListTable.getColumnModel().getColumnCount() > 0) {
+            profListTable.getColumnModel().getColumn(0).setMinWidth(150);
+            profListTable.getColumnModel().getColumn(0).setPreferredWidth(150);
+            profListTable.getColumnModel().getColumn(0).setMaxWidth(150);
+        }
+
         GroupLayout planningPanelLayout = new GroupLayout(planningPanel);
         planningPanel.setLayout(planningPanelLayout);
         planningPanelLayout.setHorizontalGroup(
@@ -807,6 +896,21 @@ public class ChartMyCourseMainPage extends JFrame {
                 .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(planningHeading, GroupLayout.PREFERRED_SIZE, 157, GroupLayout.PREFERRED_SIZE)
                 .addGap(282, 282, 282))
+                    .addGroup(planningPanelLayout.createSequentialGroup()
+                            .addGap(180, 180, 180)
+                            .addComponent(courseListLabel)
+                            .addGap(156, 156, 156)
+                            .addComponent(profListLabel))
+                    .addGroup(planningPanelLayout.createSequentialGroup()
+                            .addGap(166, 166, 166)
+                            .addComponent(courseListScrollPane, 150, 150, 150)
+                            .addGap(96, 96, 96)
+                            .addComponent(profListScrollPane, 150, 150, 150))
+                    .addGroup(planningPanelLayout.createSequentialGroup()
+                            .addGap(166, 166, 166)
+                            .addComponent(removeCourseButton)
+                            .addGap(115, 115, 115)
+                            .addComponent(removeProfButton))
         );
         planningPanelLayout.setVerticalGroup(
             planningPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
@@ -817,6 +921,18 @@ public class ChartMyCourseMainPage extends JFrame {
                 .addGroup(planningPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                     .addComponent(recommendedCoursesButton)
                     .addComponent(recommendedProfessorsButton))
+                    .addGap(18, 18, 18)
+                    .addGroup(planningPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                            .addComponent(courseListLabel)
+                            .addComponent(profListLabel))
+                    .addGap(18, 18, 18)
+                    .addGroup(planningPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                            .addComponent(courseListScrollPane, 150, 150, 150)
+                            .addComponent(profListScrollPane, 150, 150, 150))
+                    .addGap(18, 18, 18)
+                    .addGroup(planningPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                            .addComponent(removeCourseButton)
+                            .addComponent(removeProfButton))
                 .addGap(239, 239, 239))
         );
 
@@ -1444,13 +1560,93 @@ public class ChartMyCourseMainPage extends JFrame {
         planningPanel.setVisible(true);
     }
 
-    private void selectProfButtonActionPerformed(ActionEvent eventHappens) {
-        // TODO add professor filter
+    // Remove a selected course from the table of saved courses
+    private void removeCourseButtonActionPerformed(ActionEvent eventHappens) {
+        int row = courseListTable.getSelectedRow();
+        if (row >= 0) {
+            DefaultTableModel model = (DefaultTableModel) courseListTable.getModel();
+            String course = "" + model.getValueAt(row, 0);
+            int answer = JOptionPane
+                    .showConfirmDialog(null,
+                            "Do you want to remove " + course + "?",
+                            "Confirm", JOptionPane.YES_NO_OPTION);
+            if (answer == 0) {
+                model.removeRow(row);
+                curUser.removeCourse(course);
+            }
+        }
+        else {
+            JOptionPane.showMessageDialog(null, "No course selected!");
+        }
     }
 
-    private void selectFilterButtonActionPerformed(ActionEvent eventHappens) {
-        // TODO add filter functionality
+    // Remove a selected professor from the table of saved professors
+    private void removeProfButtonActionPerformed(ActionEvent eventHappens) {
+        int row = profListTable.getSelectedRow();
+        if (row >= 0) {
+            DefaultTableModel model = (DefaultTableModel) profListTable.getModel();
+            String professor = "" + model.getValueAt(row, 0);
+            int answer = JOptionPane
+                    .showConfirmDialog(null,
+                            "Do you want to remove " + professor + "?",
+                            "Confirm", JOptionPane.YES_NO_OPTION);
+            if (answer == 0) {
+                model.removeRow(row);
+                curUser.removeProfessor(professor);
+            }
+        }
+        else {
+            JOptionPane.showMessageDialog(null, "No professor selected!");
+        }
+
     }
+
+    // Save a course that the user selects from the reviews table
+    private void saveCourseButtonActionPerformed(ActionEvent eventHappens) {
+        int col = reviewsTable.getSelectedColumn();
+        int row = reviewsTable.getSelectedRow();
+        if (col == 2 && row >= 0) {
+            DefaultTableModel model = (DefaultTableModel) reviewsTable.getModel();
+            String course = "" + model.getValueAt(row, col);
+            int answer = JOptionPane
+                    .showConfirmDialog(null,
+                            "Do you want to save " + course + "?",
+                            "Confirm", JOptionPane.YES_NO_OPTION);
+            if (answer == 0) {
+                if (curUser.saveCourse(course)) {
+                    DefaultTableModel courseModel = (DefaultTableModel) courseListTable.getModel();
+                    courseModel.addRow(new Object[] {course});
+                }
+            }
+        }
+        else {
+            JOptionPane.showMessageDialog(null, "No course selected!");
+        }
+    }
+
+    // Save a professor that the user selects from the reviews table
+    private void saveProfButtonActionPerformed(ActionEvent eventHappens) {
+        int col = reviewsTable.getSelectedColumn();
+        int row = reviewsTable.getSelectedRow();
+        if (col == 3 && row >= 0) {
+            DefaultTableModel model = (DefaultTableModel) reviewsTable.getModel();
+            String professor = "" + model.getValueAt(row, col);
+            int answer = JOptionPane
+                    .showConfirmDialog(null,
+                            "Do you want to save " + professor + "?",
+                            "Confirm", JOptionPane.YES_NO_OPTION);
+            if (answer == 0) {
+                if (curUser.saveProfessor(professor)) {
+                    DefaultTableModel profModel = (DefaultTableModel) profListTable.getModel();
+                    profModel.addRow(new Object[] {professor});
+                }
+            }
+        }
+        else {
+            JOptionPane.showMessageDialog(null, "No professor selected!");
+        }
+    }
+
     private void addReviewButtonActionPerformed(ActionEvent eventHappens){
         if(loggedIn) {
             addReviewText.setColumns(50);
@@ -1620,6 +1816,9 @@ public class ChartMyCourseMainPage extends JFrame {
         initTestReviews();
         initTestUsers();
         initTestPosts();
+
+        initCourseListTable();
+        initProfListTable();
     }
     
     //In order to understand this function, you need to understand how
@@ -1679,7 +1878,31 @@ public class ChartMyCourseMainPage extends JFrame {
     	model.fireTableDataChanged();
     	
     }
-    
+
+    // Create table of saved courses from the user's saved courses list
+    public void initCourseListTable() {
+        DefaultTableModel model = (DefaultTableModel) courseListTable.getModel();
+
+        // Add the user's saved courses to the course list table
+        for (String course : curUser.getCourseList()) {
+            model.insertRow(courseListTable.getRowCount(), new Object[] {course});
+        }
+        // Tell the table we changed things
+        model.fireTableDataChanged();
+    }
+
+    // Create table of saved professors from the user's saved professors list
+    public void initProfListTable() {
+        DefaultTableModel model = (DefaultTableModel) profListTable.getModel();
+
+        // Add the user's saved professors to the professor list table
+        for (String professor : curUser.getProfessorList()) {
+            model.insertRow(profListTable.getRowCount(), new Object[] {professor});
+        }
+        // Tell the table we changed things
+        model.fireTableDataChanged();
+    }
+
     //This function takes a line of input, and makes a review object from it.
     //The format is as follows: 
     //NAME,CLASS,CRN,PROF,RATING,DESCRIPTION
