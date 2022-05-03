@@ -34,8 +34,8 @@ public class User {
 		this.userName = userName;
 		this.email = email;
 		this.password = password;
-		this.professorList = new HashSet<>();
-		this.courseList = new HashSet<>();
+		this.professorList = new HashSet<String>();
+		this.courseList = new HashSet<String>();
 	}
 	
 	public User() {
