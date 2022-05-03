@@ -381,7 +381,7 @@ public class ChartMyCourseMainPage extends JFrame {
         postReplyButton = new JButton();
         viewPostButton = new JButton();
         viewRepliesButton = new JButton();
-	removeReviewButton = new JButton();
+        removeReviewButton = new JButton();
         
         loginDialog.setTitle("login");
         loginDialog.setBackground(new Color(0, 88, 5));
@@ -819,25 +819,64 @@ public class ChartMyCourseMainPage extends JFrame {
 
         qAndATable.setAutoCreateRowSorter(true);
 
-        viewPostButton.setText("View Post");
-        viewPostButton.setFont(new Font("sansserif", 0, 8));
-        viewRepliesButton.setText("View Replies");
-        viewRepliesButton.setFont(new Font("sansserif", 0, 8));
-
-        qAndATable.setDefaultRenderer(JButton.class, new JTableButtonRenderer());
-
-        viewPostButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent eventHappens) {
-                viewRepliesActionPerformed(eventHappens);
-            }
-        });
-
         viewRepliesButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent eventHappens) {
-                viewRepliesActionPerformed(eventHappens);
+                JTable replyTable = new JTable();
+                JScrollPane replyScrollPane = new JScrollPane();
+                replyTable.setModel(new DefaultTableModel(
+                        new Object [][] {
+
+                        },
+                        new String [] {
+                                "Author", "Upvotes", "View Post"
+                        }
+                ) {
+                    Class[] types = new Class [] {
+                            String.class, Integer.class, JButton.class
+                    };
+
+                    public Class getColumnClass(int columnIndex) {
+                        return types [columnIndex];
+                    }
+                });
+                replyScrollPane.setViewportView(replyTable);
+
+                new TableFilterHeader(replyTable, AutoChoices.ENABLED);
+                TableRowSorter<TableModel> replySorter = new TableRowSorter(replyTable.getModel());
+                replyTable.setRowSorter(replySorter);
+
+                GroupLayout replyLayout = new GroupLayout(replyTable);
+                replyTable.setLayout(replyLayout);
+                replyLayout.setHorizontalGroup(
+                        replyLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                .addGroup(GroupLayout.Alignment.TRAILING, replyLayout.createSequentialGroup()
+                                        .addContainerGap(28, Short.MAX_VALUE)
+                                        .addGroup(replyLayout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
+                                                .addGroup(replyLayout.createSequentialGroup()
+                                                        //.addComponent(searchLabel, GroupLayout.PREFERRED_SIZE, 93, GroupLayout.PREFERRED_SIZE)
+                                                        //.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                                                        //.addComponent(searchText, GroupLayout.PREFERRED_SIZE, 238, GroupLayout.PREFERRED_SIZE)
+                                                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                                        //.addComponent(postReplyButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                                        .addComponent(replyScrollPane, GroupLayout.PREFERRED_SIZE, 452, GroupLayout.PREFERRED_SIZE))
+                                                .addGap(109, 109, 109))
+                                ));
+                replyLayout.setVerticalGroup(
+                        replyLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                .addGroup(replyLayout.createSequentialGroup()
+                                        .addContainerGap(38, Short.MAX_VALUE)
+                                        .addGroup(replyLayout.createParallelGroup(GroupLayout.Alignment.LEADING, false))
+                                        //.addComponent(searchLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        //.addComponent(searchText)
+                                        //.addComponent(postReplyButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                        .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(replyScrollPane, GroupLayout.PREFERRED_SIZE, 237, GroupLayout.PREFERRED_SIZE)
+                                        .addContainerGap())
+                );
+
+                replyScrollPane.setVisible(true);
             }
         });
-
 
         qAndATable.setModel(new DefaultTableModel(
             new Object [][] {
@@ -869,6 +908,57 @@ public class ChartMyCourseMainPage extends JFrame {
         };
         
         ButtonColumn buttonColumn = new ButtonColumn(qAndATable, view, 3);
+        ButtonColumn buttonColumn2 = new ButtonColumn(qAndATable, view, 4);
+
+        viewPostButton.setText("View Post");
+        viewPostButton.setFont(new Font("sansserif", 0, 8));
+        viewRepliesButton.setText("View Replies");
+        viewRepliesButton.setFont(new Font("sansserif", 0, 8));
+
+        viewPostButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent eventHappens) {
+                Post post = postsArray.get(qAndATable.getSelectedRow());
+                JDialog postDialog = new JDialog();
+                JTextArea postContents = new JTextArea();
+                postContents.append(post.getPostContents());
+                postContents.setBounds(10,30, 200,200);
+
+                JButton upvoteButton = new JButton("Upvote");
+                JButton addReplyButton = new JButton("Add Reply");
+                JButton removeUpvoteButton = new JButton("Remove Upvote");
+
+                postDialog.add(postContents);
+                postDialog.add(upvoteButton);
+                postDialog.add(addReplyButton);
+                postDialog.add(removeUpvoteButton);
+
+                upvoteButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+
+                    }
+                });
+                addReplyButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+
+                    }
+                });
+                removeUpvoteButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+
+                    }
+                });
+
+                removeUpvoteButton.setEnabled(false);
+
+                postDialog.setSize(250,300);
+                postDialog.setVisible(true);
+            }
+        });
+
+        qAndATable.setDefaultRenderer(JButton.class, new JTableButtonRenderer());
 
         new TableFilterHeader(qAndATable, AutoChoices.ENABLED);
         TableRowSorter<TableModel> QnAsorter = new TableRowSorter(qAndATable.getModel());
@@ -1350,70 +1440,6 @@ public class ChartMyCourseMainPage extends JFrame {
         }
     }
 
-    private void viewPostActionPerformed(ActionEvent eventHappens) {
-        PostFrame pf = new PostFrame(postsArray.get(qAndATable.getSelectedRow()), qAndATable, curUser);
-        pf.setVisible(true);
-    }
-
-    private void viewRepliesActionPerformed(ActionEvent eventHappens) {
-        JTable replyTable = new JTable();
-        JScrollPane replyScrollPane = new JScrollPane();
-        replyTable.setModel(new DefaultTableModel(
-                new Object [][] {
-
-                },
-                new String [] {
-                        "Author", "Upvotes", "View Post"
-                }
-        ) {
-            Class[] types = new Class [] {
-                    String.class, Integer.class, JButton.class
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-        });
-        replyScrollPane.setViewportView(replyTable);
-
-        new TableFilterHeader(replyTable, AutoChoices.ENABLED);
-        TableRowSorter<TableModel> replySorter = new TableRowSorter(replyTable.getModel());
-        replyTable.setRowSorter(replySorter);
-
-        GroupLayout replyLayout = new GroupLayout(replyTable);
-        replyTable.setLayout(replyLayout);
-        replyLayout.setHorizontalGroup(
-                replyLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                        .addGroup(GroupLayout.Alignment.TRAILING, replyLayout.createSequentialGroup()
-                                .addContainerGap(28, Short.MAX_VALUE)
-                                .addGroup(replyLayout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
-                                        .addGroup(replyLayout.createSequentialGroup()
-                                                //.addComponent(searchLabel, GroupLayout.PREFERRED_SIZE, 93, GroupLayout.PREFERRED_SIZE)
-                                                //.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-                                                //.addComponent(searchText, GroupLayout.PREFERRED_SIZE, 238, GroupLayout.PREFERRED_SIZE)
-                                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                                //.addComponent(postReplyButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                        .addComponent(replyScrollPane, GroupLayout.PREFERRED_SIZE, 452, GroupLayout.PREFERRED_SIZE))
-                                .addGap(109, 109, 109))
-        ));
-        replyLayout.setVerticalGroup(
-                replyLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                        .addGroup(replyLayout.createSequentialGroup()
-                                .addContainerGap(38, Short.MAX_VALUE)
-                                .addGroup(replyLayout.createParallelGroup(GroupLayout.Alignment.LEADING, false))
-                                        //.addComponent(searchLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        //.addComponent(searchText)
-                                        //.addComponent(postReplyButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(replyScrollPane, GroupLayout.PREFERRED_SIZE, 237, GroupLayout.PREFERRED_SIZE)
-                                .addContainerGap())
-        );
-
-        replyScrollPane.setVisible(true);
-
-    }
-    
-   
     //This is the initialization function that populates internal "databases".
     //We also set the frame as visible here, and display the login dialog.
     //TODO: enforce user login (make sure they can't close the window until they are logged in)

@@ -20,7 +20,6 @@ public class PostFrame extends JFrame implements ActionListener {
         this.post = post;
         this.table = table;
         this.user = user;
-        createAndShowGUI();
     }
 
     public void createAndShowGUI() {
