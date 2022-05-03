@@ -767,8 +767,8 @@ public class ChartMyCourseMainPage extends JFrame {
                     .addComponent(reviewsHeader, GroupLayout.PREFERRED_SIZE, 118, GroupLayout.PREFERRED_SIZE)
                     .addComponent(saveCourseButton)
 		    .addComponent(removeReviewButton)
-                    .addComponent(saveProfButton, GroupLayout.PREFERRED_SIZE, 125, GroupLayout.PREFERRED_SIZE)
-                        .addComponent(addReview,GroupLayout.PREFERRED_SIZE,125,GroupLayout.PREFERRED_SIZE))
+                    .addComponent(saveProfButton, GroupLayout.PREFERRED_SIZE, 130, GroupLayout.PREFERRED_SIZE)
+                        .addComponent(addReview,GroupLayout.PREFERRED_SIZE,130,GroupLayout.PREFERRED_SIZE))
 
                 .addGap(5, 5, 5)
                 .addComponent(reviewsTableScrollPane, GroupLayout.DEFAULT_SIZE, 593, Short.MAX_VALUE))
@@ -1808,38 +1808,47 @@ public class ChartMyCourseMainPage extends JFrame {
      * @since 1.0
      */
     private void removeDiscussionActionPerformed(ActionEvent eventHappens) {
-        if (postsArray.get(qAndATable.getSelectedRow()).getAuthor().equals(curUser.getRealName())) {
+    	if (qAndATable.getSelectedRow() >= 0) {
+	    	if (postsArray.get(qAndATable.getSelectedRow()).getAuthor().equals(curUser.getRealName())) {
+	
+	            Post post = postsArray.get(qAndATable.getSelectedRow());
+	            int answer = JOptionPane
+	                    .showConfirmDialog(null,
+	                            "Do you want to remove \"" + post.getPostContents() + "\"?",
+	                            "Confirm", JOptionPane.YES_NO_OPTION);
+	            if (answer == 0) {
+	                DefaultTableModel model = (DefaultTableModel) qAndATable.getModel();
+	               
+	                	model.removeRow(qAndATable.getSelectedRow());
+	                    postsArray.remove(qAndATable.getSelectedRow());
+	
+	                    try {
+	                        FileWriter myWriter = new FileWriter("posts.txt");
+	                        for(int k = 0; k < qAndATable.getRowCount(); k++) {
+	                            for(int l = 0; l < qAndATable.getColumnCount(); l++) {
+	                                myWriter.write(qAndATable.getModel().getValueAt(k, l).toString());
+	                                if(l != qAndATable.getColumnCount() - 1) {
+	                                    myWriter.write(",");
+	                                }
+	                            }
+	                            myWriter.write("\n");
+	                        }
+	
+	                        myWriter.close();
+	                    } catch (Exception e) {
+	                        e.printStackTrace();
+	                    }
+	                }
+	                
+	        } else {
+	            JOptionPane.showMessageDialog(null,"You can't remove discussions that you didn't write!","Alert",JOptionPane.WARNING_MESSAGE);
+	        }
+    	}
+    	else {
+            JOptionPane.showMessageDialog(null,"No discussion selected!","Alert",JOptionPane.WARNING_MESSAGE);
 
-            Post post = postsArray.get(qAndATable.getSelectedRow());
-            int answer = JOptionPane
-                    .showConfirmDialog(null,
-                            "Do you want to remove \"" + post.getPostContents() + "\"?",
-                            "Confirm", JOptionPane.YES_NO_OPTION);
-            if (answer == 0) {
-                DefaultTableModel model = (DefaultTableModel) qAndATable.getModel();
-                model.removeRow(qAndATable.getSelectedRow());
-                postsArray.remove(qAndATable.getSelectedRow());
-
-                try {
-                    FileWriter myWriter = new FileWriter("posts.txt");
-                    for(int k = 0; k < qAndATable.getRowCount(); k++) {
-                        for(int l = 0; l < qAndATable.getColumnCount(); l++) {
-                            myWriter.write(qAndATable.getModel().getValueAt(k, l).toString());
-                            if(l != qAndATable.getColumnCount() - 1) {
-                                myWriter.write(",");
-                            }
-                        }
-                        myWriter.write("\n");
-                    }
-
-                    myWriter.close();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        } else {
-            JOptionPane.showMessageDialog(null,"You can't remove discussions that you didn't write!","Alert",JOptionPane.WARNING_MESSAGE);
-        }
+    	}
+    	
     }
 
     /*private void searchTextActionPerformed(ActionEvent eventHappens) {
