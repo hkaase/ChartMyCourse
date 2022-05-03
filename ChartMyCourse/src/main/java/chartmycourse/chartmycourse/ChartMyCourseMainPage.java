@@ -59,6 +59,7 @@ public class ChartMyCourseMainPage extends JFrame {
     private JButton recommendedCoursesButton;
     private JDialog recommendedCourseDialog;
     private JButton recommendedProfessorsButton;
+    private JDialog recommendedProfessorsDialog;
     private JButton registerButton;
     private JButton reviewsButton;
     private JLabel reviewsHeader;
@@ -777,6 +778,11 @@ public class ChartMyCourseMainPage extends JFrame {
         });
 
         recommendedProfessorsButton.setText("Recommended Professors");
+        recommendedProfessorsButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent eventHappens) {
+                recommendedProfessorsButtonActionPerformed(eventHappens);
+            }
+        });
 
         GroupLayout planningPanelLayout = new GroupLayout(planningPanel);
         planningPanel.setLayout(planningPanelLayout);
@@ -1266,6 +1272,51 @@ public class ChartMyCourseMainPage extends JFrame {
 
         recommendedCourseDialog.setSize(250,300);
         recommendedCourseDialog.setVisible(true);
+    }
+
+    /**
+     * This is the functionality of clicking the Recommended Professor button
+     * @author Ricardo Boone
+     * @version 1.0
+     * @Since 1.0
+     */
+    private void recommendedProfessorsButtonActionPerformed(ActionEvent eventHappens) {
+        System.out.println("HERLLLO");
+        recommendedProfessorDialog = new JDialog(this, "Recommended Professor");
+        recommendedProfessorDialog.setLayout(new GridLayout(3, 1));
+
+        List<String> courses = new ArrayList<>();
+        courses.add("--");
+
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader("RecProfessors.csv"));
+
+            String line;
+            while((line = reader.readLine()) != null) {
+                String[] split = line.split(",");
+                if(split.length > 0) {
+                    courses.add(split[0]);
+                }
+            }
+        }
+        catch (IOException e2) {
+            e2.printStackTrace();
+        }
+
+        JComboBox courseList = new JComboBox(courses.toArray());
+
+        JButton refresh = new JButton("Refresh");
+
+        recommendedProfessorDialog.add(refresh);
+        recommendedProfessorDialog.add(courseList);
+
+        JPanel professorPanel = new JPanel();
+        professorPanel.setLayout(new BoxLayout(professorPanel, BoxLayout.Y_AXIS));
+        recommendedProfessorDialog.add(professorPanel);
+
+        recommendedProfessorDialog.setSize(250,300);
+        recommendedProfessorDialog.setVisible(true);
+
     }
 
     private void planningButtonActionPerformed(ActionEvent eventHappens) {
