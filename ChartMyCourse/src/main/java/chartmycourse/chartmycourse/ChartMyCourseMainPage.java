@@ -1913,11 +1913,14 @@ public class ChartMyCourseMainPage extends JFrame {
         DefaultTableModel model = (DefaultTableModel) courseListTable.getModel();
 
         // Add the user's saved courses to the course list table
-        for (String course : curUser.getCourseList()) {
-            model.insertRow(courseListTable.getRowCount(), new Object[] {course});
+        if (curUser != null) {
+        	for (String course : curUser.getCourseList()) {
+                model.insertRow(courseListTable.getRowCount(), new Object[] {course});
+            }
+            // Tell the table we changed things
+            model.fireTableDataChanged();
         }
-        // Tell the table we changed things
-        model.fireTableDataChanged();
+        
     }
 
     // Create table of saved professors from the user's saved professors list
@@ -1925,11 +1928,14 @@ public class ChartMyCourseMainPage extends JFrame {
         DefaultTableModel model = (DefaultTableModel) profListTable.getModel();
 
         // Add the user's saved professors to the professor list table
-        for (String professor : curUser.getProfessorList()) {
-            model.insertRow(profListTable.getRowCount(), new Object[] {professor});
+        if (curUser != null) {
+        	for (String professor : curUser.getProfessorList()) {
+                model.insertRow(profListTable.getRowCount(), new Object[] {professor});
+            }
+            // Tell the table we changed things
+            model.fireTableDataChanged();
         }
-        // Tell the table we changed things
-        model.fireTableDataChanged();
+        
     }
 
     //This function takes a line of input, and makes a review object from it.
