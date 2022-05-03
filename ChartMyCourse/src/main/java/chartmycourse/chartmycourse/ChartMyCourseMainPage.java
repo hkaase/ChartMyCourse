@@ -57,6 +57,7 @@ public class ChartMyCourseMainPage extends JFrame {
     private JTable qAndATable;
     private JScrollPane qAndATableScrollPane;
     private JButton recommendedCoursesButton;
+    private JDialog recommendedCourseDialog;
     private JButton recommendedProfessorsButton;
     private JButton registerButton;
     private JButton reviewsButton;
@@ -1065,13 +1066,10 @@ public class ChartMyCourseMainPage extends JFrame {
      * @Since 1.0
      */
     private void recommendedCoursesButtonActionPerformed(ActionEvent eventHappens) {
-        JDialog dialog = new JDialog(this, "Recommended Course");
-        dialog.setLayout(new GridLayout(4, 1));
-
-        JLabel numUni = new JLabel("Number of Universities: ");
+        recommendedCourseDialog = new JDialog(this, "Recommended Course");
+        recommendedCourseDialog.setLayout(new GridLayout(4, 1));
 
         List<JLabel> courses = new ArrayList<>();
-
 
         List<String> years = new ArrayList<>();
         years.add("--");
@@ -1090,13 +1088,13 @@ public class ChartMyCourseMainPage extends JFrame {
 
         JButton refresh = new JButton("Refresh");
 
-        dialog.add(refresh);
-        dialog.add(yearList);
-        dialog.add(semList);
+        recommendedCourseDialog.add(refresh);
+        recommendedCourseDialog.add(yearList);
+        recommendedCourseDialog.add(semList);
 
         JPanel coursePanel = new JPanel();
         coursePanel.setLayout(new BoxLayout(coursePanel, BoxLayout.Y_AXIS));
-        dialog.add(coursePanel);
+        recommendedCourseDialog.add(coursePanel);
 
         for(int i = 0; i < courses.size(); i++) {
             coursePanel.add(courses.get(i));
@@ -1176,8 +1174,8 @@ public class ChartMyCourseMainPage extends JFrame {
             }
         });
 
-        dialog.setSize(250,300);
-        dialog.setVisible(true);
+        recommendedCourseDialog.setSize(250,300);
+        recommendedCourseDialog.setVisible(true);
 
     }
 
@@ -1429,6 +1427,10 @@ public class ChartMyCourseMainPage extends JFrame {
         reviewsPanel.setVisible(false);
         planningPanel.setVisible(false);
         qAndAPanel.setVisible(false);
+        if(recommendedCourseDialog != null){
+            recommendedCourseDialog.setVisible(false);
+        }
+
     }
     
     //This function loads reviews from the reviews.txt file. 
