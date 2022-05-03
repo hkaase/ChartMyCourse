@@ -239,28 +239,20 @@ public class ChartMyCourseMainPage extends JFrame {
 			renderButton.setBackground(UIManager.getColor("Button.background"));
 		}
 
-		if (hasFocus)
-		{
+		if (hasFocus) {
 			renderButton.setBorder( focusBorder );
-		}
-		else
-		{
+		} else {
 			renderButton.setBorder( originalBorder );
 		}
 
 //		renderButton.setText( (value == null) ? "" : value.toString() );
-		if (value == null)
-		{
+		if (value == null) {
 			renderButton.setText( "" );
 			renderButton.setIcon( null );
-		}
-		else if (value instanceof Icon)
-		{
+		} else if (value instanceof Icon) {
 			renderButton.setText( "" );
 			renderButton.setIcon( (Icon)value );
-		}
-		else
-		{
+		} else {
 			renderButton.setText( value.toString() );
 			renderButton.setIcon( null );
 		}
@@ -274,8 +266,7 @@ public class ChartMyCourseMainPage extends JFrame {
 	/*
 	 *	The button has been pressed. Stop editing and invoke the custom Action
 	 */
-	public void actionPerformed(ActionEvent e)
-	{
+	public void actionPerformed(ActionEvent e) {
 		int row = table.convertRowIndexToModel( table.getEditingRow() );
 		fireEditingStopped();
 
@@ -296,15 +287,13 @@ public class ChartMyCourseMainPage extends JFrame {
 	 *  the mouse to another cell before releasing it, the editor is still
 	 *  active. Make sure editing is stopped when the mouse is released.
 	 */
-    public void mousePressed(MouseEvent e)
-    {
+    public void mousePressed(MouseEvent e) {
     	if (table.isEditing()
 		&&  table.getCellEditor() == this)
 			isButtonColumnEditor = true;
     }
 
-    public void mouseReleased(MouseEvent e)
-    {
+    public void mouseReleased(MouseEvent e) {
     	if (isButtonColumnEditor
     	&&  table.isEditing())
     		table.getCellEditor().stopCellEditing();
@@ -318,7 +307,7 @@ public class ChartMyCourseMainPage extends JFrame {
 }
 	
     
-    
+
     /**
      * Constructor function, makes declaration of instance display. 
      * @author Harm Drenth
@@ -1771,30 +1760,32 @@ public class ChartMyCourseMainPage extends JFrame {
                 "Discussion:", addDiscussion
         };
         int option = JOptionPane.showConfirmDialog(null, message, "Add Discussion Post", JOptionPane.OK_CANCEL_OPTION);
-        ((DefaultTableModel) qAndATable.getModel()).insertRow(qAndATable.getRowCount(),
-                new Object[]{curUser.getRealName(), 0, 0, "View Post", "View Replies"});
-        Post temp = new Post();
-        temp.setAuthor(curUser.getRealName());
-        temp.setUpvotes(0);
-        temp.setReplyCount(0);
-        temp.setPostContents(addDiscussion.getText());
-        postsArray.add(temp);
+        if (option == 0) {
+            ((DefaultTableModel) qAndATable.getModel()).insertRow(qAndATable.getRowCount(),
+                    new Object[]{curUser.getRealName(), 0, 0, "View Post", "View Replies"});
+            Post temp = new Post();
+            temp.setAuthor(curUser.getRealName());
+            temp.setUpvotes(0);
+            temp.setReplyCount(0);
+            temp.setPostContents(addDiscussion.getText());
+            postsArray.add(temp);
 
-        try {
-            FileWriter myWriter = new FileWriter("posts.txt");
-            for(int k = 0; k < qAndATable.getRowCount(); k++) {
-                for(int l = 0; l < qAndATable.getColumnCount(); l++) {
-                    myWriter.write(qAndATable.getModel().getValueAt(k, l).toString());
-                    if(l != qAndATable.getColumnCount() - 1) {
-                        myWriter.write(",");
+            try {
+                FileWriter myWriter = new FileWriter("posts.txt");
+                for(int k = 0; k < qAndATable.getRowCount(); k++) {
+                    for(int l = 0; l < qAndATable.getColumnCount(); l++) {
+                        myWriter.write(qAndATable.getModel().getValueAt(k, l).toString());
+                        if(l != qAndATable.getColumnCount() - 1) {
+                            myWriter.write(",");
+                        }
                     }
+                    myWriter.write("\n");
                 }
-                myWriter.write("\n");
-            }
 
-            myWriter.close();
-        } catch (Exception e) {
-            e.printStackTrace();
+                myWriter.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -1805,38 +1796,41 @@ public class ChartMyCourseMainPage extends JFrame {
      * @since 1.0
      */
     private void removeDiscussionActionPerformed(ActionEvent eventHappens) {
-        if (postsArray.get(qAndATable.getSelectedRow()).getAuthor().equals(curUser.getRealName())) {
 
-            Post post = postsArray.get(qAndATable.getSelectedRow());
-            int answer = JOptionPane
-                    .showConfirmDialog(null,
-                            "Do you want to remove \"" + post.getPostContents() + "\"?",
-                            "Confirm", JOptionPane.YES_NO_OPTION);
-            if (answer == 0) {
-                DefaultTableModel model = (DefaultTableModel) qAndATable.getModel();
-                model.removeRow(qAndATable.getSelectedRow());
-                postsArray.remove(qAndATable.getSelectedRow());
 
-                try {
-                    FileWriter myWriter = new FileWriter("posts.txt");
-                    for(int k = 0; k < qAndATable.getRowCount(); k++) {
-                        for(int l = 0; l < qAndATable.getColumnCount(); l++) {
-                            myWriter.write(qAndATable.getModel().getValueAt(k, l).toString());
-                            if(l != qAndATable.getColumnCount() - 1) {
-                                myWriter.write(",");
+            if (postsArray.get(qAndATable.getSelectedRow()).getAuthor().equals(curUser.getRealName())) {
+
+                Post post = postsArray.get(qAndATable.getSelectedRow());
+                int answer = JOptionPane
+                        .showConfirmDialog(null,
+                                "Do you want to remove \"" + post.getPostContents() + "\"?",
+                                "Confirm", JOptionPane.YES_NO_OPTION);
+                if (answer == 0) {
+                    DefaultTableModel model = (DefaultTableModel) qAndATable.getModel();
+                    model.removeRow(qAndATable.getSelectedRow());
+                    postsArray.remove(qAndATable.getSelectedRow());
+
+                    try {
+                        FileWriter myWriter = new FileWriter("posts.txt");
+                        for(int k = 0; k < qAndATable.getRowCount(); k++) {
+                            for(int l = 0; l < qAndATable.getColumnCount(); l++) {
+                                myWriter.write(qAndATable.getModel().getValueAt(k, l).toString());
+                                if(l != qAndATable.getColumnCount() - 1) {
+                                    myWriter.write(",");
+                                }
                             }
+                            myWriter.write("\n");
                         }
-                        myWriter.write("\n");
-                    }
 
-                    myWriter.close();
-                } catch (Exception e) {
-                    e.printStackTrace();
+                        myWriter.close();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
+            } else {
+                JOptionPane.showMessageDialog(null,"You can't remove discussions that you didn't write!","Alert",JOptionPane.WARNING_MESSAGE);
             }
-        } else {
-            JOptionPane.showMessageDialog(null,"You can't remove discussions that you didn't write!","Alert",JOptionPane.WARNING_MESSAGE);
-        }
+
     }
 
     /*private void searchTextActionPerformed(ActionEvent eventHappens) {
