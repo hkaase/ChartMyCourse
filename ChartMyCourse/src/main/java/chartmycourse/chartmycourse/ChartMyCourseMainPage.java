@@ -700,7 +700,7 @@ public class ChartMyCourseMainPage extends JFrame {
         });
 
 
-        addReview.setText("Add a Course Review");
+        addReview.setText("Add Review");
         addReview.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent eventHappens) {
@@ -767,10 +767,10 @@ public class ChartMyCourseMainPage extends JFrame {
                     .addComponent(reviewsHeader, GroupLayout.PREFERRED_SIZE, 118, GroupLayout.PREFERRED_SIZE)
                     .addComponent(saveCourseButton)
 		    .addComponent(removeReviewButton)
-                    .addComponent(saveProfButton, GroupLayout.PREFERRED_SIZE, 118, GroupLayout.PREFERRED_SIZE)
-                        .addComponent(addReview,GroupLayout.PREFERRED_SIZE,118,GroupLayout.PREFERRED_SIZE))
+                    .addComponent(saveProfButton, GroupLayout.PREFERRED_SIZE, 125, GroupLayout.PREFERRED_SIZE)
+                        .addComponent(addReview,GroupLayout.PREFERRED_SIZE,125,GroupLayout.PREFERRED_SIZE))
 
-                .addGap(18, 18, 18)
+                .addGap(5, 5, 5)
                 .addComponent(reviewsTableScrollPane, GroupLayout.DEFAULT_SIZE, 593, Short.MAX_VALUE))
         );
         reviewsPanelLayout.setVerticalGroup(
@@ -1227,7 +1227,7 @@ public class ChartMyCourseMainPage extends JFrame {
                 .addGap(97, 97, 97)
                 .addComponent(homeButton, GroupLayout.PREFERRED_SIZE, 60, GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(reviewsButton, GroupLayout.PREFERRED_SIZE, 60, GroupLayout.PREFERRED_SIZE)
+                .addComponent(reviewsButton, GroupLayout.PREFERRED_SIZE, 70, GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(qAndAButton, GroupLayout.PREFERRED_SIZE, 62, GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
@@ -1950,11 +1950,14 @@ public class ChartMyCourseMainPage extends JFrame {
         DefaultTableModel model = (DefaultTableModel) courseListTable.getModel();
 
         // Add the user's saved courses to the course list table
-        for (String course : curUser.getCourseList()) {
-            model.insertRow(courseListTable.getRowCount(), new Object[] {course});
+        if (curUser != null) {
+        	for (String course : curUser.getCourseList()) {
+                model.insertRow(courseListTable.getRowCount(), new Object[] {course});
+            }
+            // Tell the table we changed things
+            model.fireTableDataChanged();
         }
-        // Tell the table we changed things
-        model.fireTableDataChanged();
+        
     }
 
     // Create table of saved professors from the user's saved professors list
@@ -1962,11 +1965,14 @@ public class ChartMyCourseMainPage extends JFrame {
         DefaultTableModel model = (DefaultTableModel) profListTable.getModel();
 
         // Add the user's saved professors to the professor list table
-        for (String professor : curUser.getProfessorList()) {
-            model.insertRow(profListTable.getRowCount(), new Object[] {professor});
+        if (curUser != null) {
+        	for (String professor : curUser.getProfessorList()) {
+                model.insertRow(profListTable.getRowCount(), new Object[] {professor});
+            }
+            // Tell the table we changed things
+            model.fireTableDataChanged();
         }
-        // Tell the table we changed things
-        model.fireTableDataChanged();
+        
     }
 
     //This function takes a line of input, and makes a review object from it.
