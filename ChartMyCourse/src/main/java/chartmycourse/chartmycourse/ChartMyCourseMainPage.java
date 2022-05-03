@@ -1,10 +1,7 @@
 package chartmycourse.chartmycourse;
 
 import java.io.*;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Scanner;
+import java.util.*;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
@@ -12,6 +9,7 @@ import javax.swing.table.*;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.util.List;
 
 import net.coderazzi.filters.gui.AutoChoices;
 import net.coderazzi.filters.gui.TableFilterHeader;
@@ -95,6 +93,8 @@ public class ChartMyCourseMainPage extends JFrame {
     private Post curPost;
     private JDialog replyDialog;
     private JButton removeDiscussionButton;
+    private ArrayList<Post> upvoted;
+    private ArrayList<Reply> upvotedReplies;
 
     //This array holds the list of reviews.
     private final ArrayList<Review> reviewArray = new ArrayList<>();
@@ -407,6 +407,8 @@ public class ChartMyCourseMainPage extends JFrame {
         removeReviewButton = new JButton();
         replyTable = new JTable();
         removeDiscussionButton = new JButton();
+        upvoted = new ArrayList<>();
+        upvotedReplies = new ArrayList<>();
         
         loginDialog.setTitle("login");
         loginDialog.setBackground(new Color(0, 88, 5));
@@ -999,29 +1001,35 @@ public class ChartMyCourseMainPage extends JFrame {
                 upvoteButton.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        postsArray.get(index).setUpvotes(curPost.getUpvotes() + 1);
-                        qAndATable.getModel().setValueAt(postsArray.get(index).getUpvotes(), index, 2);
-                        model.fireTableDataChanged();
-                        removeUpvoteButton.setEnabled(true);
-                        upvoteButton.setEnabled(false);
 
-                        try {
-                            FileWriter myWriter = new FileWriter("posts.txt");
-                            for(int k = 0; k < qAndATable.getRowCount(); k++) {
-                                for(int l = 0; l < qAndATable.getColumnCount(); l++) {
-                                    myWriter.write(qAndATable.getModel().getValueAt(k, l).toString());
-                                    if(l != qAndATable.getColumnCount() - 1) {
-                                        myWriter.write(",");
+                            postsArray.get(index).setUpvotes(curPost.getUpvotes() + 1);
+                            qAndATable.getModel().setValueAt(postsArray.get(index).getUpvotes(), index, 2);
+                            model.fireTableDataChanged();
+                            removeUpvoteButton.setEnabled(true);
+                            upvoteButton.setEnabled(false);
+                            upvoted.add(curPost);
+
+                            try {
+                                FileWriter myWriter = new FileWriter("posts.txt");
+                                for(int k = 0; k < qAndATable.getRowCount(); k++) {
+                                    for(int l = 0; l < qAndATable.getColumnCount(); l++) {
+                                        if (l == 3) {
+                                            myWriter.write(postsArray.get(k).getPostContents());
+                                        } else if (l < 3) {
+                                            myWriter.write(qAndATable.getModel().getValueAt(k, l).toString());
+                                        }
+                                        if(l != qAndATable.getColumnCount() - 1) {
+                                            myWriter.write(",");
+                                        }
                                     }
+                                    myWriter.write("\n");
                                 }
-                                myWriter.write("\n");
-                            }
 
-                            myWriter.close();
-                        } catch (Exception ex) {
-                            ex.printStackTrace();
+                                myWriter.close();
+                            } catch (Exception ex) {
+                                ex.printStackTrace();
+                            }
                         }
-                    }
                 });
                 addReplyButton.addActionListener(new ActionListener() {
                     @Override
@@ -1049,7 +1057,11 @@ public class ChartMyCourseMainPage extends JFrame {
                             FileWriter myWriter = new FileWriter("posts.txt");
                             for(int k = 0; k < qAndATable.getRowCount(); k++) {
                                 for(int l = 0; l < qAndATable.getColumnCount(); l++) {
-                                    myWriter.write(qAndATable.getModel().getValueAt(k, l).toString());
+                                    if (l == 3) {
+                                        myWriter.write(postsArray.get(k).getPostContents());
+                                    } else if (l < 3) {
+                                        myWriter.write(qAndATable.getModel().getValueAt(k, l).toString());
+                                    }
                                     if(l != qAndATable.getColumnCount() - 1) {
                                         myWriter.write(",");
                                     }
@@ -1066,17 +1078,23 @@ public class ChartMyCourseMainPage extends JFrame {
                 removeUpvoteButton.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
+
                         postsArray.get(index).setUpvotes(curPost.getUpvotes() - 1);
                         qAndATable.getModel().setValueAt(postsArray.get(index).getUpvotes(), index, 2);
                         model.fireTableDataChanged();
                         upvoteButton.setEnabled(true);
                         removeUpvoteButton.setEnabled(false);
+                        upvoted.remove(curPost);
 
                         try {
                             FileWriter myWriter = new FileWriter("posts.txt");
                             for(int k = 0; k < qAndATable.getRowCount(); k++) {
                                 for(int l = 0; l < qAndATable.getColumnCount(); l++) {
-                                    myWriter.write(qAndATable.getModel().getValueAt(k, l).toString());
+                                    if (l == 3) {
+                                        myWriter.write(postsArray.get(k).getPostContents());
+                                    } else if (l < 3) {
+                                        myWriter.write(qAndATable.getModel().getValueAt(k, l).toString());
+                                    }
                                     if(l != qAndATable.getColumnCount() - 1) {
                                         myWriter.write(",");
                                     }
@@ -1095,7 +1113,16 @@ public class ChartMyCourseMainPage extends JFrame {
                 postDialog.add(addReplyButton);
                 postDialog.add(removeUpvoteButton);
 
-                removeUpvoteButton.setEnabled(false);
+                boolean found = false;
+                for (Post post : upvoted) {
+                    if (curPost.equals(post)) {
+                        found = true;
+                        break;
+                    }
+                }
+
+                upvoteButton.setEnabled(!found);
+                removeUpvoteButton.setEnabled(found);
 
                 postDialog.setSize(250,300);
                 postDialog.pack();
@@ -1131,6 +1158,7 @@ public class ChartMyCourseMainPage extends JFrame {
                         model.fireTableDataChanged();
                         removeUpvoteButton.setEnabled(true);
                         upvoteButton.setEnabled(false);
+                        upvotedReplies.add(reply);
                     }
                 });
 
@@ -1142,18 +1170,27 @@ public class ChartMyCourseMainPage extends JFrame {
                         model.fireTableDataChanged();
                         upvoteButton.setEnabled(true);
                         removeUpvoteButton.setEnabled(false);
+                        upvotedReplies.remove(reply);
                     }
                 });
 
                 replyDialog.add(upvoteButton);
                 replyDialog.add(removeUpvoteButton);
 
-                removeUpvoteButton.setEnabled(false);
+                boolean found = false;
+                for (int i = 0; i < upvotedReplies.size(); i++) {
+                    if (reply.equals(upvotedReplies.get(i))) {
+                        found = true;
+                        break;
+                    }
+                }
+
+                upvoteButton.setEnabled(!found);
+                removeUpvoteButton.setEnabled(found);
 
                 replyDialog.setSize(250,300);
                 replyDialog.pack();
                 replyDialog.setVisible(true);
-
             }
         };
 
