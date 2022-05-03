@@ -84,6 +84,9 @@ public class ChartMyCourseMainPage extends JFrame {
     private String curUserString = "not logged in";
     private JButton viewPostButton;
     private JButton viewRepliesButton;
+    private JTable replyTable;
+    private Post curPost;
+    private JDialog replyDialog;
 
     //This array holds the list of reviews.
     private final ArrayList<Review> reviewArray = new ArrayList<>();
@@ -98,6 +101,7 @@ public class ChartMyCourseMainPage extends JFrame {
     private JDialog postDialog;
     private JTextField addReplyText;
     private JTextField addReply;
+    private JButton viewReplyButton;
     
     public class ButtonColumn extends AbstractCellEditor
 	implements TableCellRenderer, TableCellEditor, ActionListener, MouseListener
@@ -386,6 +390,8 @@ public class ChartMyCourseMainPage extends JFrame {
         viewPostButton = new JButton();
         viewRepliesButton = new JButton();
         removeReviewButton = new JButton();
+        viewReplyButton = new JButton();
+        replyTable = new JTable();
         
         loginDialog.setTitle("login");
         loginDialog.setBackground(new Color(0, 88, 5));
@@ -618,10 +624,10 @@ public class ChartMyCourseMainPage extends JFrame {
                 .addContainerGap(211, Short.MAX_VALUE))
         );
 
-        chartmycoursewatermark.setFont(new Font("Cloister Black", 0, 24));
+        chartmycoursewatermark.setFont(new Font("Cloister Black", Font.PLAIN, 18));
         chartmycoursewatermark.setText("chartmycourse");
 
-        homeButton.setFont(new Font("sansserif", 0, 8));
+        homeButton.setFont(new Font("sansserif", Font.PLAIN, 8));
         homeButton.setText("home");
         homeButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent eventHappens) {
@@ -828,65 +834,6 @@ public class ChartMyCourseMainPage extends JFrame {
 
         qAndATable.setAutoCreateRowSorter(true);
 
-        viewRepliesButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent eventHappens) {
-                JTable replyTable = new JTable();
-                JScrollPane replyScrollPane = new JScrollPane();
-                replyTable.setModel(new DefaultTableModel(
-                        new Object [][] {
-
-                        },
-                        new String [] {
-                                "Author", "Upvotes", "View Post"
-                        }
-                ) {
-                    Class[] types = new Class [] {
-                            String.class, Integer.class, JButton.class
-                    };
-
-                    public Class getColumnClass(int columnIndex) {
-                        return types [columnIndex];
-                    }
-                });
-                replyScrollPane.setViewportView(replyTable);
-
-                new TableFilterHeader(replyTable, AutoChoices.ENABLED);
-                TableRowSorter<TableModel> replySorter = new TableRowSorter(replyTable.getModel());
-                replyTable.setRowSorter(replySorter);
-
-                GroupLayout replyLayout = new GroupLayout(replyTable);
-                replyTable.setLayout(replyLayout);
-                replyLayout.setHorizontalGroup(
-                        replyLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                                .addGroup(GroupLayout.Alignment.TRAILING, replyLayout.createSequentialGroup()
-                                        .addContainerGap(28, Short.MAX_VALUE)
-                                        .addGroup(replyLayout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
-                                                .addGroup(replyLayout.createSequentialGroup()
-                                                        //.addComponent(searchLabel, GroupLayout.PREFERRED_SIZE, 93, GroupLayout.PREFERRED_SIZE)
-                                                        //.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-                                                        //.addComponent(searchText, GroupLayout.PREFERRED_SIZE, 238, GroupLayout.PREFERRED_SIZE)
-                                                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                                        //.addComponent(postReplyButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                                        .addComponent(replyScrollPane, GroupLayout.PREFERRED_SIZE, 452, GroupLayout.PREFERRED_SIZE))
-                                                .addGap(109, 109, 109))
-                                ));
-                replyLayout.setVerticalGroup(
-                        replyLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                                .addGroup(replyLayout.createSequentialGroup()
-                                        .addContainerGap(38, Short.MAX_VALUE)
-                                        .addGroup(replyLayout.createParallelGroup(GroupLayout.Alignment.LEADING, false))
-                                        //.addComponent(searchLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        //.addComponent(searchText)
-                                        //.addComponent(postReplyButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                        .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(replyScrollPane, GroupLayout.PREFERRED_SIZE, 237, GroupLayout.PREFERRED_SIZE)
-                                        .addContainerGap())
-                );
-
-                replyScrollPane.setVisible(true);
-            }
-        });
-
         qAndATable.setModel(new DefaultTableModel(
             new Object [][] {
 
@@ -904,17 +851,26 @@ public class ChartMyCourseMainPage extends JFrame {
             }
         });
         qAndATableScrollPane.setViewportView(qAndATable);
-        
+
+        viewReplyButton.setText("View Reply");
+        viewReplyButton.setFont(new Font("sansserif", 0, 8));
+
+        /**
+         * This is the functionality of clicking the View Post button
+         * @author Mia Gortney
+         * @version 1.0
+         * @Since 1.0
+         */
         Action view = new AbstractAction() {
             public void actionPerformed(ActionEvent e) {
                 int index = qAndATable.getSelectedRow();
-                Post post = postsArray.get(qAndATable.getSelectedRow());
+                curPost = postsArray.get(qAndATable.getSelectedRow());
                 postDialog = new JDialog(postDialog, "View Post");
                 postDialog.setLayout(new GridLayout(4, 1));
                 JTextArea postContents = new JTextArea();
                 postContents.setColumns(20);
                 postContents.setRows(5);
-                postContents.append(post.getPostContents());
+                postContents.append(curPost.getPostContents());
                 postContents.setEditable(false);
 
                 JButton upvoteButton = new JButton("Upvote");
@@ -926,7 +882,7 @@ public class ChartMyCourseMainPage extends JFrame {
                 upvoteButton.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        postsArray.get(index).setUpvotes(post.getUpvotes() + 1);
+                        postsArray.get(index).setUpvotes(curPost.getUpvotes() + 1);
 
                         // TODO Get Table to change when adding upvotes
                         ((AbstractTableModel) qAndATable.getModel()).fireTableDataChanged();
@@ -949,8 +905,8 @@ public class ChartMyCourseMainPage extends JFrame {
                         reply.setAuthor(curUserString);
                         reply.setUpvotes(0);
                         reply.setPostContents(addReply.getText());
-                        post.getReplies().add(reply);
-                        post.setReplyCount(post.getReplyCount() + 1);
+                        curPost.getReplies().add(reply);
+                        curPost.setReplyCount(curPost.getReplyCount() + 1);
 
                         // TODO get table to change when updating num replies
                     }
@@ -958,7 +914,7 @@ public class ChartMyCourseMainPage extends JFrame {
                 removeUpvoteButton.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        postsArray.get(index).setUpvotes(post.getUpvotes() - 1);
+                        postsArray.get(index).setUpvotes(curPost.getUpvotes() - 1);
 
                         // TODO Get table to change when removing upvotes
                         ((AbstractTableModel) qAndATable.getModel()).fireTableDataChanged();
@@ -979,11 +935,104 @@ public class ChartMyCourseMainPage extends JFrame {
             }
         };
 
+        Action viewReply = new AbstractAction() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int index = replyTable.getSelectedRow();
+                Reply reply = curPost.getReplies().get(index);
+                replyDialog = new JDialog(replyDialog, "View Post");
+                replyDialog.setLayout(new GridLayout(3, 1));
+                JTextArea postContents = new JTextArea();
+                postContents.setColumns(20);
+                postContents.setRows(5);
+                postContents.append(reply.getPostContents());
+                postContents.setEditable(false);
+                replyDialog.add(postContents);
+
+                JButton upvoteButton = new JButton("Upvote");
+                JButton removeUpvoteButton = new JButton("Remove Upvote");
+
+                upvoteButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        reply.setUpvotes(reply.getUpvotes() + 1);
+
+                        // TODO Get Table to change when adding upvotes
+                        ((AbstractTableModel) replyTable.getModel()).fireTableDataChanged();
+                        removeUpvoteButton.setEnabled(true);
+                        upvoteButton.setEnabled(false);
+                    }
+                });
+
+                removeUpvoteButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        reply.setUpvotes(reply.getUpvotes() - 1);
+
+                        // TODO Get table to change when removing upvotes
+                        ((AbstractTableModel) replyTable.getModel()).fireTableDataChanged();
+                        upvoteButton.setEnabled(true);
+                        removeUpvoteButton.setEnabled(false);
+                    }
+                });
+
+                replyDialog.add(upvoteButton);
+                replyDialog.add(removeUpvoteButton);
+
+                removeUpvoteButton.setEnabled(false);
+
+                replyDialog.setSize(250,300);
+                replyDialog.pack();
+                replyDialog.setVisible(true);
+
+            }
+        };
+
+        /**
+         * This is the functionality of clicking the View Replies button
+         * @author Mia Gortney
+         * @version 1.0
+         * @Since 1.0
+         */
         Action viewReplies = new AbstractAction() {
 
             @Override
             public void actionPerformed(ActionEvent e) {
+                JFrame replyFrame = new JFrame("View Replies");
+                Post post = postsArray.get(qAndATable.getSelectedRow());
+                replyTable.setModel(new DefaultTableModel(
+                        new Object [][] {
 
+                        },
+                        new String [] {
+                                "Author", "Upvotes", "View Reply"
+                        }
+                ) {
+                    final Class[] types = new Class [] {
+                            String.class, Integer.class, JButton.class
+                    };
+
+                    public Class getColumnClass(int columnIndex) {
+                        return types [columnIndex];
+                    }
+                });
+                JScrollPane replyScrollPane = new JScrollPane();
+                replyScrollPane.setViewportView(replyTable);
+
+                ButtonColumn buttonColumn3 = new ButtonColumn(replyTable, viewReply,2);
+
+                DefaultTableModel model = (DefaultTableModel) replyTable.getModel();
+
+                for (Reply iterReply : post.getReplies()) {
+                    model.insertRow(replyTable.getRowCount(), new Object[] {iterReply.getAuthor(), iterReply.getUpvotes(), "View Reply"});
+                }
+                model.fireTableDataChanged();
+
+                replyFrame.setContentPane(replyScrollPane);
+                replyFrame.pack();
+                replyFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+                replyFrame.setVisible(true);
             }
         };
         
@@ -1709,7 +1758,7 @@ public class ChartMyCourseMainPage extends JFrame {
     	DefaultTableModel model = (DefaultTableModel) qAndATable.getModel();
 
     	for (Post iterPost : postsArray) {
-    		model.insertRow(qAndATable.getRowCount(), new Object[] {iterPost.getAuthor(), iterPost.getReplyCount(), iterPost.getUpvotes(), viewPostButton, viewRepliesButton});
+    		model.insertRow(qAndATable.getRowCount(), new Object[] {iterPost.getAuthor(), iterPost.getReplyCount(), iterPost.getUpvotes(), "View Post", "View Replies"});
     	}
     	model.fireTableDataChanged();
     	
