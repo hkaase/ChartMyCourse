@@ -1771,30 +1771,33 @@ public class ChartMyCourseMainPage extends JFrame {
                 "Discussion:", addDiscussion
         };
         int option = JOptionPane.showConfirmDialog(null, message, "Add Discussion Post", JOptionPane.OK_CANCEL_OPTION);
-        ((DefaultTableModel) qAndATable.getModel()).insertRow(qAndATable.getRowCount(),
-                new Object[]{curUser.getRealName(), 0, 0, "View Post", "View Replies"});
-        Post temp = new Post();
-        temp.setAuthor(curUser.getRealName());
-        temp.setUpvotes(0);
-        temp.setReplyCount(0);
-        temp.setPostContents(addDiscussion.getText());
-        postsArray.add(temp);
 
-        try {
-            FileWriter myWriter = new FileWriter("posts.txt");
-            for(int k = 0; k < qAndATable.getRowCount(); k++) {
-                for(int l = 0; l < qAndATable.getColumnCount(); l++) {
-                    myWriter.write(qAndATable.getModel().getValueAt(k, l).toString());
-                    if(l != qAndATable.getColumnCount() - 1) {
-                        myWriter.write(",");
+        if (option == 0) {
+            ((DefaultTableModel) qAndATable.getModel()).insertRow(qAndATable.getRowCount(),
+                    new Object[]{curUser.getRealName(), 0, 0, "View Post", "View Replies"});
+            Post temp = new Post();
+            temp.setAuthor(curUser.getRealName());
+            temp.setUpvotes(0);
+            temp.setReplyCount(0);
+            temp.setPostContents(addDiscussion.getText());
+            postsArray.add(temp);
+
+            try {
+                FileWriter myWriter = new FileWriter("posts.txt");
+                for(int k = 0; k < qAndATable.getRowCount(); k++) {
+                    for(int l = 0; l < qAndATable.getColumnCount(); l++) {
+                        myWriter.write(qAndATable.getModel().getValueAt(k, l).toString());
+                        if(l != qAndATable.getColumnCount() - 1) {
+                            myWriter.write(",");
+                        }
                     }
+                    myWriter.write("\n");
                 }
-                myWriter.write("\n");
-            }
 
-            myWriter.close();
-        } catch (Exception e) {
-            e.printStackTrace();
+                myWriter.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
