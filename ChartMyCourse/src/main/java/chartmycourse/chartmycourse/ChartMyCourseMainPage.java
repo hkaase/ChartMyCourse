@@ -1282,8 +1282,8 @@ public class ChartMyCourseMainPage extends JFrame {
      */
     private void recommendedProfessorsButtonActionPerformed(ActionEvent eventHappens) {
         System.out.println("HERLLLO");
-        recommendedProfessorDialog = new JDialog(this, "Recommended Professor");
-        recommendedProfessorDialog.setLayout(new GridLayout(3, 1));
+        recommendedProfessorsDialog = new JDialog(this, "Recommended Professor");
+        recommendedProfessorsDialog.setLayout(new GridLayout(3, 1));
 
         List<String> courses = new ArrayList<>();
         courses.add("--");
@@ -1307,15 +1307,15 @@ public class ChartMyCourseMainPage extends JFrame {
 
         JButton refresh = new JButton("Refresh");
 
-        recommendedProfessorDialog.add(refresh);
-        recommendedProfessorDialog.add(courseList);
+        recommendedProfessorsDialog.add(refresh);
+        recommendedProfessorsDialog.add(courseList);
 
         JPanel professorPanel = new JPanel();
         professorPanel.setLayout(new BoxLayout(professorPanel, BoxLayout.Y_AXIS));
-        recommendedProfessorDialog.add(professorPanel);
+        recommendedProfessorsDialog.add(professorPanel);
 
-        recommendedProfessorDialog.setSize(250,300);
-        recommendedProfessorDialog.setVisible(true);
+        recommendedProfessorsDialog.setSize(250,300);
+        recommendedProfessorsDialog.setVisible(true);
 
     }
 
