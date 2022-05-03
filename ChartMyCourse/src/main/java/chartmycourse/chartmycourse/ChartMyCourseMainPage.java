@@ -51,7 +51,7 @@ public class ChartMyCourseMainPage extends JFrame {
     private JButton planningButton;
     private JLabel planningHeading;
     private JPanel planningPanel;
-    private JButton postReplyButton;
+    private JButton postDiscussionButton;
     private JButton qAndAButton;
     private JPanel qAndAPanel;
     private JTable qAndATable;
@@ -90,8 +90,7 @@ public class ChartMyCourseMainPage extends JFrame {
     private JTextArea welcomeSplashTextArea;
     private JScrollPane welcomeSplashTextPane;
     private String curUserString = "not logged in";
-    private JButton viewPostButton;
-    private JButton viewRepliesButton;
+
     private JTable replyTable;
     private Post curPost;
     private JDialog replyDialog;
@@ -109,7 +108,8 @@ public class ChartMyCourseMainPage extends JFrame {
     private JDialog postDialog;
     private JTextField addReplyText;
     private JTextField addReply;
-    private JButton viewReplyButton;
+    private JTextField addDiscussionText;
+    private JTextField addDiscussion;
     
     public class ButtonColumn extends AbstractCellEditor
 	implements TableCellRenderer, TableCellEditor, ActionListener, MouseListener
@@ -402,11 +402,8 @@ public class ChartMyCourseMainPage extends JFrame {
         addReviewRating = new JTextField();
         addReviewCRN = new JTextField();
         addReviewText = new JTextField();
-        postReplyButton = new JButton();
-        viewPostButton = new JButton();
-        viewRepliesButton = new JButton();
+        postDiscussionButton = new JButton();
         removeReviewButton = new JButton();
-        viewReplyButton = new JButton();
         replyTable = new JTable();
         
         loginDialog.setTitle("login");
@@ -968,8 +965,8 @@ public class ChartMyCourseMainPage extends JFrame {
         });
         qAndATableScrollPane.setViewportView(qAndATable);
 
-        viewReplyButton.setText("View Reply");
-        viewReplyButton.setFont(new Font("sansserif", 0, 8));
+        /*viewReplyButton.setText("View Reply");
+        viewReplyButton.setFont(new Font("sansserif", 0, 8));*/
 
         /**
          * This is the functionality of clicking the View Post button
@@ -979,13 +976,15 @@ public class ChartMyCourseMainPage extends JFrame {
          */
         Action view = new AbstractAction() {
             public void actionPerformed(ActionEvent e) {
+                DefaultTableModel model = (DefaultTableModel) qAndATable.getModel();
+
                 int index = qAndATable.getSelectedRow();
                 curPost = postsArray.get(qAndATable.getSelectedRow());
                 postDialog = new JDialog(postDialog, "View Post");
                 postDialog.setLayout(new GridLayout(4, 1));
                 JTextArea postContents = new JTextArea();
-                postContents.setColumns(20);
-                postContents.setRows(5);
+                postContents.setColumns(50);
+                postContents.setRows(3);
                 postContents.append(curPost.getPostContents());
                 postContents.setEditable(false);
 
@@ -1001,7 +1000,7 @@ public class ChartMyCourseMainPage extends JFrame {
                         postsArray.get(index).setUpvotes(curPost.getUpvotes() + 1);
 
                         // TODO Get Table to change when adding upvotes
-                        ((AbstractTableModel) qAndATable.getModel()).fireTableDataChanged();
+                        model.fireTableDataChanged();
                         removeUpvoteButton.setEnabled(true);
                         upvoteButton.setEnabled(false);
                     }
@@ -1024,6 +1023,8 @@ public class ChartMyCourseMainPage extends JFrame {
                         curPost.getReplies().add(reply);
                         curPost.setReplyCount(curPost.getReplyCount() + 1);
 
+                        model.fireTableDataChanged();
+
                         // TODO get table to change when updating num replies
                     }
                 });
@@ -1033,7 +1034,7 @@ public class ChartMyCourseMainPage extends JFrame {
                         postsArray.get(index).setUpvotes(curPost.getUpvotes() - 1);
 
                         // TODO Get table to change when removing upvotes
-                        ((AbstractTableModel) qAndATable.getModel()).fireTableDataChanged();
+                        model.fireTableDataChanged();
                         upvoteButton.setEnabled(true);
                         removeUpvoteButton.setEnabled(false);
                     }
@@ -1055,13 +1056,15 @@ public class ChartMyCourseMainPage extends JFrame {
 
             @Override
             public void actionPerformed(ActionEvent e) {
+                DefaultTableModel model = (DefaultTableModel) replyTable.getModel();
+
                 int index = replyTable.getSelectedRow();
                 Reply reply = curPost.getReplies().get(index);
                 replyDialog = new JDialog(replyDialog, "View Post");
                 replyDialog.setLayout(new GridLayout(3, 1));
                 JTextArea postContents = new JTextArea();
-                postContents.setColumns(20);
-                postContents.setRows(5);
+                postContents.setColumns(50);
+                postContents.setRows(3);
                 postContents.append(reply.getPostContents());
                 postContents.setEditable(false);
                 replyDialog.add(postContents);
@@ -1075,7 +1078,7 @@ public class ChartMyCourseMainPage extends JFrame {
                         reply.setUpvotes(reply.getUpvotes() + 1);
 
                         // TODO Get Table to change when adding upvotes
-                        ((AbstractTableModel) replyTable.getModel()).fireTableDataChanged();
+                        model.fireTableDataChanged();
                         removeUpvoteButton.setEnabled(true);
                         upvoteButton.setEnabled(false);
                     }
@@ -1087,7 +1090,7 @@ public class ChartMyCourseMainPage extends JFrame {
                         reply.setUpvotes(reply.getUpvotes() - 1);
 
                         // TODO Get table to change when removing upvotes
-                        ((AbstractTableModel) replyTable.getModel()).fireTableDataChanged();
+                        model.fireTableDataChanged();
                         upvoteButton.setEnabled(true);
                         removeUpvoteButton.setEnabled(false);
                     }
@@ -1155,11 +1158,6 @@ public class ChartMyCourseMainPage extends JFrame {
         ButtonColumn buttonColumn = new ButtonColumn(qAndATable, view, 3);
         ButtonColumn buttonColumn2 = new ButtonColumn(qAndATable, viewReplies, 4);
 
-        viewPostButton.setText("View Post");
-        viewPostButton.setFont(new Font("sansserif", 0, 8));
-        viewRepliesButton.setText("View Replies");
-        viewRepliesButton.setFont(new Font("sansserif", 0, 8));
-
         // TODO render buttons correctly in table
         qAndATable.setDefaultRenderer(JButton.class, new JTableButtonRenderer());
 
@@ -1167,8 +1165,15 @@ public class ChartMyCourseMainPage extends JFrame {
         TableRowSorter<TableModel> QnAsorter = new TableRowSorter(qAndATable.getModel());
         qAndATable.setRowSorter(QnAsorter);
 
-        postReplyButton.setFont(new Font("Segoe UI", 0, 8));
-        postReplyButton.setText("Post New Discussion");
+        postDiscussionButton.setFont(new Font("Segoe UI", 0, 8));
+        postDiscussionButton.setText("Post New Discussion");
+
+        postDiscussionButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                addNewDiscussionActionPerformed(e);
+            }
+        });
 
         GroupLayout qAndAPanelLayout = new GroupLayout(qAndAPanel);
         qAndAPanel.setLayout(qAndAPanelLayout);
@@ -1182,7 +1187,7 @@ public class ChartMyCourseMainPage extends JFrame {
                         //.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
                         //.addComponent(searchText, GroupLayout.PREFERRED_SIZE, 238, GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(postReplyButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(postDiscussionButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addComponent(qAndATableScrollPane, GroupLayout.PREFERRED_SIZE, 452, GroupLayout.PREFERRED_SIZE))
                 .addGap(109, 109, 109))
         );
@@ -1193,7 +1198,7 @@ public class ChartMyCourseMainPage extends JFrame {
                 .addGroup(qAndAPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
                     //.addComponent(searchLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     //.addComponent(searchText)
-                    .addComponent(postReplyButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(postDiscussionButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(qAndATableScrollPane, GroupLayout.PREFERRED_SIZE, 237, GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -1339,13 +1344,12 @@ public class ChartMyCourseMainPage extends JFrame {
         	loginDialog.setVisible(false);
             curUserString = inputUser.getRealName();
             curUserLabel.setText(curUserString);
-	    loggedIn = true;
+	        loggedIn = true;
             loginRequestButton.setText("logout");
-	    if(curUserString.equalsIgnoreCase("admin")) {
+	        if (curUserString.equalsIgnoreCase("admin")) {
             	removeReviewButton.setVisible(true);
             }
-        }
-        else {
+        } else {
         	JOptionPane.showMessageDialog(null, "Account information not found.");
         }
     	
@@ -1736,6 +1740,31 @@ public class ChartMyCourseMainPage extends JFrame {
         loginDialog.setVisible(false);
         signupDialog.setVisible(true);
 
+    }
+
+    /**
+     * This is the functionality for add discussion post
+     * @author Mia Gortney
+     * @version 1.0
+     * @since 1.0
+     */
+    private void addNewDiscussionActionPerformed(ActionEvent eventHappens) {
+        addDiscussionText = new JTextField();
+        addDiscussion = new JTextField();
+        addDiscussionText.setColumns(50);
+        addDiscussion.setColumns(50);
+        Object[] message = {
+                "Discussion:", addDiscussion
+        };
+        int option = JOptionPane.showConfirmDialog(null, message, "Add Discussion Post", JOptionPane.OK_CANCEL_OPTION);
+        ((DefaultTableModel) qAndATable.getModel()).insertRow(qAndATable.getRowCount(),
+                new Object[]{curUser.getRealName(), 0, 0, "View Post", "View Replies"});
+        Post temp = new Post();
+        temp.setAuthor(curUser.getRealName());
+        temp.setUpvotes(0);
+        temp.setReplyCount(0);
+        temp.setPostContents(addDiscussion.getText());
+        postsArray.add(temp);
     }
 
     /*private void searchTextActionPerformed(ActionEvent eventHappens) {
