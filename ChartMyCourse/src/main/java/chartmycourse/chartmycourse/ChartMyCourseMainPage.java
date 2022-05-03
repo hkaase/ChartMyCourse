@@ -94,6 +94,7 @@ public class ChartMyCourseMainPage extends JFrame {
     private JTable replyTable;
     private Post curPost;
     private JDialog replyDialog;
+    private JButton removeDiscussionButton;
 
     //This array holds the list of reviews.
     private final ArrayList<Review> reviewArray = new ArrayList<>();
@@ -405,6 +406,7 @@ public class ChartMyCourseMainPage extends JFrame {
         postDiscussionButton = new JButton();
         removeReviewButton = new JButton();
         replyTable = new JTable();
+        removeDiscussionButton = new JButton();
         
         loginDialog.setTitle("login");
         loginDialog.setBackground(new Color(0, 88, 5));
@@ -1175,6 +1177,16 @@ public class ChartMyCourseMainPage extends JFrame {
             }
         });
 
+        removeDiscussionButton.setFont(new Font("Segoe UI", 0, 8));
+        removeDiscussionButton.setText("Remove Discussion");
+
+        removeDiscussionButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                removeDiscussionActionPerformed(e);
+            }
+        });
+
         GroupLayout qAndAPanelLayout = new GroupLayout(qAndAPanel);
         qAndAPanel.setLayout(qAndAPanelLayout);
         qAndAPanelLayout.setHorizontalGroup(
@@ -1188,8 +1200,9 @@ public class ChartMyCourseMainPage extends JFrame {
                         //.addComponent(searchText, GroupLayout.PREFERRED_SIZE, 238, GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(postDiscussionButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(removeDiscussionButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addComponent(qAndATableScrollPane, GroupLayout.PREFERRED_SIZE, 452, GroupLayout.PREFERRED_SIZE))
-                .addGap(109, 109, 109))
+                .addGap(109, 109, 109)
         );
         qAndAPanelLayout.setVerticalGroup(
             qAndAPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
@@ -1199,6 +1212,7 @@ public class ChartMyCourseMainPage extends JFrame {
                     //.addComponent(searchLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     //.addComponent(searchText)
                     .addComponent(postDiscussionButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(removeDiscussionButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(qAndATableScrollPane, GroupLayout.PREFERRED_SIZE, 237, GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -1765,6 +1779,29 @@ public class ChartMyCourseMainPage extends JFrame {
         temp.setReplyCount(0);
         temp.setPostContents(addDiscussion.getText());
         postsArray.add(temp);
+    }
+
+    /**
+     * This is the functionality for remove discussion post
+     * @author Mia Gortney
+     * @version 1.0
+     * @since 1.0
+     */
+    private void removeDiscussionActionPerformed(ActionEvent eventHappens) {
+        if (postsArray.get(qAndATable.getSelectedRow()).getAuthor().equals(curUser.getRealName())) {
+
+            Post post = postsArray.get(qAndATable.getSelectedRow());
+            int answer = JOptionPane
+                    .showConfirmDialog(null,
+                            "Do you want to remove \"" + post.getPostContents() + "\"?",
+                            "Confirm", JOptionPane.YES_NO_OPTION);
+            if (answer == 0) {
+                DefaultTableModel model = (DefaultTableModel) qAndATable.getModel();
+                model.removeRow(qAndATable.getSelectedRow());
+            }
+        } else {
+            JOptionPane.showMessageDialog(null,"You can't remove discussions that you didn't write!","Alert",JOptionPane.WARNING_MESSAGE);
+        }
     }
 
     /*private void searchTextActionPerformed(ActionEvent eventHappens) {
