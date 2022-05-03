@@ -698,7 +698,7 @@ public class ChartMyCourseMainPage extends JFrame {
         });
 
 
-        addReview.setText("Add a Course Review");
+        addReview.setText("Add Review");
         addReview.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent eventHappens) {
@@ -765,10 +765,10 @@ public class ChartMyCourseMainPage extends JFrame {
                     .addComponent(reviewsHeader, GroupLayout.PREFERRED_SIZE, 118, GroupLayout.PREFERRED_SIZE)
                     .addComponent(saveCourseButton)
 		    .addComponent(removeReviewButton)
-                    .addComponent(saveProfButton, GroupLayout.PREFERRED_SIZE, 118, GroupLayout.PREFERRED_SIZE)
-                        .addComponent(addReview,GroupLayout.PREFERRED_SIZE,118,GroupLayout.PREFERRED_SIZE))
+                    .addComponent(saveProfButton, GroupLayout.PREFERRED_SIZE, 125, GroupLayout.PREFERRED_SIZE)
+                        .addComponent(addReview,GroupLayout.PREFERRED_SIZE,125,GroupLayout.PREFERRED_SIZE))
 
-                .addGap(18, 18, 18)
+                .addGap(5, 5, 5)
                 .addComponent(reviewsTableScrollPane, GroupLayout.DEFAULT_SIZE, 593, Short.MAX_VALUE))
         );
         reviewsPanelLayout.setVerticalGroup(
