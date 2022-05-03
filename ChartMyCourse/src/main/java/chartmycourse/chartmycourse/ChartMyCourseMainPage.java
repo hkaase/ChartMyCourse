@@ -1779,6 +1779,23 @@ public class ChartMyCourseMainPage extends JFrame {
         temp.setReplyCount(0);
         temp.setPostContents(addDiscussion.getText());
         postsArray.add(temp);
+
+        try {
+            FileWriter myWriter = new FileWriter("posts.txt");
+            for(int k = 0; k < qAndATable.getRowCount(); k++) {
+                for(int l = 0; l < qAndATable.getColumnCount(); l++) {
+                    myWriter.write(qAndATable.getModel().getValueAt(k, l).toString());
+                    if(l != qAndATable.getColumnCount() - 1) {
+                        myWriter.write(",");
+                    }
+                }
+                myWriter.write("\n");
+            }
+
+            myWriter.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -1798,6 +1815,24 @@ public class ChartMyCourseMainPage extends JFrame {
             if (answer == 0) {
                 DefaultTableModel model = (DefaultTableModel) qAndATable.getModel();
                 model.removeRow(qAndATable.getSelectedRow());
+                postsArray.remove(qAndATable.getSelectedRow());
+
+                try {
+                    FileWriter myWriter = new FileWriter("posts.txt");
+                    for(int k = 0; k < qAndATable.getRowCount(); k++) {
+                        for(int l = 0; l < qAndATable.getColumnCount(); l++) {
+                            myWriter.write(qAndATable.getModel().getValueAt(k, l).toString());
+                            if(l != qAndATable.getColumnCount() - 1) {
+                                myWriter.write(",");
+                            }
+                        }
+                        myWriter.write("\n");
+                    }
+
+                    myWriter.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         } else {
             JOptionPane.showMessageDialog(null,"You can't remove discussions that you didn't write!","Alert",JOptionPane.WARNING_MESSAGE);
