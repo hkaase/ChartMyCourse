@@ -1281,7 +1281,6 @@ public class ChartMyCourseMainPage extends JFrame {
      * @Since 1.0
      */
     private void recommendedProfessorsButtonActionPerformed(ActionEvent eventHappens) {
-        System.out.println("HERLLLO");
         recommendedProfessorDialog = new JDialog(this, "Recommended Professor");
         recommendedProfessorDialog.setLayout(new GridLayout(3, 1));
 
