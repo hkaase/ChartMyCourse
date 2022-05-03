@@ -1,8 +1,8 @@
-1,1,CSI 1430
-2,2,CSI 1440,CSI 2350
-3,2,CSI 2334,CSI 3334
-4,2,CSI 3471,CSI 3344
-5,3,CSI 3336,CSI 3335,CSI 3372
-6,3,CSI 3439,CSI 4321,CSI 4111
-7,3,CSI 4337,PHI 1310,CSI 4323
-8,2,CSI 43C9,CSI 4330
+1,1,CSI 1430 Intro to Computer Science I
+2,2,CSI 1440 Intro to Computer Science II,CSI 2350 Discrete Structures
+3,2,CSI 2334 Intro to Computer Systems,CSI 3334 Data Structures
+4,2,CSI 3471 Software Engineering I,CSI 3344 Intro to Algorithms
+5,3,CSI 3336 Systems Programming,CSI 3335 Database Design,CSI 3372 Software Engineering II
+6,3,CSI 3439 Computer Architecture,CSI 4321 Data Communication,CSI 4144 Competitive Learning
+7,3,CSI 4337 Operating Systems,PHI 1310 Computer Ethics,CSI 4323 Intro to Cybersecurity
+8,2,CSI 43C9 Capstone Design,CSI 4330 Foundations of Computing
