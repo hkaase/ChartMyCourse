@@ -1061,9 +1061,127 @@ public class ChartMyCourseMainPage extends JFrame {
         
     }
 
-    //This is the recommended courses button, on the 
+    /**
+     * This is the functionality of clicking the Recommended Courses button
+     * @author Ricardo Boone
+     * @version 1.0
+     * @Since 1.0
+     */
     private void recommendedCoursesButtonActionPerformed(ActionEvent eventHappens) {
-    	//TODO add recommended courses button functionality
+        JDialog dialog = new JDialog(this, "Recommended Course");
+        dialog.setLayout(new GridLayout(4, 1));
+
+        JLabel numUni = new JLabel("Number of Universities: ");
+
+        List<JLabel> courses = new ArrayList<>();
+
+
+        List<String> years = new ArrayList<>();
+        years.add("--");
+        years.add("Freshman");
+        years.add("Sophmore");
+        years.add("Junior");
+        years.add("Senior");
+
+        List<String> sem = new ArrayList<>();
+        sem.add("--");
+        sem.add("Fall");
+        sem.add("Spring");
+
+        JComboBox yearList = new JComboBox(years.toArray());
+        JComboBox semList = new JComboBox(sem.toArray());
+
+        JButton refresh = new JButton("Refresh");
+
+        dialog.add(refresh);
+        dialog.add(yearList);
+        dialog.add(semList);
+
+        JPanel coursePanel = new JPanel();
+        coursePanel.setLayout(new BoxLayout(coursePanel, BoxLayout.Y_AXIS));
+        dialog.add(coursePanel);
+
+        for(int i = 0; i < courses.size(); i++) {
+            coursePanel.add(courses.get(i));
+        }
+
+        refresh.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                courses.clear();
+                int num = coursePanel.getComponentCount();
+                for(int i = 0; i < num; i++) {
+                    coursePanel.remove(0);
+                }
+                int value = -1;
+
+                if(yearList.getSelectedItem() == null || yearList.getSelectedItem().equals("--")) {
+                    courses.add(new JLabel("Please select a Year"));
+                }
+                else if(yearList.getSelectedItem().equals("Freshman")) {
+                    value = 1;
+                }
+                else if(yearList.getSelectedItem().equals("Sophmore")) {
+                    value = 2;
+                }
+                else if(yearList.getSelectedItem().equals("Junior")) {
+                    value = 3;
+                }
+                else if(yearList.getSelectedItem().equals("Senior")) {
+                    value = 4;
+                }
+
+
+                if(semList.getSelectedItem() == null || semList.getSelectedItem().equals("--")) {
+                    courses.add(new JLabel("Please select a Semester"));
+                    value = -1;
+                }
+                else if(semList.getSelectedItem().equals("Fall")) {
+                    value = value*2 - 1;
+                }
+                else if(semList.getSelectedItem().equals("Spring")) {
+                    value = value*2;
+                }
+
+                if(value >= 1) {
+                    try {
+
+
+                        BufferedReader reader = new BufferedReader(new FileReader("RecCourses.csv"));
+                        String line = "";
+
+                        for(int i = 0; i < value; i++) {
+                            line = reader.readLine();
+                        }
+
+                        String[] split = line.split(",");
+
+                        for(int i = 0; i < Integer.parseInt(split[1]); i++) {
+                            courses.add(new JLabel(split[2 + i]));
+                        }
+
+                    }
+                    catch (IOException e2) {
+                        System.out.println("IO Error");
+                        e2.printStackTrace();
+                    }
+                    catch (IndexOutOfBoundsException e2) {
+                        System.out.println("Index error");
+                        e2.printStackTrace();
+                    }
+                }
+
+                for(int i = 0; i < courses.size(); i++) {
+                    coursePanel.add(courses.get(i));
+                }
+                coursePanel.updateUI();
+
+            }
+        });
+
+        dialog.setSize(250,300);
+        dialog.setVisible(true);
+
     }
 
     private void planningButtonActionPerformed(ActionEvent eventHappens) {
