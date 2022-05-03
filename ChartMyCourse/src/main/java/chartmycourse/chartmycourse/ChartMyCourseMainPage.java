@@ -1176,7 +1176,6 @@ public class ChartMyCourseMainPage extends JFrame {
 
         recommendedCourseDialog.setSize(250,300);
         recommendedCourseDialog.setVisible(true);
-
     }
 
     private void planningButtonActionPerformed(ActionEvent eventHappens) {
@@ -1192,30 +1191,42 @@ public class ChartMyCourseMainPage extends JFrame {
         // TODO add filter functionality
     }
     private void addReviewButtonActionPerformed(ActionEvent eventHappens){
-        addReviewText.setColumns(50);
-        Object [] message = {
-                "CRN:", addReviewCRN,
-                "Author:", addReviewAuthor,
-                "Course:", addReviewCourse,
-                "Professor:", addReviewProfessor,
-                "Rating 1-10:", addReviewRating,
-                "Review Text:", addReviewText
-        };
-        int option = JOptionPane.showConfirmDialog(null,message,"Add Review",JOptionPane.OK_CANCEL_OPTION);
-        //model.insertRow(reviewsTable.getRowCount(), new Object[] {iterReview.getAuthor(), iterReview.getCRN(), iterReview.getCourse(), iterReview.getProfessor(), iterReview.getRating(),iterReview.getReviewBody()});
-        ((DefaultTableModel) reviewsTable.getModel()).insertRow(reviewsTable.getRowCount(),
-                new Object[]{addReviewAuthor.getText(), addReviewCRN.getText(),addReviewCourse.getText(),addReviewProfessor.getText(),Integer.parseInt(addReviewRating.getText()),addReviewText.getText()});
-        Review temp = new Review();
-        temp.setCourse(addReviewCourse.getText());
-        temp.setAuthor(addReviewAuthor.getText());
-        temp.setCRN(addReviewCRN.getText());
-        temp.setProfessor(addReviewProfessor.getText());
-        temp.setReviewBody(addReviewText.getText());
-        temp.setRating(Integer.parseInt(addReview.getText()));
-        reviewArray.add(temp);
-
+        if(loggedIn) {
+            addReviewText.setColumns(50);
+            Object[] message = {
+                    "CRN:", addReviewCRN,
+                    "Author:", addReviewAuthor,
+                    "Course:", addReviewCourse,
+                    "Professor:", addReviewProfessor,
+                    "Rating 1-10:", addReviewRating,
+                    "Review Text:", addReviewText
+            };
+            int option = JOptionPane.showConfirmDialog(null, message, "Add Review", JOptionPane.OK_CANCEL_OPTION);
+            //model.insertRow(reviewsTable.getRowCount(), new Object[] {iterReview.getAuthor(), iterReview.getCRN(), iterReview.getCourse(), iterReview.getProfessor(), iterReview.getRating(),iterReview.getReviewBody()});
+            ((DefaultTableModel) reviewsTable.getModel()).insertRow(reviewsTable.getRowCount(),
+                    new Object[]{addReviewAuthor.getText(), addReviewCRN.getText(), addReviewCourse.getText(), addReviewProfessor.getText(), Integer.parseInt(addReviewRating.getText()), addReviewText.getText()});
+            Review temp = new Review();
+            temp.setCourse(addReviewCourse.getText());
+            temp.setAuthor(addReviewAuthor.getText());
+            temp.setCRN(addReviewCRN.getText());
+            temp.setProfessor(addReviewProfessor.getText());
+            temp.setReviewBody(addReviewText.getText());
+            temp.setRating(Integer.parseInt(addReview.getText()));
+            reviewArray.add(temp);
+        } else {
+            displayNotLoggedInError();
+        }
     }
 
+    private void displayNotLoggedInError() {
+        JFrame notLogged = new JFrame("Not logged in");
+        JLabel notLoggedLbl = new JLabel("You must be logged in to perform this action");
+
+        notLogged.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        notLogged.add(notLoggedLbl);
+        notLogged.pack();
+        notLogged.setVisible(true);
+    }
 	
     private void removeReviewActionPerformed(ActionEvent eventHappens){
     	//TODO removeReview
