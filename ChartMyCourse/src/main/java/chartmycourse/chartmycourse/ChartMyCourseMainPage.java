@@ -1771,31 +1771,34 @@ public class ChartMyCourseMainPage extends JFrame {
                 "Discussion:", addDiscussion
         };
         int option = JOptionPane.showConfirmDialog(null, message, "Add Discussion Post", JOptionPane.OK_CANCEL_OPTION);
-        ((DefaultTableModel) qAndATable.getModel()).insertRow(qAndATable.getRowCount(),
-                new Object[]{curUser.getRealName(), 0, 0, "View Post", "View Replies"});
-        Post temp = new Post();
-        temp.setAuthor(curUser.getRealName());
-        temp.setUpvotes(0);
-        temp.setReplyCount(0);
-        temp.setPostContents(addDiscussion.getText());
-        postsArray.add(temp);
+        if (option == JOptionPane.OK_OPTION) {
+        	((DefaultTableModel) qAndATable.getModel()).insertRow(qAndATable.getRowCount(),
+        			new Object[]{curUser.getRealName(), 0, 0, "View Post", "View Replies"});
+            Post temp = new Post();
+            temp.setAuthor(curUser.getRealName());
+            temp.setUpvotes(0);
+            temp.setReplyCount(0);
+            temp.setPostContents(addDiscussion.getText());
+            postsArray.add(temp);
 
-        try {
-            FileWriter myWriter = new FileWriter("posts.txt");
-            for(int k = 0; k < qAndATable.getRowCount(); k++) {
-                for(int l = 0; l < qAndATable.getColumnCount(); l++) {
-                    myWriter.write(qAndATable.getModel().getValueAt(k, l).toString());
-                    if(l != qAndATable.getColumnCount() - 1) {
-                        myWriter.write(",");
+            try {
+                FileWriter myWriter = new FileWriter("posts.txt");
+                for(int k = 0; k < qAndATable.getRowCount(); k++) {
+                    for(int l = 0; l < qAndATable.getColumnCount(); l++) {
+                        myWriter.write(qAndATable.getModel().getValueAt(k, l).toString());
+                        if(l != qAndATable.getColumnCount() - 1) {
+                            myWriter.write(",");
+                        }
                     }
+                    myWriter.write("\n");
                 }
-                myWriter.write("\n");
-            }
 
-            myWriter.close();
-        } catch (Exception e) {
-            e.printStackTrace();
+                myWriter.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
+                
     }
 
     /**
@@ -1805,7 +1808,8 @@ public class ChartMyCourseMainPage extends JFrame {
      * @since 1.0
      */
     private void removeDiscussionActionPerformed(ActionEvent eventHappens) {
-    	if (qAndATable.getSelectedRow() >= 0) {
+    	int selectedRow = qAndATable.getSelectedRow();
+    	if (selectedRow >= 0) {
 	    	if (postsArray.get(qAndATable.getSelectedRow()).getAuthor().equals(curUser.getRealName())) {
 	
 	            Post post = postsArray.get(qAndATable.getSelectedRow());
@@ -1816,8 +1820,8 @@ public class ChartMyCourseMainPage extends JFrame {
 	            if (answer == 0) {
 	                DefaultTableModel model = (DefaultTableModel) qAndATable.getModel();
 	               
-	                	model.removeRow(qAndATable.getSelectedRow());
-	                    postsArray.remove(qAndATable.getSelectedRow());
+	                	model.removeRow(selectedRow);
+	                    postsArray.remove(selectedRow);
 	
 	                    try {
 	                        FileWriter myWriter = new FileWriter("posts.txt");
@@ -2097,7 +2101,7 @@ public class ChartMyCourseMainPage extends JFrame {
     	DefaultTableModel model = (DefaultTableModel) qAndATable.getModel();
 
     	for (Post iterPost : postsArray) {
-    		model.insertRow(qAndATable.getRowCount(), new Object[] {iterPost.getAuthor(), iterPost.getReplyCount(), iterPost.getUpvotes(), "View Post", "View Replies"});
+    		model.insertRow(qAndATable.getRowCount(), new Object[] {iterPost.getAuthor(), iterPost.getReplyCount(), iterPost.getUpvotes(), "View", "View"});
     	}
     	model.fireTableDataChanged();
     	
