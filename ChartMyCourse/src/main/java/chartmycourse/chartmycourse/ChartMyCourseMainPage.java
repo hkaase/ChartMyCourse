@@ -65,6 +65,8 @@ public class ChartMyCourseMainPage extends JFrame {
     private JButton reviewsButton;
     private JLabel reviewsHeader;
     private JButton addReview;
+    private JTextField addReviewCRN;
+    private JTextField addReviewAuthor, addReviewCourse, addReviewProfessor, addReviewRating, addReviewText;
     private JPanel reviewsPanel;
     private JTable reviewsTable;
     private JScrollPane reviewsTableScrollPane;
@@ -372,7 +374,12 @@ public class ChartMyCourseMainPage extends JFrame {
         //searchText = new JTextField();
         qAndATableScrollPane = new JScrollPane();
         qAndATable = new JTable();
-       
+        addReviewAuthor = new JTextField();
+        addReviewCourse = new JTextField();
+        addReviewProfessor = new JTextField();
+        addReviewRating = new JTextField();
+        addReviewCRN = new JTextField();
+        addReviewText = new JTextField();
         postReplyButton = new JButton();
         viewPostButton = new JButton();
         viewRepliesButton = new JButton();
@@ -1072,8 +1079,30 @@ public class ChartMyCourseMainPage extends JFrame {
         // TODO add filter functionality
     }
     private void addReviewButtonActionPerformed(ActionEvent eventHappens){
+        addReviewText.setColumns(50);
+        Object [] message = {
+                "CRN:", addReviewCRN,
+                "Author:", addReviewAuthor,
+                "Course:", addReviewCourse,
+                "Professor:", addReviewProfessor,
+                "Rating 1-10:", addReviewRating,
+                "Review Text:", addReviewText
+        };
+        int option = JOptionPane.showConfirmDialog(null,message,"Add Review",JOptionPane.OK_CANCEL_OPTION);
+        //model.insertRow(reviewsTable.getRowCount(), new Object[] {iterReview.getAuthor(), iterReview.getCRN(), iterReview.getCourse(), iterReview.getProfessor(), iterReview.getRating(),iterReview.getReviewBody()});
+        ((DefaultTableModel) reviewsTable.getModel()).insertRow(reviewsTable.getRowCount(),
+                new Object[]{addReviewAuthor.getText(), addReviewCRN.getText(),addReviewCourse.getText(),addReviewProfessor.getText(),Integer.parseInt(addReviewRating.getText()),addReviewText.getText()});
+        Review temp = new Review();
+        temp.setCourse(addReviewCourse.getText());
+        temp.setAuthor(addReviewAuthor.getText());
+        temp.setCRN(addReviewCRN.getText());
+        temp.setProfessor(addReviewProfessor.getText());
+        temp.setReviewBody(addReviewText.getText());
+        temp.setRating(Integer.parseInt(addReview.getText()));
+        reviewArray.add(temp);
 
     }
+
 	
     private void removeReviewActionPerformed(ActionEvent eventHappens){
     	//TODO removeReview
