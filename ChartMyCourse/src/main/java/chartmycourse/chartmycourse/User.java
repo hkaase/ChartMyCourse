@@ -11,8 +11,8 @@ public class User {
 	public String password;
 	int year;
 
-	public Set<String> professorList;
-	public Set<String> courseList;
+	public Set<String> professorList = new HashSet<String>();
+	public Set<String> courseList = new HashSet<String>();
 	
 	
 	public boolean compare(User testUser) {
