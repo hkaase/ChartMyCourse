@@ -3,20 +3,18 @@ package chartmycourse.chartmycourse;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.List;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.border.LineBorder;
 import javax.swing.table.*;
+
 import java.io.FileWriter;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.event.ActionListener;
 
 import net.coderazzi.filters.gui.AutoChoices;
 import net.coderazzi.filters.gui.TableFilterHeader;
@@ -33,7 +31,6 @@ import net.coderazzi.filters.gui.TableFilterHeader;
 public class ChartMyCourseMainPage extends JFrame {
 
 	//These are the required buttons, labels, and other swing elements.
-    private JDialog addReviewDialog;
 	private JLabel chartmycoursewatermark;
     private JLabel curUserHeading;
     private JLabel curUserLabel;
@@ -68,13 +65,6 @@ public class ChartMyCourseMainPage extends JFrame {
     private JButton reviewsButton;
     private JLabel reviewsHeader;
     private JButton addReview;
-    private JTextField addReviewCRN;
-    private JTextField addReviewAuthor;
-    private JTextField addReviewCourse;
-    private JTextField addReviewProfessor;
-    private JTextField addReviewText;
-    private JTextField addReviewRating;
-
     private JPanel reviewsPanel;
     private JTable reviewsTable;
     private JScrollPane reviewsTableScrollPane;
@@ -90,13 +80,226 @@ public class ChartMyCourseMainPage extends JFrame {
     private JTextField usernameTextField;
     private JTextArea welcomeSplashTextArea;
     private JScrollPane welcomeSplashTextPane;
-    private String curUser = "not logged in";
+    private String curUserString = "not logged in";
+    private JButton viewPostButton;
+    private JButton viewRepliesButton;
+
     //This array holds the list of reviews.
-    private ArrayList<Review> reviewArray = new ArrayList<Review>();
+    private final ArrayList<Review> reviewArray = new ArrayList<>();
     //This array holds the list of users.
-    private ArrayList<User> userArray = new ArrayList<User>();
+    private final ArrayList<User> userArray = new ArrayList<>();
     //This array holds the list of posts.
-    private ArrayList<Post> postsArray = new ArrayList<Post>();
+    private final ArrayList<Post> postsArray = new ArrayList<>();
+    private Boolean loggedIn = false;
+    private DefaultTableModel reviewtablemodel;
+    private JButton removeReviewButton;
+    private User curUser;
+    
+    public class ButtonColumn extends AbstractCellEditor
+	implements TableCellRenderer, TableCellEditor, ActionListener, MouseListener
+{
+	private JTable table;
+	private Action action;
+	private int mnemonic;
+	private Border originalBorder;
+	private Border focusBorder;
+
+	private JButton renderButton;
+	private JButton editButton;
+	private Object editorValue;
+	private boolean isButtonColumnEditor;
+
+	/**
+	 *  Create the ButtonColumn to be used as a renderer and editor. The
+	 *  renderer and editor will automatically be installed on the TableColumn
+	 *  of the specified column.
+	 *
+	 *  @param table the table containing the button renderer/editor
+	 *  @param action the Action to be invoked when the button is invoked
+	 *  @param column the column to which the button renderer/editor is added
+	 */
+	public ButtonColumn(JTable table, Action action, int column)
+	{
+		this.table = table;
+		this.action = action;
+
+		renderButton = new JButton("Action");
+		editButton = new JButton("Action");
+		editButton.setFocusPainted( false );
+		editButton.addActionListener( this );
+		originalBorder = editButton.getBorder();
+		setFocusBorder( new LineBorder(Color.BLUE) );
+
+		TableColumnModel columnModel = table.getColumnModel();
+		columnModel.getColumn(column).setCellRenderer( this );
+		columnModel.getColumn(column).setCellEditor( this );
+		table.addMouseListener( this );
+	}
+
+
+	/**
+	 *  Get foreground color of the button when the cell has focus
+	 *
+	 *  @return the foreground color
+	 */
+	public Border getFocusBorder()
+	{
+		return focusBorder;
+	}
+
+	/**
+	 *  The foreground color of the button when the cell has focus
+	 *
+	 *  @param focusBorder the foreground color
+	 */
+	public void setFocusBorder(Border focusBorder)
+	{
+		this.focusBorder = focusBorder;
+		editButton.setBorder( focusBorder );
+	}
+
+	public int getMnemonic()
+	{
+		return mnemonic;
+	}
+
+	/**
+	 *  The mnemonic to activate the button when the cell has focus
+	 *
+	 *  @param mnemonic the mnemonic
+	 */
+	public void setMnemonic(int mnemonic)
+	{
+		this.mnemonic = mnemonic;
+		renderButton.setMnemonic(mnemonic);
+		editButton.setMnemonic(mnemonic);
+	}
+
+	@Override
+	public Component getTableCellEditorComponent(
+		JTable table, Object value, boolean isSelected, int row, int column)
+	{
+		if (value == null)
+		{
+			editButton.setText( "" );
+			editButton.setIcon( null );
+		}
+		else if (value instanceof Icon)
+		{
+			editButton.setText( "" );
+			editButton.setIcon( (Icon)value );
+		}
+		else
+		{
+			editButton.setText( value.toString() );
+			editButton.setIcon( null );
+		}
+
+		this.editorValue = value;
+		return editButton;
+	}
+
+	@Override
+	public Object getCellEditorValue()
+	{
+		return editorValue;
+	}
+
+//
+//  Implement TableCellRenderer interface
+//
+	public Component getTableCellRendererComponent(
+		JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column)
+	{
+		if (isSelected)
+		{
+			renderButton.setForeground(table.getSelectionForeground());
+	 		renderButton.setBackground(table.getSelectionBackground());
+		}
+		else
+		{
+			renderButton.setForeground(table.getForeground());
+			renderButton.setBackground(UIManager.getColor("Button.background"));
+		}
+
+		if (hasFocus)
+		{
+			renderButton.setBorder( focusBorder );
+		}
+		else
+		{
+			renderButton.setBorder( originalBorder );
+		}
+
+//		renderButton.setText( (value == null) ? "" : value.toString() );
+		if (value == null)
+		{
+			renderButton.setText( "" );
+			renderButton.setIcon( null );
+		}
+		else if (value instanceof Icon)
+		{
+			renderButton.setText( "" );
+			renderButton.setIcon( (Icon)value );
+		}
+		else
+		{
+			renderButton.setText( value.toString() );
+			renderButton.setIcon( null );
+		}
+
+		return renderButton;
+	}
+
+//
+//  Implement ActionListener interface
+//
+	/*
+	 *	The button has been pressed. Stop editing and invoke the custom Action
+	 */
+	public void actionPerformed(ActionEvent e)
+	{
+		int row = table.convertRowIndexToModel( table.getEditingRow() );
+		fireEditingStopped();
+
+		//  Invoke the Action
+
+		ActionEvent event = new ActionEvent(
+			table,
+			ActionEvent.ACTION_PERFORMED,
+			"" + row);
+		action.actionPerformed(event);
+	}
+
+//
+//  Implement MouseListener interface
+//
+	/*
+	 *  When the mouse is pressed the editor is invoked. If you then then drag
+	 *  the mouse to another cell before releasing it, the editor is still
+	 *  active. Make sure editing is stopped when the mouse is released.
+	 */
+    public void mousePressed(MouseEvent e)
+    {
+    	if (table.isEditing()
+		&&  table.getCellEditor() == this)
+			isButtonColumnEditor = true;
+    }
+
+    public void mouseReleased(MouseEvent e)
+    {
+    	if (isButtonColumnEditor
+    	&&  table.isEditing())
+    		table.getCellEditor().stopCellEditing();
+
+		isButtonColumnEditor = false;
+    }
+
+    public void mouseClicked(MouseEvent e) {}
+	public void mouseEntered(MouseEvent e) {}
+    public void mouseExited(MouseEvent e) {}
+}
+	
     
     
     /**
@@ -169,15 +372,11 @@ public class ChartMyCourseMainPage extends JFrame {
         //searchText = new JTextField();
         qAndATableScrollPane = new JScrollPane();
         qAndATable = new JTable();
+       
         postReplyButton = new JButton();
-        addReviewDialog = new JDialog();
-        addReviewCRN = new JTextField();
-        addReviewAuthor = new JTextField();
-        addReviewCourse = new JTextField();
-        addReviewProfessor = new JTextField();
-        addReviewText = new JTextField();
-        addReviewRating = new JTextField();
-
+        viewPostButton = new JButton();
+        viewRepliesButton = new JButton();
+	removeReviewButton = new JButton();
         
         loginDialog.setTitle("login");
         loginDialog.setBackground(new Color(0, 88, 5));
@@ -380,7 +579,7 @@ public class ChartMyCourseMainPage extends JFrame {
 
         curUserHeading.setText("Current User: ");
 
-        curUserLabel.setText(curUser);
+        curUserLabel.setText(curUserString);
 
         GroupLayout homePanelLayout = new GroupLayout(homePanel);
         homePanel.setLayout(homePanelLayout);
@@ -462,6 +661,13 @@ public class ChartMyCourseMainPage extends JFrame {
         });
 
         reviewsPanel.setPreferredSize(new Dimension(589, 332));
+	    
+	removeReviewButton.setText("Remove Review");
+        removeReviewButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent eventHappens) {
+                removeReviewActionPerformed(eventHappens);
+            }
+        });
 
         selectProfButton.setText("Select Professor");
         selectProfButton.addActionListener(new ActionListener() {
@@ -486,7 +692,7 @@ public class ChartMyCourseMainPage extends JFrame {
         reviewsHeader.setFont(new Font("sansserif", 0, 24));
         reviewsHeader.setText("Reviews");
 
-        reviewsTable.setModel(new DefaultTableModel(
+        reviewtablemodel = new DefaultTableModel(
             new Object [][] {
 
             },
@@ -501,7 +707,8 @@ public class ChartMyCourseMainPage extends JFrame {
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
             }
-        });
+        };
+        reviewsTable.setModel(reviewtablemodel);
         reviewsTable.setColumnSelectionAllowed(true);
         reviewsTable.getTableHeader().setReorderingAllowed(false);
         reviewsTableScrollPane.setViewportView(reviewsTable);
@@ -525,6 +732,7 @@ public class ChartMyCourseMainPage extends JFrame {
                 .addGroup(reviewsPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
                     .addComponent(reviewsHeader, GroupLayout.PREFERRED_SIZE, 118, GroupLayout.PREFERRED_SIZE)
                     .addComponent(selectProfButton)
+		    .addComponent(removeReviewButton)
                     .addComponent(selectFilterButton, GroupLayout.PREFERRED_SIZE, 118, GroupLayout.PREFERRED_SIZE)
                         .addComponent(addReview,GroupLayout.PREFERRED_SIZE,118,GroupLayout.PREFERRED_SIZE))
 
@@ -538,6 +746,8 @@ public class ChartMyCourseMainPage extends JFrame {
                 .addComponent(reviewsHeader)
                 .addGap(12, 12, 12)
                 .addComponent(selectProfButton)
+		.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(removeReviewButton)
                 .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(selectFilterButton)
                     .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
@@ -547,7 +757,7 @@ public class ChartMyCourseMainPage extends JFrame {
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(reviewsTableScrollPane, GroupLayout.PREFERRED_SIZE, 300, GroupLayout.PREFERRED_SIZE))
         );
-
+        removeReviewButton.setVisible(false);
         planningPanel.setPreferredSize(new Dimension(589, 332));
         planningPanel.setVisible(false);
 
@@ -603,16 +813,37 @@ public class ChartMyCourseMainPage extends JFrame {
         });*/
 
         qAndATable.setAutoCreateRowSorter(true);
+
+        viewPostButton.setText("View Post");
+        viewPostButton.setFont(new Font("sansserif", 0, 8));
+        viewRepliesButton.setText("View Replies");
+        viewRepliesButton.setFont(new Font("sansserif", 0, 8));
+
+        qAndATable.setDefaultRenderer(JButton.class, new JTableButtonRenderer());
+
+        viewPostButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent eventHappens) {
+                viewRepliesActionPerformed(eventHappens);
+            }
+        });
+
+        viewRepliesButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent eventHappens) {
+                viewRepliesActionPerformed(eventHappens);
+            }
+        });
+
+
         qAndATable.setModel(new DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "Author", "Replies", "Upvotes", "View Post"
+                "Author", "Replies", "Upvotes", "View Post", "View Replies"
             }
         ) {
             Class[] types = new Class [] {
-                String.class, Integer.class, Integer.class, String.class
+                String.class, Integer.class, Integer.class, JButton.class, JButton.class
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -620,6 +851,19 @@ public class ChartMyCourseMainPage extends JFrame {
             }
         });
         qAndATableScrollPane.setViewportView(qAndATable);
+        
+        Action view = new AbstractAction()
+        {
+            public void actionPerformed(ActionEvent e)
+            {
+               int modelRow = Integer.valueOf( e.getActionCommand() );
+               JDialog editPane = new JDialog();;// = initEditMenu(((DefaultTableModel) qAndATable.getModel()), modelRow);
+               editPane.pack();
+               editPane.setVisible(true);
+            }
+        };
+        
+        ButtonColumn buttonColumn = new ButtonColumn(qAndATable, view, 3);
 
         new TableFilterHeader(qAndATable, AutoChoices.ENABLED);
         TableRowSorter<TableModel> QnAsorter = new TableRowSorter(qAndATable.getModel());
@@ -731,6 +975,7 @@ public class ChartMyCourseMainPage extends JFrame {
 
         reviewsPanel.setVisible(false);
         planningPanel.setVisible(false);
+        qAndAPanel.setVisible(false);
 
         pack();
     }
@@ -765,6 +1010,12 @@ public class ChartMyCourseMainPage extends JFrame {
      * @since 1.0
      */
     private void loginRequestButtonActionPerformed(ActionEvent eventHappens) {
+	 if(loggedIn) {
+    		curUserLabel.setText("not logged in");
+    		loggedIn = false;
+    		loginRequestButton.setText("login");
+		removeReviewButton.setVisible(false);
+    	}
         loginDialog.setVisible(true);
     }
 
@@ -781,14 +1032,20 @@ public class ChartMyCourseMainPage extends JFrame {
         	if (iterUser.compare(inputUser)) {
         		userFound = true;
         		inputUser.setRealName(iterUser.getRealName());
+                curUser = iterUser;
         		break;
         	}
         }
         
         if (userFound) {
         	loginDialog.setVisible(false);
-            curUser = inputUser.getRealName();
-            curUserLabel.setText(curUser);
+            curUserString = inputUser.getRealName();
+            curUserLabel.setText(curUserString);
+	    loggedIn = true;
+            loginRequestButton.setText("logout");
+	    if(curUserString.equalsIgnoreCase("admin")) {
+            	removeReviewButton.setVisible(true);
+            }
         }
         else {
         	JOptionPane.showMessageDialog(null, "Account information not found.");
@@ -815,23 +1072,36 @@ public class ChartMyCourseMainPage extends JFrame {
         // TODO add filter functionality
     }
     private void addReviewButtonActionPerformed(ActionEvent eventHappens){
-        addReviewText.setColumns(50);
-        Object [] message = {
-                "CRN:", addReviewCRN,
-                "Author:", addReviewAuthor,
-                "Course:", addReviewCourse,
-                "Professor:", addReviewProfessor,
-                "Rating 1-10:", addReviewRating,
-                "Review Text:", addReviewText
-        };
-        int option = JOptionPane.showConfirmDialog(null,message,"Add Review",JOptionPane.OK_CANCEL_OPTION);
-        //model.insertRow(reviewsTable.getRowCount(), new Object[] {iterReview.getAuthor(), iterReview.getCRN(), iterReview.getCourse(), iterReview.getProfessor(), iterReview.getRating(),iterReview.getReviewBody()});
-        ((DefaultTableModel) reviewsTable.getModel()).insertRow(reviewsTable.getRowCount(),
-                new Object[]{addReviewAuthor.getText(), addReviewCRN.getText(),addReviewCourse.getText(),addReviewProfessor.getText(),Integer.parseInt(addReviewRating.getText()),addReviewText.getText()});
-
 
     }
+	
+    private void removeReviewActionPerformed(ActionEvent eventHappens){
+    	//TODO removeReview
+    	
+    	
+    	int i = reviewsTable.getSelectedRow();
+    
+    	reviewtablemodel.removeRow(i);
 
+    		try {
+        		FileWriter myWriter = new FileWriter("reviews.txt");
+        		for(int k = 0; k < reviewtablemodel.getRowCount(); k++) {
+        			for(int l = 0; l < reviewtablemodel.getColumnCount(); l++) {
+        				myWriter.write(reviewtablemodel.getValueAt(k, l).toString());
+        				if(l != reviewtablemodel.getColumnCount()-1) {
+        					myWriter.write(",");
+        				}
+        			}
+        			myWriter.write("\n");
+        		}
+        	
+        		myWriter.close();
+        	}
+        	catch (Exception e) {
+    			e.printStackTrace();
+    		}	
+    }	
+	
     private void reviewsButtonActionPerformed(ActionEvent eventHappens) {
         hideAll();
         reviewsPanel.setVisible(true);
@@ -864,7 +1134,7 @@ public class ChartMyCourseMainPage extends JFrame {
 
     private void qAndAButtonActionPerformed(ActionEvent eventHappens) {
        hideAll();
-        qAndAPanel.setVisible(true);
+       qAndAPanel.setVisible(true);
     }
 
     //This is the event for when the register button is pressed
@@ -926,6 +1196,69 @@ public class ChartMyCourseMainPage extends JFrame {
         	
         }
     }
+
+    private void viewPostActionPerformed(ActionEvent eventHappens) {
+        PostFrame pf = new PostFrame(postsArray.get(qAndATable.getSelectedRow()), qAndATable, curUser);
+        pf.setVisible(true);
+    }
+
+    private void viewRepliesActionPerformed(ActionEvent eventHappens) {
+        JTable replyTable = new JTable();
+        JScrollPane replyScrollPane = new JScrollPane();
+        replyTable.setModel(new DefaultTableModel(
+                new Object [][] {
+
+                },
+                new String [] {
+                        "Author", "Upvotes", "View Post"
+                }
+        ) {
+            Class[] types = new Class [] {
+                    String.class, Integer.class, JButton.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
+        replyScrollPane.setViewportView(replyTable);
+
+        new TableFilterHeader(replyTable, AutoChoices.ENABLED);
+        TableRowSorter<TableModel> replySorter = new TableRowSorter(replyTable.getModel());
+        replyTable.setRowSorter(replySorter);
+
+        GroupLayout replyLayout = new GroupLayout(replyTable);
+        replyTable.setLayout(replyLayout);
+        replyLayout.setHorizontalGroup(
+                replyLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGroup(GroupLayout.Alignment.TRAILING, replyLayout.createSequentialGroup()
+                                .addContainerGap(28, Short.MAX_VALUE)
+                                .addGroup(replyLayout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
+                                        .addGroup(replyLayout.createSequentialGroup()
+                                                //.addComponent(searchLabel, GroupLayout.PREFERRED_SIZE, 93, GroupLayout.PREFERRED_SIZE)
+                                                //.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                                                //.addComponent(searchText, GroupLayout.PREFERRED_SIZE, 238, GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                                //.addComponent(postReplyButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                        .addComponent(replyScrollPane, GroupLayout.PREFERRED_SIZE, 452, GroupLayout.PREFERRED_SIZE))
+                                .addGap(109, 109, 109))
+        ));
+        replyLayout.setVerticalGroup(
+                replyLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGroup(replyLayout.createSequentialGroup()
+                                .addContainerGap(38, Short.MAX_VALUE)
+                                .addGroup(replyLayout.createParallelGroup(GroupLayout.Alignment.LEADING, false))
+                                        //.addComponent(searchLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        //.addComponent(searchText)
+                                        //.addComponent(postReplyButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(replyScrollPane, GroupLayout.PREFERRED_SIZE, 237, GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap())
+        );
+
+        replyScrollPane.setVisible(true);
+
+    }
     
    
     //This is the initialization function that populates internal "databases".
@@ -965,8 +1298,8 @@ public class ChartMyCourseMainPage extends JFrame {
 			reviewScanner = new Scanner(reviewFile);
 			while (reviewScanner.hasNextLine()) {
 	    		//call createReviewFromLine on read line, which does exactly as it says
-	    		reviewArray.add(createReviewFromLine(reviewScanner.nextLine()));
-	    	}
+                reviewArray.add(createReviewFromLine(reviewScanner.nextLine()));
+            }
 	    	//Call table creation function
 	    	initReviewTable();
 		} catch (FileNotFoundException e) {
@@ -1012,7 +1345,6 @@ public class ChartMyCourseMainPage extends JFrame {
 		try {
 			userScanner = new Scanner(userFile);
 			while (userScanner.hasNextLine()) {
-	    		
 	    		userArray.add(createUserFromLine(userScanner.nextLine()));
 	    	}
 	    	
@@ -1022,6 +1354,14 @@ public class ChartMyCourseMainPage extends JFrame {
 		}
     	
     	
+    }
+
+    // This class defines the button renderer.
+    static class JTableButtonRenderer implements TableCellRenderer {
+        @Override public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
+                                                                 boolean hasFocus, int row, int column) {
+            return (JButton) value;
+        }
     }
     
     //This function creates a user from a line.
@@ -1043,7 +1383,6 @@ public class ChartMyCourseMainPage extends JFrame {
 		try {
 			postScanner = new Scanner(postsFile);
 			while (postScanner.hasNextLine()) {
-	    		
 	    		postsArray.add(createPostFromLine(postScanner.nextLine()));
 	    	}
 			
@@ -1053,16 +1392,14 @@ public class ChartMyCourseMainPage extends JFrame {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-    	
-    	
     }
     
     //See other init() functions
     public void initQAndATable() {
     	DefaultTableModel model = (DefaultTableModel) qAndATable.getModel();
-    	
+
     	for (Post iterPost : postsArray) {
-    		model.insertRow(qAndATable.getRowCount(), new Object[] {iterPost.getAuthor(), iterPost.getReplies(), iterPost.getUpvotes(), iterPost.getPostContents()});
+    		model.insertRow(qAndATable.getRowCount(), new Object[] {iterPost.getAuthor(), iterPost.getReplies(), iterPost.getUpvotes(), viewPostButton, viewRepliesButton});
     	}
     	model.fireTableDataChanged();
     	
@@ -1073,7 +1410,7 @@ public class ChartMyCourseMainPage extends JFrame {
     	Post readPost = new Post();
     	List<String> result = Arrays.asList(line.split(","));
     	readPost.setAuthor(result.get(0));
-    	readPost.setReplies(Integer.parseInt(result.get(1)));
+    	readPost.setReplyCount(Integer.parseInt(result.get(1)));
     	readPost.setUpvotes(Integer.parseInt(result.get(2)));
     	readPost.setPostContents(result.get(3));
 

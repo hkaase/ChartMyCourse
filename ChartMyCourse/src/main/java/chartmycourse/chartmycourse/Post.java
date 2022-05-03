@@ -1,7 +1,9 @@
 package chartmycourse.chartmycourse;
 
-import javax.swing.JTable;
+import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.util.ArrayList;
+import java.util.Objects;
 
 public class Post {
 	String author, postContents;
@@ -30,6 +32,8 @@ public class Post {
 	*/
 	int replyCount, upvotes;
 
+	ArrayList<Reply> replies = new ArrayList<>();
+
 	public String getAuthor() {
 		return author;
 	}
@@ -46,14 +50,6 @@ public class Post {
 		this.postContents = postContents;
 	}
 
-	public int getReplies() {
-		return replyCount;
-	}
-
-	public void setReplies(int replies) {
-		this.replyCount = replies;
-	}
-
 	public int getUpvotes() {
 		return upvotes;
 	}
@@ -61,6 +57,32 @@ public class Post {
 	public void setUpvotes(int upvotes) {
 		this.upvotes = upvotes;
 	}
-	
-	
+
+	public int getReplyCount() {
+		return replyCount;
+	}
+
+	public void setReplyCount(int replyCount) {
+		this.replyCount = replyCount;
+	}
+
+	public void setReplies(ArrayList<Reply> replies) {
+		this.replies = replies;
+	}
+
+	public ArrayList<Reply> getReplies() {
+		return replies;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof Post post)) return false;
+		return replyCount == post.replyCount && upvotes == post.upvotes && Objects.equals(author, post.author) && Objects.equals(postContents, post.postContents) && Objects.equals(replies, post.replies);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(author, postContents, replyCount, upvotes, replies);
+	}
 }

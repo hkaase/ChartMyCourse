@@ -6,7 +6,7 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 /**
  * This is the initializer for ChartMyCourse. It is important to initialize here so that 
- * the LookAndFeel is set!
+ * the LookAndFeel is set! 
  * 
  * @author Harm Drenth
  * @version 1.0

@@ -1,6 +1,7 @@
-
+ChartMyCourse/.idea
+ChartMyCourse/.project
+ChartMyCourse/.settings
+ChartMyCourse/target/
 *.class
-*.class
-*.class
-*.class
+ChartMyCourse/target/classes/chartmycourse/chartmycourse/ChartMyCourseMainPage.class
 *.class
