@@ -1,3 +1,3 @@
-Harm Drenth,0,985,Should swing be this bad?,View
-Ricardo Boone,0,12,Best dining hall?,View
-Warren Burrus,0,3,Where should I live on campus?,View
+Harm Drenth,0,985,View,View
+Ricardo Boone,0,12,View,View
+Warren Burrus,0,3,View,View
