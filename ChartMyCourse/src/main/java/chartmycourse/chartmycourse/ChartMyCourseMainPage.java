@@ -1797,7 +1797,7 @@ public class ChartMyCourseMainPage extends JFrame {
      */
     private void removeDiscussionActionPerformed(ActionEvent eventHappens) {
 
-
+        if (qAndATable.getSelectedRow() != -1) {
             if (postsArray.get(qAndATable.getSelectedRow()).getAuthor().equals(curUser.getRealName())) {
 
                 Post post = postsArray.get(qAndATable.getSelectedRow());
@@ -1812,10 +1812,10 @@ public class ChartMyCourseMainPage extends JFrame {
 
                     try {
                         FileWriter myWriter = new FileWriter("posts.txt");
-                        for(int k = 0; k < qAndATable.getRowCount(); k++) {
-                            for(int l = 0; l < qAndATable.getColumnCount(); l++) {
+                        for (int k = 0; k < qAndATable.getRowCount(); k++) {
+                            for (int l = 0; l < qAndATable.getColumnCount(); l++) {
                                 myWriter.write(qAndATable.getModel().getValueAt(k, l).toString());
-                                if(l != qAndATable.getColumnCount() - 1) {
+                                if (l != qAndATable.getColumnCount() - 1) {
                                     myWriter.write(",");
                                 }
                             }
@@ -1828,9 +1828,11 @@ public class ChartMyCourseMainPage extends JFrame {
                     }
                 }
             } else {
-                JOptionPane.showMessageDialog(null,"You can't remove discussions that you didn't write!","Alert",JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(null, "You can't remove discussions that you didn't write!", "Alert", JOptionPane.WARNING_MESSAGE);
             }
-
+        } else {
+            JOptionPane.showMessageDialog(null, "No row selected", "Warning", JOptionPane.WARNING_MESSAGE);
+        }
     }
 
     /*private void searchTextActionPerformed(ActionEvent eventHappens) {
