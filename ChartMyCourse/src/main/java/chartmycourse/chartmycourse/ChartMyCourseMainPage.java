@@ -96,6 +96,8 @@ public class ChartMyCourseMainPage extends JFrame {
     private JButton removeReviewButton;
     private User curUser;
     private JDialog postDialog;
+    private JTextField addReplyText;
+    private JTextField addReply;
     
     public class ButtonColumn extends AbstractCellEditor
 	implements TableCellRenderer, TableCellEditor, ActionListener, MouseListener
@@ -935,7 +937,22 @@ public class ChartMyCourseMainPage extends JFrame {
                 addReplyButton.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
+                        addReplyText = new JTextField();
+                        addReply = new JTextField();
+                        addReplyText.setColumns(50);
+                        addReply.setColumns(50);
+                        Object[] message = {
+                                "Reply:", addReply
+                        };
+                        int option = JOptionPane.showConfirmDialog(null, message, "Add Reply", JOptionPane.OK_CANCEL_OPTION);
+                        Reply reply = new Reply();
+                        reply.setAuthor(curUserString);
+                        reply.setUpvotes(0);
+                        reply.setPostContents(addReply.getText());
+                        post.getReplies().add(reply);
+                        post.setReplyCount(post.getReplyCount() + 1);
 
+                        // TODO get table to change when updating num replies
                     }
                 });
                 removeUpvoteButton.addActionListener(new ActionListener() {
@@ -962,7 +979,7 @@ public class ChartMyCourseMainPage extends JFrame {
             }
         };
 
-        Action newReply = new AbstractAction() {
+        Action viewReplies = new AbstractAction() {
 
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -971,13 +988,14 @@ public class ChartMyCourseMainPage extends JFrame {
         };
         
         ButtonColumn buttonColumn = new ButtonColumn(qAndATable, view, 3);
-        ButtonColumn buttonColumn2 = new ButtonColumn(qAndATable, newReply, 4);
+        ButtonColumn buttonColumn2 = new ButtonColumn(qAndATable, viewReplies, 4);
 
         viewPostButton.setText("View Post");
         viewPostButton.setFont(new Font("sansserif", 0, 8));
         viewRepliesButton.setText("View Replies");
         viewRepliesButton.setFont(new Font("sansserif", 0, 8));
 
+        // TODO render buttons correctly in table
         qAndATable.setDefaultRenderer(JButton.class, new JTableButtonRenderer());
 
         new TableFilterHeader(qAndATable, AutoChoices.ENABLED);
