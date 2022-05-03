@@ -94,6 +94,7 @@ public class ChartMyCourseMainPage extends JFrame {
     private DefaultTableModel reviewtablemodel;
     private JButton removeReviewButton;
     private User curUser;
+    private JDialog postDialog;
     
     public class ButtonColumn extends AbstractCellEditor
 	implements TableCellRenderer, TableCellEditor, ActionListener, MouseListener
@@ -896,46 +897,33 @@ public class ChartMyCourseMainPage extends JFrame {
         });
         qAndATableScrollPane.setViewportView(qAndATable);
         
-        Action view = new AbstractAction()
-        {
-            public void actionPerformed(ActionEvent e)
-            {
-               int modelRow = Integer.valueOf( e.getActionCommand() );
-               JDialog editPane = new JDialog();;// = initEditMenu(((DefaultTableModel) qAndATable.getModel()), modelRow);
-               editPane.pack();
-               editPane.setVisible(true);
-            }
-        };
-        
-        ButtonColumn buttonColumn = new ButtonColumn(qAndATable, view, 3);
-        ButtonColumn buttonColumn2 = new ButtonColumn(qAndATable, view, 4);
-
-        viewPostButton.setText("View Post");
-        viewPostButton.setFont(new Font("sansserif", 0, 8));
-        viewRepliesButton.setText("View Replies");
-        viewRepliesButton.setFont(new Font("sansserif", 0, 8));
-
-        viewPostButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent eventHappens) {
+        Action view = new AbstractAction() {
+            public void actionPerformed(ActionEvent e) {
+                int index = qAndATable.getSelectedRow();
                 Post post = postsArray.get(qAndATable.getSelectedRow());
-                JDialog postDialog = new JDialog();
+                postDialog = new JDialog(postDialog, "View Post");
+                postDialog.setLayout(new GridLayout(4, 1));
                 JTextArea postContents = new JTextArea();
+                postContents.setColumns(20);
+                postContents.setRows(5);
                 postContents.append(post.getPostContents());
-                postContents.setBounds(10,30, 200,200);
+                postContents.setEditable(false);
 
                 JButton upvoteButton = new JButton("Upvote");
                 JButton addReplyButton = new JButton("Add Reply");
                 JButton removeUpvoteButton = new JButton("Remove Upvote");
 
                 postDialog.add(postContents);
-                postDialog.add(upvoteButton);
-                postDialog.add(addReplyButton);
-                postDialog.add(removeUpvoteButton);
 
                 upvoteButton.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
+                        postsArray.get(index).setUpvotes(post.getUpvotes() + 1);
 
+                        // TODO Get Table to change when adding upvotes
+                        ((AbstractTableModel) qAndATable.getModel()).fireTableDataChanged();
+                        removeUpvoteButton.setEnabled(true);
+                        upvoteButton.setEnabled(false);
                     }
                 });
                 addReplyButton.addActionListener(new ActionListener() {
@@ -947,16 +935,42 @@ public class ChartMyCourseMainPage extends JFrame {
                 removeUpvoteButton.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
+                        postsArray.get(index).setUpvotes(post.getUpvotes() - 1);
 
+                        // TODO Get table to change when removing upvotes
+                        ((AbstractTableModel) qAndATable.getModel()).fireTableDataChanged();
+                        upvoteButton.setEnabled(true);
+                        removeUpvoteButton.setEnabled(false);
                     }
                 });
+
+                postDialog.add(upvoteButton);
+                postDialog.add(addReplyButton);
+                postDialog.add(removeUpvoteButton);
 
                 removeUpvoteButton.setEnabled(false);
 
                 postDialog.setSize(250,300);
+                postDialog.pack();
                 postDialog.setVisible(true);
             }
-        });
+        };
+
+        Action newReply = new AbstractAction() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        };
+        
+        ButtonColumn buttonColumn = new ButtonColumn(qAndATable, view, 3);
+        ButtonColumn buttonColumn2 = new ButtonColumn(qAndATable, newReply, 4);
+
+        viewPostButton.setText("View Post");
+        viewPostButton.setFont(new Font("sansserif", 0, 8));
+        viewRepliesButton.setText("View Replies");
+        viewRepliesButton.setFont(new Font("sansserif", 0, 8));
 
         qAndATable.setDefaultRenderer(JButton.class, new JTableButtonRenderer());
 
@@ -1584,7 +1598,7 @@ public class ChartMyCourseMainPage extends JFrame {
     	DefaultTableModel model = (DefaultTableModel) qAndATable.getModel();
 
     	for (Post iterPost : postsArray) {
-    		model.insertRow(qAndATable.getRowCount(), new Object[] {iterPost.getAuthor(), iterPost.getReplies(), iterPost.getUpvotes(), viewPostButton, viewRepliesButton});
+    		model.insertRow(qAndATable.getRowCount(), new Object[] {iterPost.getAuthor(), iterPost.getReplyCount(), iterPost.getUpvotes(), viewPostButton, viewRepliesButton});
     	}
     	model.fireTableDataChanged();
     	
