@@ -1,7 +1,6 @@
 package chartmycourse.chartmycourse;
 
-import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.*;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,8 +9,6 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
 import javax.swing.table.*;
-
-import java.io.FileWriter;
 
 import java.awt.*;
 import java.awt.event.*;
