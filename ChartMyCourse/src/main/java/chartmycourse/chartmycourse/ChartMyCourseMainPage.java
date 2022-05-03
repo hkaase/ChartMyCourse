@@ -1316,6 +1316,8 @@ public class ChartMyCourseMainPage extends JFrame {
         recommendedProfessorDialog = new JDialog(this, "Recommended Professor");
         recommendedProfessorDialog.setLayout(new GridLayout(3, 1));
 
+        List<JLabel> profs = new ArrayList<>();
+
         List<String> courses = new ArrayList<>();
         courses.add("--");
 
@@ -1348,7 +1350,37 @@ public class ChartMyCourseMainPage extends JFrame {
         refresh.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                profs.clear();
+                int num = professorPanel.getComponentCount();
+                for(int i = 0; i < num; i++) {
+                    professorPanel.remove(0);
+                }
+                try {
+                    BufferedReader reader = new BufferedReader(new FileReader("RecProfessors.csv"));
 
+                    String line;
+                    while((line = reader.readLine()) != null) {
+                        String[] split = line.split(",");
+                        if(split.length > 0) {
+                            if(courseList.getSelectedItem().equals(split[0])) {
+                                for(int i = 1; i < split.length; i++) {
+                                    profs.add(new JLabel(split[i]));
+                                }
+                                break;
+                            }
+                        }
+                    }
+                    if(profs.size() == 0) {
+                        profs.add(new JLabel("Please select a course"));
+                    }
+                }
+                catch (IOException e2) {
+                    e2.printStackTrace();
+                }
+                for(int i = 0; i < profs.size(); i++) {
+                    professorPanel.add(profs.get(i));
+                }
+                professorPanel.updateUI();
             }
         });
 
@@ -1356,6 +1388,7 @@ public class ChartMyCourseMainPage extends JFrame {
         recommendedProfessorDialog.setVisible(true);
 
     }
+
 
     private void planningButtonActionPerformed(ActionEvent eventHappens) {
         hideAll();
