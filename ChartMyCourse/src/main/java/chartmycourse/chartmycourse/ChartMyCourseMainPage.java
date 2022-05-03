@@ -911,7 +911,7 @@ public class ChartMyCourseMainPage extends JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(chartmycoursewatermark, GroupLayout.PREFERRED_SIZE, 146, GroupLayout.PREFERRED_SIZE)
+                .addComponent(chartmycoursewatermark, GroupLayout.PREFERRED_SIZE, 160, GroupLayout.PREFERRED_SIZE)
                 .addGap(97, 97, 97)
                 .addComponent(homeButton, GroupLayout.PREFERRED_SIZE, 60, GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
