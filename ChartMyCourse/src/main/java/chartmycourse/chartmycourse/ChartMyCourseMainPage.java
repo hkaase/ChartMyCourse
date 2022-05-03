@@ -1771,9 +1771,9 @@ public class ChartMyCourseMainPage extends JFrame {
                 "Discussion:", addDiscussion
         };
         int option = JOptionPane.showConfirmDialog(null, message, "Add Discussion Post", JOptionPane.OK_CANCEL_OPTION);
-        if (option == JOptionPane.OK_OPTION) {
-        	((DefaultTableModel) qAndATable.getModel()).insertRow(qAndATable.getRowCount(),
-        			new Object[]{curUser.getRealName(), 0, 0, "View Post", "View Replies"});
+        if (option == 0) {
+            ((DefaultTableModel) qAndATable.getModel()).insertRow(qAndATable.getRowCount(),
+                    new Object[]{curUser.getRealName(), 0, 0, "View Post", "View Replies"});
             Post temp = new Post();
             temp.setAuthor(curUser.getRealName());
             temp.setUpvotes(0);
