@@ -1473,9 +1473,8 @@ public class ChartMyCourseMainPage extends JFrame {
 
     /**
      * This is the functionality of clicking the Recommended Courses button
-     * @author Ricardo Boone
-     * @version 1.0
-     * @Since 1.0
+     *
+     * @param eventHappens the given ActionEvent that called this method
      */
     private void recommendedCoursesButtonActionPerformed(ActionEvent eventHappens) {
         recommendedCourseDialog = new JDialog(this, "Recommended Course");
@@ -1592,9 +1591,8 @@ public class ChartMyCourseMainPage extends JFrame {
 
     /**
      * This is the functionality of clicking the Recommended Professor button
-     * @author Ricardo Boone
-     * @version 1.0
-     * @Since 1.0
+     *
+     * @param eventHappens the given ActionEvent that called this method
      */
     private void recommendedProfessorsButtonActionPerformed(ActionEvent eventHappens) {
         recommendedProfessorDialog = new JDialog(this, "Recommended Professor");
