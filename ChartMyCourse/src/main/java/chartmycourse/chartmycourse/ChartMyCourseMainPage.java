@@ -1,10 +1,7 @@
 package chartmycourse.chartmycourse;
 
 import java.io.*;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Scanner;
+import java.util.*;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
@@ -12,6 +9,7 @@ import javax.swing.table.*;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.util.List;
 
 import net.coderazzi.filters.gui.AutoChoices;
 import net.coderazzi.filters.gui.TableFilterHeader;
@@ -90,6 +88,7 @@ public class ChartMyCourseMainPage extends JFrame {
     private JTextArea welcomeSplashTextArea;
     private JScrollPane welcomeSplashTextPane;
     private String curUserString = "not logged in";
+    private JLabel qAndAHeader;
 
     private JTable replyTable;
     private Post curPost;
@@ -407,6 +406,7 @@ public class ChartMyCourseMainPage extends JFrame {
         removeReviewButton = new JButton();
         replyTable = new JTable();
         removeDiscussionButton = new JButton();
+        qAndAHeader = new JLabel("Q&A");
         
         loginDialog.setTitle("login");
         loginDialog.setBackground(new Color(0, 88, 5));
@@ -1026,6 +1026,7 @@ public class ChartMyCourseMainPage extends JFrame {
                 addReplyButton.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
+
                         addReplyText = new JTextField();
                         addReply = new JTextField();
                         addReplyText.setColumns(50);
@@ -1056,8 +1057,20 @@ public class ChartMyCourseMainPage extends JFrame {
                                 }
                                 myWriter.write("\n");
                             }
-
                             myWriter.close();
+
+                            myWriter = new FileWriter("replies.txt");
+                            for (int i = 0; i < postsArray.size(); i++) {
+                                for(int j = 0; j < postsArray.get(i).getReplies().size(); j++) {
+
+                                    Reply r = postsArray.get(i).getReplies().get(j);
+                                    myWriter.write(postsArray.get(i).getAuthor() + "," +
+                                            postsArray.get(i).getPostContents() + "," + r.getAuthor() + ","
+                                            + r.getUpvotes() + "," + r.getPostContents() + "\n");
+                                }
+                            }
+                            myWriter.close();
+
                         } catch (Exception ex) {
                             ex.printStackTrace();
                         }
@@ -1096,6 +1109,10 @@ public class ChartMyCourseMainPage extends JFrame {
                 postDialog.add(removeUpvoteButton);
 
                 removeUpvoteButton.setEnabled(false);
+                if (!loggedIn) {
+                    upvoteButton.setEnabled(false);
+                    addReplyButton.setEnabled(false);
+                }
 
                 postDialog.setSize(250,300);
                 postDialog.pack();
@@ -1109,6 +1126,7 @@ public class ChartMyCourseMainPage extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 DefaultTableModel model = (DefaultTableModel) replyTable.getModel();
 
+                curPost = postsArray.get(qAndATable.getSelectedRow());
                 int index = replyTable.getSelectedRow();
                 Reply reply = curPost.getReplies().get(index);
                 replyDialog = new JDialog(replyDialog, "View Post");
@@ -1149,6 +1167,9 @@ public class ChartMyCourseMainPage extends JFrame {
                 replyDialog.add(removeUpvoteButton);
 
                 removeUpvoteButton.setEnabled(false);
+                if (!loggedIn) {
+                    upvoteButton.setEnabled(false);
+                }
 
                 replyDialog.setSize(250,300);
                 replyDialog.pack();
@@ -1242,9 +1263,6 @@ public class ChartMyCourseMainPage extends JFrame {
                 .addContainerGap(28, Short.MAX_VALUE)
                 .addGroup(qAndAPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
                     .addGroup(qAndAPanelLayout.createSequentialGroup()
-                        //.addComponent(searchLabel, GroupLayout.PREFERRED_SIZE, 93, GroupLayout.PREFERRED_SIZE)
-                        //.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-                        //.addComponent(searchText, GroupLayout.PREFERRED_SIZE, 238, GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(postDiscussionButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addComponent(removeDiscussionButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -1810,42 +1828,42 @@ public class ChartMyCourseMainPage extends JFrame {
      * @since 1.0
      */
     private void addNewDiscussionActionPerformed(ActionEvent eventHappens) {
-        addDiscussionText = new JTextField();
-        addDiscussion = new JTextField();
-        addDiscussionText.setColumns(50);
-        addDiscussion.setColumns(50);
-        Object[] message = {
-                "Discussion:", addDiscussion
-        };
-        int option = JOptionPane.showConfirmDialog(null, message, "Add Discussion Post", JOptionPane.OK_CANCEL_OPTION);
-        if (option == 0) {
-            ((DefaultTableModel) qAndATable.getModel()).insertRow(qAndATable.getRowCount(),
-                    new Object[]{curUser.getRealName(), 0, 0, "View Post", "View Replies"});
-            Post temp = new Post();
-            temp.setAuthor(curUser.getRealName());
-            temp.setUpvotes(0);
-            temp.setReplyCount(0);
-            temp.setPostContents(addDiscussion.getText());
-            postsArray.add(temp);
 
-            try {
-                FileWriter myWriter = new FileWriter("posts.txt");
-                for(int k = 0; k < qAndATable.getRowCount(); k++) {
-                    for(int l = 0; l < qAndATable.getColumnCount(); l++) {
-                        myWriter.write(qAndATable.getModel().getValueAt(k, l).toString());
-                        if(l != qAndATable.getColumnCount() - 1) {
-                            myWriter.write(",");
-                        }
+        if (loggedIn) {
+            addDiscussionText = new JTextField();
+            addDiscussion = new JTextField();
+            addDiscussionText.setColumns(50);
+            addDiscussion.setColumns(50);
+            Object[] message = {
+                    "Discussion:", addDiscussion
+            };
+            int option = JOptionPane.showConfirmDialog(null, message, "Add Discussion Post", JOptionPane.OK_CANCEL_OPTION);
+            if (option == 0) {
+                ((DefaultTableModel) qAndATable.getModel()).insertRow(qAndATable.getRowCount(),
+                        new Object[]{curUser.getRealName(), 0, 0, "View Post", "View Replies"});
+                Post temp = new Post();
+                temp.setAuthor(curUser.getRealName());
+                temp.setUpvotes(0);
+                temp.setReplyCount(0);
+                temp.setPostContents(addDiscussion.getText());
+                postsArray.add(temp);
+
+                try {
+                    FileWriter myWriter = new FileWriter("posts.txt");
+                    for(int k = 0; k < postsArray.size(); k++) {
+                        Post p = postsArray.get(k);
+                        myWriter.write(p.getAuthor() + "," + p.getReplyCount() + "," +
+                                p.getUpvotes() + "," + p.getPostContents() + "\n");
                     }
-                    myWriter.write("\n");
-                }
 
-                myWriter.close();
-            } catch (Exception e) {
-                e.printStackTrace();
+                    myWriter.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
+        } else {
+            JOptionPane.showMessageDialog(null, "You aren't logged in!", "Alert", JOptionPane.WARNING_MESSAGE);
         }
-                
     }
 
     /**
@@ -1855,6 +1873,7 @@ public class ChartMyCourseMainPage extends JFrame {
      * @since 1.0
      */
     private void removeDiscussionActionPerformed(ActionEvent eventHappens) {
+
     	int selectedRow = qAndATable.getSelectedRow();
     	if (selectedRow >= 0) {
 	    	if (postsArray.get(qAndATable.getSelectedRow()).getAuthor().equals(curUser.getRealName())) {
@@ -1895,10 +1914,6 @@ public class ChartMyCourseMainPage extends JFrame {
             JOptionPane.showMessageDialog(null,"No discussion selected!","Alert",JOptionPane.WARNING_MESSAGE);
     	}
     }
-
-    /*private void searchTextActionPerformed(ActionEvent eventHappens) {
-        String input = searchText.getText();
-    }*/
 
     private void qAndAButtonActionPerformed(ActionEvent eventHappens) {
        hideAll();
@@ -1974,6 +1989,7 @@ public class ChartMyCourseMainPage extends JFrame {
         initTestReviews();
         initTestUsers();
         initTestPosts();
+        initReplies();
 
         initCourseListTable();
         initProfListTable();
@@ -2149,6 +2165,32 @@ public class ChartMyCourseMainPage extends JFrame {
     	}
     	model.fireTableDataChanged();
     	
+    }
+
+    public void initReplies() {
+        File repliesFile = new File("replies.txt");
+        Scanner replyScanner;
+        try {
+            replyScanner = new Scanner(repliesFile);
+            while (replyScanner.hasNextLine()) {
+
+                String[] split = replyScanner.nextLine().split(",");
+
+                for (int i = 0; i < postsArray.size(); i++) {
+                    if (postsArray.get(i).getAuthor().equals(split[0]) && postsArray.get(i).getPostContents().equals(split[1])) {
+                        Reply reply = new Reply();
+                        reply.setAuthor(split[2]);
+                        reply.setUpvotes(Integer.parseInt(split[3]));
+                        reply.setPostContents(split[4]);
+                        postsArray.get(i).getReplies().add(reply);
+                        break;
+                    }
+                }
+            }
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
     }
     
     //See createUserFromLine or createReviewFromLine

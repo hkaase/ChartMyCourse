@@ -1,3 +1,3 @@
-Harm Drenth,0,985,Don't you love when your demo breaks because you accidentally merged an old branch?,View
-Ricardo Boone,0,12,Best dining hall on campus?,View
-Warren Burrus,0,3,Where should I live next year?,View
+Harm Drenth,0,985,View,View
+Ricardo Boone,2,12,View,View
+Warren Burrus,0,3,View,View
