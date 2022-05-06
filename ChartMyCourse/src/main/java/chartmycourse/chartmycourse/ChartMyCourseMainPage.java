@@ -89,6 +89,7 @@ public class ChartMyCourseMainPage extends JFrame {
     private JScrollPane welcomeSplashTextPane;
     private String curUserString = "not logged in";
     private JLabel qAndAHeader;
+    private JButton removeReplyButton;
 
     private JTable replyTable;
     private Post curPost;
@@ -407,6 +408,7 @@ public class ChartMyCourseMainPage extends JFrame {
         replyTable = new JTable();
         removeDiscussionButton = new JButton();
         qAndAHeader = new JLabel("Q&A");
+        removeReplyButton = new JButton();
         
         loginDialog.setTitle("login");
         loginDialog.setBackground(new Color(0, 88, 5));
@@ -1188,7 +1190,8 @@ public class ChartMyCourseMainPage extends JFrame {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                JFrame replyFrame = new JFrame("View Replies");
+                replyDialog = new JDialog(replyDialog, "View Reply");
+                replyDialog.setLayout(new GridLayout(1, 2));
                 Post post = postsArray.get(qAndATable.getSelectedRow());
                 replyTable.setModel(new DefaultTableModel(
                         new Object [][] {
@@ -1213,15 +1216,48 @@ public class ChartMyCourseMainPage extends JFrame {
 
                 DefaultTableModel model = (DefaultTableModel) replyTable.getModel();
 
+                removeReplyButton.setText("Remove Reply");
+                removeReplyButton.setBounds(5, 5, 5, 5);
+                removeReplyButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        if (replyTable.getSelectedRow() > 0) {
+
+                            Reply r = post.getReplies().get(replyTable.getSelectedRow());
+                            if (r.getAuthor().equals(curUser.getRealName())) {
+
+                                int option = JOptionPane.showConfirmDialog(null,
+                                        "Are you sure you want to remove this reply?");
+                                if (option == 0) {
+                                    ((DefaultTableModel) replyTable.getModel()).removeRow(replyTable.getSelectedRow());
+                                    post.getReplies().remove(r);
+                                }
+
+                            } else {
+                                JOptionPane.showMessageDialog(null,
+                                        "You can't delete something you didn't write!",
+                                        "Alert", JOptionPane.WARNING_MESSAGE);
+                            }
+
+                        } else {
+                            JOptionPane.showMessageDialog(null, "No row is selected!",
+                                    "Alert", JOptionPane.WARNING_MESSAGE);
+                        }
+                    }
+                });
+
                 for (Reply iterReply : post.getReplies()) {
                     model.insertRow(replyTable.getRowCount(), new Object[] {iterReply.getAuthor(), iterReply.getUpvotes(), "View Reply"});
                 }
                 model.fireTableDataChanged();
 
-                replyFrame.setContentPane(replyScrollPane);
-                replyFrame.pack();
-                replyFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-                replyFrame.setVisible(true);
+                replyDialog.add(removeReplyButton);
+                replyDialog.add(replyScrollPane);
+
+                //replyDialog.setSize(250,200);
+                replyDialog.pack();
+                replyDialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+                replyDialog.setVisible(true);
             }
         };
         
@@ -1855,7 +1891,6 @@ public class ChartMyCourseMainPage extends JFrame {
                         myWriter.write(p.getAuthor() + "," + p.getReplyCount() + "," +
                                 p.getUpvotes() + "," + p.getPostContents() + "\n");
                     }
-
                     myWriter.close();
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -2161,7 +2196,7 @@ public class ChartMyCourseMainPage extends JFrame {
     	DefaultTableModel model = (DefaultTableModel) qAndATable.getModel();
 
     	for (Post iterPost : postsArray) {
-    		model.insertRow(qAndATable.getRowCount(), new Object[] {iterPost.getAuthor(), iterPost.getReplyCount(), iterPost.getUpvotes(), "View", "View"});
+    		model.insertRow(qAndATable.getRowCount(), new Object[] {iterPost.getAuthor(), iterPost.getReplyCount(), iterPost.getUpvotes(), "View Post", "View Replies"});
     	}
     	model.fireTableDataChanged();
     	
