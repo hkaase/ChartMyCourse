@@ -788,13 +788,19 @@ public class ChartMyCourseMainPage extends JFrame {
                             + curReview.getFlagged() + " time(s). Admin is working on it!",
                                     "Alert", JOptionPane.WARNING_MESSAGE);
 
+                            curReview.getFlaggedUsers().add(curUser);
+
                             try {
                                 FileWriter myWriter = new FileWriter("reviews.txt");
                                 for (int k = 0; k < reviewArray.size(); k++) {
                                     Review review = reviewArray.get(k);
                                     myWriter.write(review.getAuthor() + "," + review.getCourse() + "," + review.getCRN()
                                             + "," + review.getProfessor() + "," + review.getRating() + "," + review.getReviewBody() + ","
-                                            + review.getFlagged() + "\n");
+                                            + review.getFlagged());
+                                    for (int j = 0; j < review.getFlaggedUsers().size(); j++) {
+                                        myWriter.write("," + review.getFlaggedUsers().get(j).getRealName());
+                                    }
+                                    myWriter.write("\n");
                                 }
                                 myWriter.close();
 
@@ -816,19 +822,26 @@ public class ChartMyCourseMainPage extends JFrame {
                                             "The review has now been flagged " + curReview.getFlagged() + " time(s).",
                                     "Alert", JOptionPane.WARNING_MESSAGE);
 
+                            curReview.getFlaggedUsers().remove(curUser);
+
                             try {
                                 FileWriter myWriter = new FileWriter("reviews.txt");
                                 for (int k = 0; k < reviewArray.size(); k++) {
                                     Review review = reviewArray.get(k);
                                     myWriter.write(review.getAuthor() + "," + review.getCourse() + "," + review.getCRN()
                                             + "," + review.getProfessor() + "," + review.getRating() + "," + review.getReviewBody() + ","
-                                            + review.getFlagged() + "\n");
+                                            + review.getFlagged());
+                                    for (int j = 0; j < review.getFlaggedUsers().size(); j++) {
+                                        myWriter.write("," + review.getFlaggedUsers().get(j).getRealName());
+                                    }
+                                    myWriter.write("\n");
                                 }
                                 myWriter.close();
 
                             } catch (Exception ex) {
                                 ex.printStackTrace();
                             }
+
                             flagButton.setEnabled(true);
                             removeFlagButton.setEnabled(false);
                         }
@@ -838,9 +851,17 @@ public class ChartMyCourseMainPage extends JFrame {
                     reviewDialog.add(flagButton);
                     reviewDialog.add(removeFlagButton);
 
-                    removeFlagButton.setEnabled(false);
                     if (!loggedIn) {
                         flagButton.setEnabled(false);
+                        removeFlagButton.setEnabled(false);
+                    } else {
+                        if (curReview.getFlaggedUsers().contains(curUser)) {
+                            removeFlagButton.setEnabled(true);
+                            flagButton.setEnabled(false);
+                        } else {
+                            flagButton.setEnabled(true);
+                            removeFlagButton.setEnabled(false);
+                        }
                     }
 
                     reviewDialog.setSize(250,300);
@@ -1961,7 +1982,11 @@ public class ChartMyCourseMainPage extends JFrame {
                     Review review = reviewArray.get(k);
                     myWriter.write(review.getAuthor() + "," + review.getCourse() + "," + review.getCRN()
                             + "," + review.getProfessor() + "," + review.getRating() + "," + review.getReviewBody() + ","
-                            + review.getFlagged() + "\n");
+                            + review.getFlagged());
+                    for (int j = 0; j < review.getFlaggedUsers().size(); j++) {
+                        myWriter.write("," + review.getFlaggedUsers().get(j).getRealName());
+                    }
+                    myWriter.write("\n");
                 }
                 myWriter.close();
 
@@ -1998,7 +2023,11 @@ public class ChartMyCourseMainPage extends JFrame {
                     Review review = reviewArray.get(k);
                     myWriter.write(review.getAuthor() + "," + review.getCourse() + "," + review.getCRN()
                     + "," + review.getProfessor() + "," + review.getRating() + "," + review.getReviewBody() + ","
-                    + review.getFlagged() + "\n");
+                    + review.getFlagged());
+                    for (int j = 0; j < review.getFlaggedUsers().size(); j++) {
+                        myWriter.write("," + review.getFlaggedUsers().get(j).getRealName());
+                    }
+                    myWriter.write("\n");
                 }
         		myWriter.close();
         	}
@@ -2192,8 +2221,8 @@ public class ChartMyCourseMainPage extends JFrame {
     public void initialize() {
         this.setVisible(true);
         loginDialog.setVisible(true);
-        initTestReviews();
         initTestUsers();
+        initTestReviews();
         initTestPosts();
         initReplies();
 
@@ -2303,6 +2332,13 @@ public class ChartMyCourseMainPage extends JFrame {
     	readReview.setRating(Integer.parseInt(result.get(4)));
     	readReview.setReviewBody(result.get(5));
         readReview.setFlagged(Integer.parseInt(result.get(6)));
+        for (int i = 0; i < readReview.getFlagged(); i++) {
+            for (int j = 0; j < userArray.size(); j++) {
+                if (userArray.get(j).getRealName().equals(result.get(i + 7))) {
+                    readReview.getFlaggedUsers().add(userArray.get(j));
+                }
+            }
+        }
     	
     	return readReview;
     }

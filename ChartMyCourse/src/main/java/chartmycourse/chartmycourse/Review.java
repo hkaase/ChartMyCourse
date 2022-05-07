@@ -1,5 +1,6 @@
 package chartmycourse.chartmycourse;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 
@@ -11,6 +12,7 @@ public class Review {
     int rating;
     String reviewBody;
 	int flagged = 0;
+	ArrayList<User> flaggedUsers = new ArrayList<>();
 	public String getAuthor() {
 		return author;
 	}
@@ -56,9 +58,17 @@ public class Review {
 		this.flagged = flagged;
 	}
 
+	public ArrayList<User> getFlaggedUsers() {
+		return flaggedUsers;
+	}
+
+	public void setFlaggedUsers(ArrayList<User> flaggedUsers) {
+		this.flaggedUsers = flaggedUsers;
+	}
+
 	@Override
 	public int hashCode() {
-		return Objects.hash(CRN, author, course, professor, rating, reviewBody, flagged);
+		return Objects.hash(CRN, author, course, professor, rating, reviewBody, flagged, flaggedUsers);
 	}
 	@Override
 	public boolean equals(Object obj) {
@@ -72,7 +82,7 @@ public class Review {
 		return Objects.equals(CRN, other.CRN) && Objects.equals(author, other.author)
 				&& Objects.equals(course, other.course) && Objects.equals(professor, other.professor)
 				&& rating == other.rating && Objects.equals(reviewBody, other.reviewBody)
-				&& Objects.equals(flagged, other.flagged);
+				&& Objects.equals(flagged, other.flagged) && Objects.equals(flaggedUsers, other.flaggedUsers);
 	}
     
     
