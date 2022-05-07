@@ -1532,7 +1532,7 @@ public class ChartMyCourseMainPage extends JFrame {
      *
      * @param eventHappens the given ActionEvent that called this method
      */
-    private void recommendedCoursesButtonActionPerformed(ActionEvent eventHappens) {
+    public void recommendedCoursesButtonActionPerformed(ActionEvent eventHappens) {
         recommendedCourseDialog = new JDialog(this, "Recommended Course");
         recommendedCourseDialog.setLayout(new GridLayout(4, 1));
 
@@ -1650,7 +1650,7 @@ public class ChartMyCourseMainPage extends JFrame {
      *
      * @param eventHappens the given ActionEvent that called this method
      */
-    private void recommendedProfessorsButtonActionPerformed(ActionEvent eventHappens) {
+    public void recommendedProfessorsButtonActionPerformed(ActionEvent eventHappens) {
         recommendedProfessorDialog = new JDialog(this, "Recommended Professor");
         recommendedProfessorDialog.setLayout(new GridLayout(3, 1));
 
