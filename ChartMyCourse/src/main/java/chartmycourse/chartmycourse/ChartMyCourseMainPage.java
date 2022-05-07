@@ -89,7 +89,7 @@ public class ChartMyCourseMainPage extends JFrame {
     private JScrollPane welcomeSplashTextPane;
     private String curUserString = "not logged in";
     private JLabel qAndAHeader;
-
+    private JDialog reviewDialog;
 
     private JTable replyTable;
     private Post curPost;
@@ -736,7 +736,7 @@ public class ChartMyCourseMainPage extends JFrame {
             }
         ) {
             Class[] types = new Class [] {
-                String.class, String.class, String.class, String.class, Integer.class, Object.class
+                String.class, String.class, String.class, String.class, Integer.class, JButton.class
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -753,6 +753,104 @@ public class ChartMyCourseMainPage extends JFrame {
             reviewsTable.getColumnModel().getColumn(1).setPreferredWidth(50);
             reviewsTable.getColumnModel().getColumn(1).setMaxWidth(50);
         }
+
+        Action viewReview = new AbstractAction () {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                Review curReview = reviewArray.get(reviewsTable.getSelectedRow());
+                int option = 0;
+
+                if (curReview.getFlagged() > 0) {
+                    option = JOptionPane.showConfirmDialog(null, "This review has been flagged " +
+                            curReview.getFlagged() + " time(s). Admin is working on it! Do you still want to view?",
+                            "Alert", JOptionPane.OK_CANCEL_OPTION);
+                }
+
+                if (option == 0) {
+                    reviewDialog = new JDialog(reviewDialog, "View Review");
+                    reviewDialog.setLayout(new GridLayout(3, 1));
+                    JTextArea reviewContents = new JTextArea();
+                    reviewContents.setColumns(50);
+                    reviewContents.setRows(3);
+                    reviewContents.append(curReview.getReviewBody());
+                    reviewContents.setEditable(false);
+
+                    JButton flagButton = new JButton("Flag");
+                    JButton removeFlagButton = new JButton("Remove Flag");
+
+                    flagButton.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            curReview.setFlagged(curReview.getFlagged() + 1);
+                            JOptionPane.showMessageDialog(null, "This review has now been flagged "
+                            + curReview.getFlagged() + " time(s). Admin is working on it!",
+                                    "Alert", JOptionPane.WARNING_MESSAGE);
+
+                            try {
+                                FileWriter myWriter = new FileWriter("reviews.txt");
+                                for (int k = 0; k < reviewArray.size(); k++) {
+                                    Review review = reviewArray.get(k);
+                                    myWriter.write(review.getAuthor() + "," + review.getCourse() + "," + review.getCRN()
+                                            + "," + review.getProfessor() + "," + review.getRating() + "," + review.getReviewBody() + ","
+                                            + review.getFlagged() + "\n");
+                                }
+                                myWriter.close();
+
+                            } catch (Exception ex) {
+                                ex.printStackTrace();
+                            }
+
+                            removeFlagButton.setEnabled(true);
+                            flagButton.setEnabled(false);
+                        }
+                    });
+
+                    removeFlagButton.addActionListener(new ActionListener() {
+
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            curReview.setFlagged(curReview.getFlagged() - 1);
+                            JOptionPane.showMessageDialog(null, "Your flag on this review has been removed. " +
+                                            "The review has now been flagged " + curReview.getFlagged() + " time(s).",
+                                    "Alert", JOptionPane.WARNING_MESSAGE);
+
+                            try {
+                                FileWriter myWriter = new FileWriter("reviews.txt");
+                                for (int k = 0; k < reviewArray.size(); k++) {
+                                    Review review = reviewArray.get(k);
+                                    myWriter.write(review.getAuthor() + "," + review.getCourse() + "," + review.getCRN()
+                                            + "," + review.getProfessor() + "," + review.getRating() + "," + review.getReviewBody() + ","
+                                            + review.getFlagged() + "\n");
+                                }
+                                myWriter.close();
+
+                            } catch (Exception ex) {
+                                ex.printStackTrace();
+                            }
+                            flagButton.setEnabled(true);
+                            removeFlagButton.setEnabled(false);
+                        }
+                    });
+
+                    reviewDialog.add(reviewContents);
+                    reviewDialog.add(flagButton);
+                    reviewDialog.add(removeFlagButton);
+
+                    removeFlagButton.setEnabled(false);
+                    if (!loggedIn) {
+                        flagButton.setEnabled(false);
+                    }
+
+                    reviewDialog.setSize(250,300);
+                    reviewDialog.pack();
+                    reviewDialog.setVisible(true);
+                }
+            }
+        };
+
+        ButtonColumn buttonColumn5 = new ButtonColumn(reviewsTable, viewReview, 5);
 
         new TableFilterHeader(reviewsTable, AutoChoices.ENABLED);
         TableRowSorter<TableModel> sorter = new TableRowSorter(reviewsTable.getModel());
@@ -1847,7 +1945,7 @@ public class ChartMyCourseMainPage extends JFrame {
                 return;
             }
             ((DefaultTableModel) reviewsTable.getModel()).insertRow(reviewsTable.getRowCount(),
-                    new Object[]{addReviewAuthor.getText(), addReviewCRN.getText(), addReviewCourse.getText(), addReviewProfessor.getText(), Integer.parseInt(addReviewRating.getText()), addReviewText.getText()});
+                    new Object[]{addReviewAuthor.getText(), addReviewCRN.getText(), addReviewCourse.getText(), addReviewProfessor.getText(), Integer.parseInt(addReviewRating.getText()), "View Review"});
             Review temp = new Review();
             temp.setCourse(addReviewCourse.getText());
             temp.setAuthor(addReviewAuthor.getText());
@@ -1856,6 +1954,20 @@ public class ChartMyCourseMainPage extends JFrame {
             temp.setReviewBody(addReviewText.getText());
             temp.setRating(Integer.parseInt(addReview.getText()));
             reviewArray.add(temp);
+
+            try {
+                FileWriter myWriter = new FileWriter("reviews.txt");
+                for (int k = 0; k < reviewArray.size(); k++) {
+                    Review review = reviewArray.get(k);
+                    myWriter.write(review.getAuthor() + "," + review.getCourse() + "," + review.getCRN()
+                            + "," + review.getProfessor() + "," + review.getRating() + "," + review.getReviewBody() + ","
+                            + review.getFlagged() + "\n");
+                }
+                myWriter.close();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         } else {
             displayNotLoggedInError();
         }
@@ -1876,21 +1988,18 @@ public class ChartMyCourseMainPage extends JFrame {
     	
     	
     	int i = reviewsTable.getSelectedRow();
-    
     	reviewtablemodel.removeRow(i);
+        Review r = reviewArray.get(i);
+        reviewArray.remove(r);
 
     		try {
         		FileWriter myWriter = new FileWriter("reviews.txt");
-        		for(int k = 0; k < reviewtablemodel.getRowCount(); k++) {
-        			for(int l = 0; l < reviewtablemodel.getColumnCount(); l++) {
-        				myWriter.write(reviewtablemodel.getValueAt(k, l).toString());
-        				if(l != reviewtablemodel.getColumnCount()-1) {
-        					myWriter.write(",");
-        				}
-        			}
-        			myWriter.write("\n");
-        		}
-        	
+                for (int k = 0; k < reviewArray.size(); k++) {
+                    Review review = reviewArray.get(k);
+                    myWriter.write(review.getAuthor() + "," + review.getCourse() + "," + review.getCRN()
+                    + "," + review.getProfessor() + "," + review.getRating() + "," + review.getReviewBody() + ","
+                    + review.getFlagged() + "\n");
+                }
         		myWriter.close();
         	}
         	catch (Exception e) {
@@ -2143,7 +2252,7 @@ public class ChartMyCourseMainPage extends JFrame {
 
     	//Iterate through review array, and create a row in our table for each
     	for (Review iterReview : reviewArray) {
-    		model.insertRow(reviewsTable.getRowCount(), new Object[] {iterReview.getAuthor(), iterReview.getCRN(), iterReview.getCourse(), iterReview.getProfessor(), iterReview.getRating(),iterReview.getReviewBody()});
+    		model.insertRow(reviewsTable.getRowCount(), new Object[] {iterReview.getAuthor(), iterReview.getCRN(), iterReview.getCourse(), iterReview.getProfessor(), iterReview.getRating(),"View Review"});
     	}
     	//Make sure and tell the table we changed things
     	model.fireTableDataChanged();
@@ -2193,6 +2302,7 @@ public class ChartMyCourseMainPage extends JFrame {
     	readReview.setProfessor(result.get(3));
     	readReview.setRating(Integer.parseInt(result.get(4)));
     	readReview.setReviewBody(result.get(5));
+        readReview.setFlagged(Integer.parseInt(result.get(6)));
     	
     	return readReview;
     }

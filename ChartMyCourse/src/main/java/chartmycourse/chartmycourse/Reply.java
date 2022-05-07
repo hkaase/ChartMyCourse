@@ -6,7 +6,6 @@ public class Reply {
 
     String author, postContents;
     int upvotes;
-    int flagged = 0;
 
     public String getAuthor() {
         return author;
@@ -32,24 +31,15 @@ public class Reply {
         this.upvotes = upvotes;
     }
 
-    public int getFlagged() {
-        return flagged;
-    }
-
-    public void setFlagged(int flagged) {
-        this.flagged = flagged;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Reply)) return false;
-        Reply reply = (Reply) o;
-        return upvotes == reply.upvotes && flagged == reply.flagged && Objects.equals(author, reply.author) && Objects.equals(postContents, reply.postContents);
+        if (!(o instanceof Reply reply)) return false;
+        return upvotes == reply.upvotes && Objects.equals(author, reply.author) && Objects.equals(postContents, reply.postContents);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(author, postContents, upvotes, flagged);
+        return Objects.hash(author, postContents, upvotes);
     }
 }

@@ -7,30 +7,7 @@ import java.util.Objects;
 
 public class Post {
 	String author, postContents;
-
-	//not yet implemented
-	/*
-	static public JTable replies;
-	static {
-		replies.setModel(new DefaultTableModel(
-	            new Object [][] {
-
-	            },
-	            new String [] {
-	                "Review Author", "CRN", "Course", "Professor", "Review Score/10", "View Review"
-	            }
-	        ) {
-	            Class[] types = new Class [] {
-	                String.class, String.class, String.class, String.class, Integer.class, Object.class
-	            };
-
-	            public Class getColumnClass(int columnIndex) {
-	                return types [columnIndex];
-	            }
-	        });
-	}
-	*/
-	int replyCount, upvotes, flagged = 0;
+	int replyCount, upvotes;
 
 	ArrayList<Reply> replies = new ArrayList<>();
 
@@ -74,24 +51,15 @@ public class Post {
 		return replies;
 	}
 
-	public int getFlagged() {
-		return flagged;
-	}
-
-	public void setFlagged(int flagged) {
-		this.flagged = flagged;
-	}
-
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
-		if (!(o instanceof Post)) return false;
-		Post post = (Post) o;
-		return replyCount == post.replyCount && upvotes == post.upvotes && flagged == post.flagged && Objects.equals(author, post.author) && Objects.equals(postContents, post.postContents) && Objects.equals(replies, post.replies);
+		if (!(o instanceof Post post)) return false;
+		return replyCount == post.replyCount && upvotes == post.upvotes && Objects.equals(author, post.author) && Objects.equals(postContents, post.postContents) && Objects.equals(replies, post.replies);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(author, postContents, replyCount, upvotes, flagged, replies);
+		return Objects.hash(author, postContents, replyCount, upvotes, replies);
 	}
 }

@@ -10,6 +10,7 @@ public class Review {
     public String professor;
     int rating;
     String reviewBody;
+	int flagged = 0;
 	public String getAuthor() {
 		return author;
 	}
@@ -46,9 +47,18 @@ public class Review {
 	public void setReviewBody(String reviewBody) {
 		this.reviewBody = reviewBody;
 	}
+
+	public int getFlagged() {
+		return flagged;
+	}
+
+	public void setFlagged(int flagged) {
+		this.flagged = flagged;
+	}
+
 	@Override
 	public int hashCode() {
-		return Objects.hash(CRN, author, course, professor, rating, reviewBody);
+		return Objects.hash(CRN, author, course, professor, rating, reviewBody, flagged);
 	}
 	@Override
 	public boolean equals(Object obj) {
@@ -61,7 +71,8 @@ public class Review {
 		Review other = (Review) obj;
 		return Objects.equals(CRN, other.CRN) && Objects.equals(author, other.author)
 				&& Objects.equals(course, other.course) && Objects.equals(professor, other.professor)
-				&& rating == other.rating && Objects.equals(reviewBody, other.reviewBody);
+				&& rating == other.rating && Objects.equals(reviewBody, other.reviewBody)
+				&& Objects.equals(flagged, other.flagged);
 	}
     
     
