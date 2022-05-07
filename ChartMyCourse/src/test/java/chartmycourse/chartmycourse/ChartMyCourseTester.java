@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
+import java.awt.event.ActionEvent;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -27,6 +28,19 @@ public class ChartMyCourseTester {
     @BeforeEach
     void init() {
     	box = new ChartMyCourseMainPage();
+    }
+
+
+    @Test
+    @DisplayName("Recommended Professor")
+    void recProf() {
+        box.recommendedProfessorsButtonActionPerformed(new ActionEvent("src", 1, "command"));
+    }
+
+    @Test
+    @DisplayName("Recommended Course")
+    void recCourse() {
+        box.recommendedCoursesButtonActionPerformed(new ActionEvent("src", 2, "command"));
     }
 
     /* example tests from lab 9
