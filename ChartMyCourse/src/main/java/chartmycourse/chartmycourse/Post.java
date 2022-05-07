@@ -7,7 +7,7 @@ import java.util.Objects;
 
 public class Post {
 	String author, postContents;
-	
+
 	//not yet implemented
 	/*
 	static public JTable replies;

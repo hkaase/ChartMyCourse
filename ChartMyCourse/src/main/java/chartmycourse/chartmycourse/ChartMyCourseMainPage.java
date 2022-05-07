@@ -1776,7 +1776,20 @@ public class ChartMyCourseMainPage extends JFrame {
                     "Review Text:", addReviewText
             };
             int option = JOptionPane.showConfirmDialog(null, message, "Add Review", JOptionPane.OK_CANCEL_OPTION);
-            //model.insertRow(reviewsTable.getRowCount(), new Object[] {iterReview.getAuthor(), iterReview.getCRN(), iterReview.getCourse(), iterReview.getProfessor(), iterReview.getRating(),iterReview.getReviewBody()});
+            //Input Validation:
+            Object message1 = new String[]{"Please enter a numeric value for the course rating"};
+            Object message2 = new String[]{"Please enter a value between 1 and 10"};
+            try{
+                int rating = Integer.parseInt(addReviewRating.getText());
+            }
+            catch(NumberFormatException nfe){
+               JOptionPane.showMessageDialog(null, message1, "ERROR", JOptionPane.OK_CANCEL_OPTION);
+                return;
+            }
+            if(Integer.parseInt(addReviewRating.getText()) > 10 ||  Integer.parseInt(addReviewRating.getText()) < 1){
+                JOptionPane.showMessageDialog(null, message2, "ERROR", JOptionPane.OK_CANCEL_OPTION);
+                return;
+            }
             ((DefaultTableModel) reviewsTable.getModel()).insertRow(reviewsTable.getRowCount(),
                     new Object[]{addReviewAuthor.getText(), addReviewCRN.getText(), addReviewCourse.getText(), addReviewProfessor.getText(), Integer.parseInt(addReviewRating.getText()), addReviewText.getText()});
             Review temp = new Review();

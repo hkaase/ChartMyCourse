@@ -1,3 +1,5 @@
 Tomas Cerny,BuffTommyCerny,tomas_cerny@baylor.edu,doprdele!
 Mia,Mia,mia_gortney@baylor.edu,Eliza
 Admin,admin,admin@baylor.edu,admin12
+
+Varun,varunapte2,varunapte2@gmail.com,varunapte
