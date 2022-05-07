@@ -1147,10 +1147,28 @@ public class ChartMyCourseMainPage extends JFrame {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         reply.setUpvotes(reply.getUpvotes() + 1);
+                        curPost.getReplies().get(index).setUpvotes(reply.getUpvotes());
                         replyTable.getModel().setValueAt(reply.getUpvotes(), index, 1);
                         model.fireTableDataChanged();
                         removeUpvoteButton.setEnabled(true);
                         upvoteButton.setEnabled(false);
+
+                        try {
+                            FileWriter myWriter = new FileWriter("replies.txt");
+                            for (int i = 0; i < postsArray.size(); i++) {
+                                for(int j = 0; j < postsArray.get(i).getReplies().size(); j++) {
+
+                                    Reply r = postsArray.get(i).getReplies().get(j);
+                                    myWriter.write(postsArray.get(i).getAuthor() + "," +
+                                            postsArray.get(i).getPostContents() + "," + r.getAuthor() + ","
+                                            + r.getUpvotes() + "," + r.getPostContents() + "\n");
+                                }
+                            }
+                            myWriter.close();
+
+                        } catch (IOException ex) {
+                            ex.printStackTrace();
+                        }
                     }
                 });
 
@@ -1158,10 +1176,28 @@ public class ChartMyCourseMainPage extends JFrame {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         reply.setUpvotes(reply.getUpvotes() - 1);
+                        curPost.getReplies().get(index).setUpvotes(reply.getUpvotes());
                         replyTable.getModel().setValueAt(reply.getUpvotes(), index, 1);
                         model.fireTableDataChanged();
                         upvoteButton.setEnabled(true);
                         removeUpvoteButton.setEnabled(false);
+
+                        try {
+                            FileWriter myWriter = new FileWriter("replies.txt");
+                            for (int i = 0; i < postsArray.size(); i++) {
+                                for(int j = 0; j < postsArray.get(i).getReplies().size(); j++) {
+
+                                    Reply r = postsArray.get(i).getReplies().get(j);
+                                    myWriter.write(postsArray.get(i).getAuthor() + "," +
+                                            postsArray.get(i).getPostContents() + "," + r.getAuthor() + ","
+                                            + r.getUpvotes() + "," + r.getPostContents() + "\n");
+                                }
+                            }
+                            myWriter.close();
+
+                        } catch (IOException ex) {
+                            ex.printStackTrace();
+                        }
                     }
                 });
 
@@ -1181,6 +1217,71 @@ public class ChartMyCourseMainPage extends JFrame {
         };
 
         /**
+         * This is the functionality of removing a reply.
+         * @author Mia Gortney
+         * @version 1.0
+         * @Since 1.0
+         */
+        Action removeReply = new AbstractAction() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                if (loggedIn) {
+                    curPost = postsArray.get(qAndATable.getSelectedRow());
+                    Reply reply = curPost.getReplies().get(replyTable.getSelectedRow());
+                    if (reply.getAuthor().equals(curUser.getRealName())) {
+
+                        int option = JOptionPane.showConfirmDialog(null,
+                                "Are you sure you want to remove this reply?");
+                        if (option == 0) {
+                            ((DefaultTableModel) replyTable.getModel()).removeRow(replyTable.getSelectedRow());
+                            curPost.getReplies().remove(reply);
+                            curPost.setReplyCount(curPost.getReplyCount() - 1);
+                            postsArray.get(qAndATable.getSelectedRow()).setReplyCount(curPost.getReplyCount());
+                            qAndATable.getModel().setValueAt(curPost.getReplyCount(), qAndATable.getSelectedRow(), 1);
+                            DefaultTableModel model = (DefaultTableModel) replyTable.getModel();
+                            model.fireTableDataChanged();
+
+                            try {
+                                FileWriter myWriter = new FileWriter("posts.txt");
+                                for(int k = 0; k < postsArray.size(); k++) {
+                                    Post p = postsArray.get(k);
+                                    myWriter.write(p.getAuthor() + "," + p.getReplyCount() + "," +
+                                            p.getUpvotes() + "," + p.getPostContents() + "\n");
+                                }
+                                myWriter.close();
+
+                                myWriter = new FileWriter("replies.txt");
+                                for (int i = 0; i < postsArray.size(); i++) {
+                                    for(int j = 0; j < postsArray.get(i).getReplies().size(); j++) {
+
+                                        Reply r = postsArray.get(i).getReplies().get(j);
+                                        myWriter.write(postsArray.get(i).getAuthor() + "," +
+                                                postsArray.get(i).getPostContents() + "," + r.getAuthor() + ","
+                                                + r.getUpvotes() + "," + r.getPostContents() + "\n");
+                                    }
+                                }
+                                myWriter.close();
+
+                            } catch (Exception ex) {
+                                ex.printStackTrace();
+                            }
+                        }
+
+                    } else {
+                        JOptionPane.showMessageDialog(null,
+                                "You can't delete something you didn't write!",
+                                "Alert", JOptionPane.WARNING_MESSAGE);
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(null, "You have to log in first.",
+                            "Alert", JOptionPane.WARNING_MESSAGE);
+                }
+            }
+        };
+
+        /**
          * This is the functionality of clicking the View Replies button
          * @author Mia Gortney
          * @version 1.0
@@ -1191,18 +1292,18 @@ public class ChartMyCourseMainPage extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 replyDialog = new JDialog(replyDialog, "View Reply");
-                replyDialog.setLayout(new GridLayout(1, 2));
+                replyDialog.setLayout(new GridLayout(1, 1));
                 Post post = postsArray.get(qAndATable.getSelectedRow());
                 replyTable.setModel(new DefaultTableModel(
                         new Object [][] {
 
                         },
                         new String [] {
-                                "Author", "Upvotes", "View Reply"
+                                "Author", "Upvotes", "View Reply", "Remove"
                         }
                 ) {
                     final Class[] types = new Class [] {
-                            String.class, Integer.class, JButton.class
+                            String.class, Integer.class, JButton.class, JButton.class
                     };
 
                     public Class getColumnClass(int columnIndex) {
@@ -1213,48 +1314,17 @@ public class ChartMyCourseMainPage extends JFrame {
                 replyScrollPane.setViewportView(replyTable);
 
                 ButtonColumn buttonColumn3 = new ButtonColumn(replyTable, viewReply,2);
+                ButtonColumn buttonColumn4 = new ButtonColumn(replyTable, removeReply, 3);
 
                 DefaultTableModel model = (DefaultTableModel) replyTable.getModel();
 
-                removeReplyButton.setText("Remove Reply");
-                removeReplyButton.setBounds(5, 5, 5, 5);
-                removeReplyButton.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        if (replyTable.getSelectedRow() > 0) {
-
-                            Reply r = post.getReplies().get(replyTable.getSelectedRow());
-                            if (r.getAuthor().equals(curUser.getRealName())) {
-
-                                int option = JOptionPane.showConfirmDialog(null,
-                                        "Are you sure you want to remove this reply?");
-                                if (option == 0) {
-                                    ((DefaultTableModel) replyTable.getModel()).removeRow(replyTable.getSelectedRow());
-                                    post.getReplies().remove(r);
-                                }
-
-                            } else {
-                                JOptionPane.showMessageDialog(null,
-                                        "You can't delete something you didn't write!",
-                                        "Alert", JOptionPane.WARNING_MESSAGE);
-                            }
-
-                        } else {
-                            JOptionPane.showMessageDialog(null, "No row is selected!",
-                                    "Alert", JOptionPane.WARNING_MESSAGE);
-                        }
-                    }
-                });
-
                 for (Reply iterReply : post.getReplies()) {
-                    model.insertRow(replyTable.getRowCount(), new Object[] {iterReply.getAuthor(), iterReply.getUpvotes(), "View Reply"});
+                    model.insertRow(replyTable.getRowCount(), new Object[] {iterReply.getAuthor(), iterReply.getUpvotes(), "View Reply", "Remove"});
                 }
                 model.fireTableDataChanged();
 
-                replyDialog.add(removeReplyButton);
-                replyDialog.add(replyScrollPane);
-
-                //replyDialog.setSize(250,200);
+                replyDialog.setContentPane(replyScrollPane);
+                replyDialog.setSize(250,200);
                 replyDialog.pack();
                 replyDialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
                 replyDialog.setVisible(true);
@@ -1934,24 +2004,19 @@ public class ChartMyCourseMainPage extends JFrame {
 	               
 	                	model.removeRow(selectedRow);
 	                    postsArray.remove(selectedRow);
-	
-	                    try {
-	                        FileWriter myWriter = new FileWriter("posts.txt");
-	                        for(int k = 0; k < qAndATable.getRowCount(); k++) {
-	                            for(int l = 0; l < qAndATable.getColumnCount(); l++) {
-	                                myWriter.write(qAndATable.getModel().getValueAt(k, l).toString());
-	                                if(l != qAndATable.getColumnCount() - 1) {
-	                                    myWriter.write(",");
-	                                }
-	                            }
-	                            myWriter.write("\n");
-	                        }
-	
-	                        myWriter.close();
-	                    } catch (Exception e) {
-	                        e.printStackTrace();
-	                    }
-	                }
+
+                    try {
+                        FileWriter myWriter = new FileWriter("posts.txt");
+                        for(int k = 0; k < postsArray.size(); k++) {
+                            Post p = postsArray.get(k);
+                            myWriter.write(p.getAuthor() + "," + p.getReplyCount() + "," +
+                                    p.getUpvotes() + "," + p.getPostContents() + "\n");
+                        }
+                        myWriter.close();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
 	                
 	        } else {
 	            JOptionPane.showMessageDialog(null,"You can't remove discussions that you didn't write!","Alert",JOptionPane.WARNING_MESSAGE);
