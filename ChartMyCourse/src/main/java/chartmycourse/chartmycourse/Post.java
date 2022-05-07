@@ -30,7 +30,7 @@ public class Post {
 	        });
 	}
 	*/
-	int replyCount, upvotes;
+	int replyCount, upvotes, flagged = 0;
 
 	ArrayList<Reply> replies = new ArrayList<>();
 
@@ -74,15 +74,24 @@ public class Post {
 		return replies;
 	}
 
+	public int getFlagged() {
+		return flagged;
+	}
+
+	public void setFlagged(int flagged) {
+		this.flagged = flagged;
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
-		if (!(o instanceof Post post)) return false;
-		return replyCount == post.replyCount && upvotes == post.upvotes && Objects.equals(author, post.author) && Objects.equals(postContents, post.postContents) && Objects.equals(replies, post.replies);
+		if (!(o instanceof Post)) return false;
+		Post post = (Post) o;
+		return replyCount == post.replyCount && upvotes == post.upvotes && flagged == post.flagged && Objects.equals(author, post.author) && Objects.equals(postContents, post.postContents) && Objects.equals(replies, post.replies);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(author, postContents, replyCount, upvotes, replies);
+		return Objects.hash(author, postContents, replyCount, upvotes, flagged, replies);
 	}
 }
