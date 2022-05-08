@@ -30,7 +30,6 @@ public class ChartMyCourseTester {
     	box = new ChartMyCourseMainPage();
     }
 
-
     @Test
     @DisplayName("Recommended Professor")
     void recProf() {
@@ -43,54 +42,24 @@ public class ChartMyCourseTester {
         box.recommendedCoursesButtonActionPerformed(new ActionEvent("src", 2, "command"));
     }
 	
-      @Test
-  @DisplayName("Invalid Email")
-  void userEmailVerify() {
-  	Boolean caught = false;
-  	try {
+    @Test
+    @DisplayName("Invalid Email")
+    void userEmailVerify() {
+  	    boolean caught = false;
+  	    try {
 			User user = new User("abc", "abcd", "12", "ab", "ab");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			caught = true;
 		} 
-  	assertTrue(caught);
-   }
+  	    assertTrue(caught);
+    }
 	
-	 @Test
-  @DisplayName("Add Reply")
-  void addReplyTest() {
-	 
-  	assertThrows(NullPointerException.class, () -> box.addReplyButton.doClick());
-  	
-  }
-
-    /* example tests from lab 9
     @Test
-    void feed() {
-    	box.insertCoin(Coin.cent);
-    	assertEquals(.01f, box.balance(), "Cent expected");
+    @DisplayName("Add Reply")
+    void addReplyTest() {
+  	    assertThrows(NullPointerException.class, () -> box.addReplyButton.doClick());
     }
 
-    @Test
-    //@Disabled("TODO: need to fix :)... yes you!")
-    
-    //Fixed by not changing balance if coin is null.
-    void feedEmpty() {
-    	//box.insertCoin(null);
-    	assertThrows(RuntimeException.class, () -> box.insertCoin(null), "Tried to insert null coin, didn't throw");
 
-    }
-    
-    @DisplayName("Should calculate the correct sum")
-    @ParameterizedTest(name = "{index} => coins={0}, total={1}")
-    @MethodSource("coins")
-    void feedParams(Coin[] coins, float total) {
-    	for (Coin coin : coins) {
-    		box.insertCoin(coin);
-		}
-    	assertEquals(total, box.balance(), "Different total expected");
-    
-    }
-    */
-    
 }

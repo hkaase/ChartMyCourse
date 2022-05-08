@@ -1,4 +1,6 @@
-Harm Drenth,1,1,What,Mia
+Harm Drenth,1,0,What
 Ricardo Boone,1,1,What,Mia
 Warren Burrus,0,0,What
-Chase Harris,1,1,Hi Mia!!,Chase Harris
+Chase Harris,0,1,Hi Mia!!,Chase Harris
+Mia,0,0,Hello. This is my discussion.
+Mia,0,0,This is my discussion post. Hello!

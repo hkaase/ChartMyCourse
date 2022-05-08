@@ -99,6 +99,12 @@ public class ChartMyCourseMainPage extends JFrame {
     private JDialog replyDialog;
     private JButton removeDiscussionButton;
     public  JButton addReplyButton;
+    public JButton upvoteButton;
+    public JButton upvoteReplyButton;
+    public JButton removeUpvoteButton;
+    public JButton removeUpvoteReplyButton;
+    public JButton flagButton;
+    public JButton removeFlagButton;
 
     //This array holds the list of reviews.
     private final ArrayList<Review> reviewArray = new ArrayList<>();
@@ -415,6 +421,12 @@ public class ChartMyCourseMainPage extends JFrame {
         replyTable = new JTable();
         removeDiscussionButton = new JButton();
         qAndAHeader = new JLabel("Q&A");
+        upvoteButton = new JButton("Upvote");
+        upvoteReplyButton = new JButton("Upvote");
+        removeUpvoteButton = new JButton("Remove Upvote");
+        removeUpvoteReplyButton = new JButton("Remove Upvote");
+        flagButton = new JButton("Flag");
+        removeFlagButton = new JButton("Remove Flag");
         
         loginDialog.setTitle("login");
         loginDialog.setBackground(new Color(0, 88, 5));
@@ -439,9 +451,6 @@ public class ChartMyCourseMainPage extends JFrame {
             	loginButtonActionPerformed(eventHappens);
             }
         });
-
-        
-
 
         //Set text of label for password field.
         passwordLabel.setText("password:");
@@ -709,7 +718,7 @@ public class ChartMyCourseMainPage extends JFrame {
         reviewsPanel.setPreferredSize(new Dimension(589, 332));
         reviewsPanel.setBackground(homeColor);
 	    
-	removeReviewButton.setText("Remove Review");
+	    removeReviewButton.setText("Remove Review");
         removeReviewButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent eventHappens) {
                 removeReviewActionPerformed(eventHappens);
@@ -793,9 +802,6 @@ public class ChartMyCourseMainPage extends JFrame {
                     reviewContents.setRows(3);
                     reviewContents.append(curReview.getReviewBody());
                     reviewContents.setEditable(false);
-
-                    JButton flagButton = new JButton("Flag");
-                    JButton removeFlagButton = new JButton("Remove Flag");
 
                     flagButton.addActionListener(new ActionListener() {
                         @Override
@@ -1078,16 +1084,6 @@ public class ChartMyCourseMainPage extends JFrame {
         qAndAPanel.setPreferredSize(new Dimension(589, 332));
         qAndAPanel.setBackground(homeColor);
 
-        //searchLabel.setFont(new Font("sansserif", 0, 24));
-        //searchLabel.setText("Search:");
-
-        /*searchText.setText("search text");
-        searchText.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent eventHappens) {
-                searchTextActionPerformed(eventHappens);
-            }
-        });*/
-
         qAndATable.setAutoCreateRowSorter(true);
 
         qAndATable.setModel(new DefaultTableModel(
@@ -1130,9 +1126,7 @@ public class ChartMyCourseMainPage extends JFrame {
                     postContents.append(curPost.getPostContents());
                     postContents.setEditable(false);
 
-                    JButton upvoteButton = new JButton("Upvote");
                     addReplyButton = new JButton("Add Reply");
-                    JButton removeUpvoteButton = new JButton("Remove Upvote");
 
                     postDialog.add(postContents);
 
@@ -1295,10 +1289,7 @@ public class ChartMyCourseMainPage extends JFrame {
                 postContents.setEditable(false);
                 replyDialog.add(postContents);
 
-                JButton upvoteButton = new JButton("Upvote");
-                JButton removeUpvoteButton = new JButton("Remove Upvote");
-
-                upvoteButton.addActionListener(new ActionListener() {
+                upvoteReplyButton.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         reply.setUpvotes(reply.getUpvotes() + 1);
@@ -1332,7 +1323,7 @@ public class ChartMyCourseMainPage extends JFrame {
                     }
                 });
 
-                removeUpvoteButton.addActionListener(new ActionListener() {
+                removeUpvoteReplyButton.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         reply.setUpvotes(reply.getUpvotes() - 1);
@@ -1370,15 +1361,15 @@ public class ChartMyCourseMainPage extends JFrame {
                 replyDialog.add(removeUpvoteButton);
 
                 if (!loggedIn) {
-                    removeUpvoteButton.setEnabled(false);
-                    upvoteButton.setEnabled(false);
+                    removeUpvoteReplyButton.setEnabled(false);
+                    upvoteReplyButton.setEnabled(false);
                 } else {
                     if (curPost.getReplies().get(replyTable.getSelectedRow()).getUpvotedUsers().contains(curUser)) {
-                        removeUpvoteButton.setEnabled(true);
+                        removeUpvoteReplyButton.setEnabled(true);
                         upvoteButton.setEnabled(false);
                     } else {
-                        removeUpvoteButton.setEnabled(false);
-                        upvoteButton.setEnabled(true);
+                        removeUpvoteReplyButton.setEnabled(false);
+                        upvoteReplyButton.setEnabled(true);
                     }
                 }
                 replyDialog.setSize(250,300);
@@ -2543,10 +2534,12 @@ public class ChartMyCourseMainPage extends JFrame {
     	readPost.setReplyCount(Integer.parseInt(result.get(1)));
     	readPost.setUpvotes(Integer.parseInt(result.get(2)));
     	readPost.setPostContents(result.get(3));
+        int index = 4;
         for (int i = 0; i < readPost.getUpvotes(); i++) {
             for (int j = 0; j < userArray.size(); j++) {
-                if (userArray.get(j).getRealName().equals(result.get(i + 4))) {
+                if (userArray.get(j).getRealName().equals(result.get(index))) {
                     readPost.getUpvotedUsers().add(userArray.get(j));
+                    index++;
                     break;
                 }
             }
