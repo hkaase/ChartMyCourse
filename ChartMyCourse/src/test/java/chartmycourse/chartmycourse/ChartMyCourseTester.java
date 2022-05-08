@@ -55,6 +55,14 @@ public class ChartMyCourseTester {
 		} 
   	assertTrue(caught);
    }
+	
+	 @Test
+  @DisplayName("Add Reply")
+  void addReplyTest() {
+	 
+  	assertThrows(NullPointerException.class, () -> box.addReplyButton.doClick());
+  	
+  }
 
     /* example tests from lab 9
     @Test

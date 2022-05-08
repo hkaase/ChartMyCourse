@@ -1,4 +1,4 @@
-It is recommended to have OpenJDK17 installed. Simply double click ChartMyCourse.jar and it will open.
+It is recommended to have OpenJDK17 installed. Go to the root folder of the repo, then ChartMyCourse. Simply double click ChartMyCourse.jar and it will open.
 
 Complete application with User Interface and user input validation - Done
 
