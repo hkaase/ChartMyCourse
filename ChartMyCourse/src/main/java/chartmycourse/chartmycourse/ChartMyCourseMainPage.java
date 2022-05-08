@@ -1862,7 +1862,7 @@ public class ChartMyCourseMainPage extends JFrame {
                     while((line = reader.readLine()) != null) {
                         String[] split = line.split(",");
                         if(split.length > 0) {
-                            if(courseList.getSelectedItem().equals(split[0])) {
+                            if(Objects.equals(courseList.getSelectedItem(), split[0])) {
                                 for(int i = 1; i < split.length; i++) {
                                     profs.add(new JLabel(split[i]));
                                 }
@@ -1994,11 +1994,11 @@ public class ChartMyCourseMainPage extends JFrame {
             try{
                 int rating = Integer.parseInt(addReviewRating.getText());
             } catch(NumberFormatException nfe){
-               JOptionPane.showMessageDialog(null, message1, "ERROR", JOptionPane.OK_CANCEL_OPTION);
+               JOptionPane.showMessageDialog(null, message1, "ERROR", JOptionPane.WARNING_MESSAGE);
                 return;
             }
             if(Integer.parseInt(addReviewRating.getText()) > 10 ||  Integer.parseInt(addReviewRating.getText()) < 1){
-                JOptionPane.showMessageDialog(null, message2, "ERROR", JOptionPane.OK_CANCEL_OPTION);
+                JOptionPane.showMessageDialog(null, message2, "ERROR", JOptionPane.WARNING_MESSAGE);
                 return;
             }
             ((DefaultTableModel) reviewsTable.getModel()).insertRow(reviewsTable.getRowCount(),
@@ -2046,8 +2046,7 @@ public class ChartMyCourseMainPage extends JFrame {
 
     /**
      * This is the functionality to remove a review.
-     * @Author Mia Gortney
-     * @version 1.0
+     * @author Mia Gortney
      * @since 1.0
      */
     private void removeReviewActionPerformed(ActionEvent eventHappens){
@@ -2103,7 +2102,6 @@ public class ChartMyCourseMainPage extends JFrame {
     /**
      * This is the functionality for add discussion post
      * @author Mia Gortney
-     * @version 1.0
      * @since 1.0
      */
     private void addNewDiscussionActionPerformed(ActionEvent eventHappens) {
@@ -2151,7 +2149,6 @@ public class ChartMyCourseMainPage extends JFrame {
     /**
      * This is the functionality for remove discussion post
      * @author Mia Gortney
-     * @version 1.0
      * @since 1.0
      */
     private void removeDiscussionActionPerformed(ActionEvent eventHappens) {
@@ -2203,7 +2200,7 @@ public class ChartMyCourseMainPage extends JFrame {
 
     //This is the event for when the register button is pressed
     private void registerButtonActionPerformed(ActionEvent eventHappens) {
-    	Boolean allSet = true;
+        boolean allSet = true;
     	//Initialize variables to hold the values of the text fields.
     	String readRealName, readUserName, readEmail, readPassword;
     	
@@ -2226,7 +2223,6 @@ public class ChartMyCourseMainPage extends JFrame {
 			try {
 				userToRegister = new User(readRealName, readUserName, readEmail, readPassword);
 			} catch (Exception e1) {
-				// TODO Auto-generated catch block
 				JOptionPane.showMessageDialog(null, "Error: please enter a valid baylor email");
 				allSet = false;
 			}
@@ -2245,8 +2241,6 @@ public class ChartMyCourseMainPage extends JFrame {
 	        		}
 	        	}
 	        	//If it is indeed unique, add it to the user array.
-	        	//NOTE: this does not add the user to the users.txt file!
-	        	//TODO: add user persistence
 	        	if (isUniqueUser) {
 	        		userArray.add(userToRegister);
 			        try {
@@ -2304,9 +2298,7 @@ public class ChartMyCourseMainPage extends JFrame {
         }
     }
     
-    //This function loads reviews from the reviews.txt file. 
-    
-    //TODO: add "make a review" functionality
+    //This function loads reviews from the reviews.txt file.
     public void initTestReviews() {
     	//Open the reviews file and a scanner for it.
     	File reviewFile = new File("reviews.txt");
@@ -2320,7 +2312,6 @@ public class ChartMyCourseMainPage extends JFrame {
 	    	//Call table creation function
 	    	initReviewTable();
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
     }
@@ -2401,7 +2392,6 @@ public class ChartMyCourseMainPage extends JFrame {
 	    	}
 	    	
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
     }
@@ -2439,7 +2429,6 @@ public class ChartMyCourseMainPage extends JFrame {
 			initQAndATable();
 	    	
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
     }
