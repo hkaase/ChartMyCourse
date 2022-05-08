@@ -1296,8 +1296,8 @@ public class ChartMyCourseMainPage extends JFrame {
                         curPost.getReplies().get(index).setUpvotes(reply.getUpvotes());
                         replyTable.getModel().setValueAt(reply.getUpvotes(), index, 1);
                         model.fireTableDataChanged();
-                        removeUpvoteButton.setEnabled(true);
-                        upvoteButton.setEnabled(false);
+                        removeUpvoteReplyButton.setEnabled(true);
+                        upvoteReplyButton.setEnabled(false);
                         curPost.getReplies().get(index).getUpvotedUsers().add(curUser);
 
                         try {
@@ -1330,8 +1330,8 @@ public class ChartMyCourseMainPage extends JFrame {
                         curPost.getReplies().get(index).setUpvotes(reply.getUpvotes());
                         replyTable.getModel().setValueAt(reply.getUpvotes(), index, 1);
                         model.fireTableDataChanged();
-                        upvoteButton.setEnabled(true);
-                        removeUpvoteButton.setEnabled(false);
+                        upvoteReplyButton.setEnabled(true);
+                        removeUpvoteReplyButton.setEnabled(false);
                         curPost.getReplies().get(index).getUpvotedUsers().remove(curUser);
 
                         try {
@@ -1357,8 +1357,8 @@ public class ChartMyCourseMainPage extends JFrame {
                     }
                 });
 
-                replyDialog.add(upvoteButton);
-                replyDialog.add(removeUpvoteButton);
+                replyDialog.add(upvoteReplyButton);
+                replyDialog.add(removeUpvoteReplyButton);
 
                 if (!loggedIn) {
                     removeUpvoteReplyButton.setEnabled(false);
