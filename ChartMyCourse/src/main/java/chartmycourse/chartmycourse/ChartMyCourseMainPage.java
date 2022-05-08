@@ -599,18 +599,20 @@ public class ChartMyCourseMainPage extends JFrame {
         );
 
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        setBackground(new Color(21, 71, 52));
+        setBackground(new Color(185,214,235));
 
         homePanel.setPreferredSize(new Dimension(589, 332));
 
         welcomeSplashTextArea.setColumns(20);
         welcomeSplashTextArea.setRows(5);
-        welcomeSplashTextArea.setText("Welcome to ChartMyCourse!\nUse the buttons above to switch tabs\nto your desired functionality.");
+        welcomeSplashTextArea.setText("Welcome to Chart My Course!\nUse the buttons above to switch tabs\nto your desired functionality.");
         welcomeSplashTextPane.setViewportView(welcomeSplashTextArea);
 
         curUserHeading.setText("Current User: ");
 
         curUserLabel.setText(curUserString);
+        Color homeColor = new Color(185,214,235);
+        homePanel.setBackground(homeColor);
 
         GroupLayout homePanelLayout = new GroupLayout(homePanel);
         homePanel.setLayout(homePanelLayout);
@@ -641,7 +643,7 @@ public class ChartMyCourseMainPage extends JFrame {
         );
 
         chartmycoursewatermark.setFont(new Font("Cloister Black", Font.PLAIN, 18));
-        chartmycoursewatermark.setText("chartmycourse");
+        chartmycoursewatermark.setText("Chart My Course");
 
         homeButton.setFont(new Font("sansserif", Font.PLAIN, 8));
         homeButton.setText("home");
@@ -692,6 +694,7 @@ public class ChartMyCourseMainPage extends JFrame {
         });
 
         reviewsPanel.setPreferredSize(new Dimension(589, 332));
+        reviewsPanel.setBackground(homeColor);
 	    
 	removeReviewButton.setText("Remove Review");
         removeReviewButton.addActionListener(new ActionListener() {
@@ -753,6 +756,7 @@ public class ChartMyCourseMainPage extends JFrame {
             reviewsTable.getColumnModel().getColumn(1).setPreferredWidth(50);
             reviewsTable.getColumnModel().getColumn(1).setMaxWidth(50);
         }
+        reviewsTable.setDefaultEditor(Object.class,null);
 
         Action viewReview = new AbstractAction () {
 
@@ -913,6 +917,7 @@ public class ChartMyCourseMainPage extends JFrame {
         );
         removeReviewButton.setVisible(false);
         planningPanel.setPreferredSize(new Dimension(589, 332));
+        planningPanel.setBackground(homeColor);
         planningPanel.setVisible(false);
 
         planningHeading.setFont(new Font("sansserif", 0, 36));
@@ -974,6 +979,7 @@ public class ChartMyCourseMainPage extends JFrame {
             courseListTable.getColumnModel().getColumn(0).setPreferredWidth(150);
             courseListTable.getColumnModel().getColumn(0).setMaxWidth(150);
         }
+        courseListTable.setDefaultEditor(Object.class, null);
 
         profListTable.setModel(new DefaultTableModel(
                 new Object [][] {
@@ -1000,6 +1006,7 @@ public class ChartMyCourseMainPage extends JFrame {
             profListTable.getColumnModel().getColumn(0).setPreferredWidth(150);
             profListTable.getColumnModel().getColumn(0).setMaxWidth(150);
         }
+        profListTable.setDefaultEditor(Object.class,null);
 
         GroupLayout planningPanelLayout = new GroupLayout(planningPanel);
         planningPanel.setLayout(planningPanelLayout);
@@ -1056,6 +1063,7 @@ public class ChartMyCourseMainPage extends JFrame {
         );
 
         qAndAPanel.setPreferredSize(new Dimension(589, 332));
+        qAndAPanel.setBackground(homeColor);
 
         //searchLabel.setFont(new Font("sansserif", 0, 24));
         //searchLabel.setText("Search:");
@@ -1085,6 +1093,7 @@ public class ChartMyCourseMainPage extends JFrame {
                 return types [columnIndex];
             }
         });
+        qAndATable.setDefaultEditor(Object.class,null);
         qAndATableScrollPane.setViewportView(qAndATable);
 
         /**
@@ -1468,6 +1477,7 @@ public class ChartMyCourseMainPage extends JFrame {
                     }
                 });
                 JScrollPane replyScrollPane = new JScrollPane();
+                replyTable.setDefaultEditor(Object.class,null);
                 replyScrollPane.setViewportView(replyTable);
 
                 ButtonColumn buttonColumn3 = new ButtonColumn(replyTable, viewReply,2);
