@@ -55,6 +55,12 @@ public class ChartMyCourseTester {
 		} 
   	assertTrue(caught);
    }
+	
+   @Test
+    @DisplayName("Add Review")
+    void addReviewTest() {
+    	box.addReviewButtonActionPerformed(new ActionEvent("src", 3, "command"));
+    }
 
     /* example tests from lab 9
     @Test
