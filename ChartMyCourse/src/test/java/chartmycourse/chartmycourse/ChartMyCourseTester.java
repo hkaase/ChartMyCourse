@@ -61,5 +61,27 @@ public class ChartMyCourseTester {
   	    assertThrows(NullPointerException.class, () -> box.addReplyButton.doClick());
     }
 
+    @Test
+    @DisplayName("Upvote")
+    void upvoteTest() {
 
+    }
+
+    @Test
+    @DisplayName("Remove Upvote")
+    void removeUpvoteTest() {
+
+    }
+
+    @Test
+    @DisplayName("Flag")
+    void flagTest() {
+
+    }
+
+    @Test
+    @DisplayName("Remove Flag")
+    void removeFlagTest() {
+
+    }
 }
