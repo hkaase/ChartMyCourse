@@ -607,18 +607,20 @@ public class ChartMyCourseMainPage extends JFrame {
         );
 
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        setBackground(new Color(21, 71, 52));
+        setBackground(new Color(185,214,235));
 
         homePanel.setPreferredSize(new Dimension(589, 332));
 
         welcomeSplashTextArea.setColumns(20);
         welcomeSplashTextArea.setRows(5);
-        welcomeSplashTextArea.setText("Welcome to ChartMyCourse!\nUse the buttons above to switch tabs\nto your desired functionality.");
+        welcomeSplashTextArea.setText("Welcome to Chart My Course!\nUse the buttons above to switch tabs\nto your desired functionality.");
         welcomeSplashTextPane.setViewportView(welcomeSplashTextArea);
 
         curUserHeading.setText("Current User: ");
 
         curUserLabel.setText(curUserString);
+        Color homeColor = new Color(185,214,235);
+        homePanel.setBackground(homeColor);
 
         GroupLayout homePanelLayout = new GroupLayout(homePanel);
         homePanel.setLayout(homePanelLayout);
@@ -649,7 +651,7 @@ public class ChartMyCourseMainPage extends JFrame {
         );
 
         chartmycoursewatermark.setFont(new Font("Cloister Black", Font.PLAIN, 18));
-        chartmycoursewatermark.setText("chartmycourse");
+        chartmycoursewatermark.setText("Chart My Course");
 
         homeButton.setFont(new Font("sansserif", Font.PLAIN, 8));
         homeButton.setText("home");
@@ -700,6 +702,7 @@ public class ChartMyCourseMainPage extends JFrame {
         });
 
         reviewsPanel.setPreferredSize(new Dimension(589, 332));
+        reviewsPanel.setBackground(homeColor);
 	    
 	removeReviewButton.setText("Remove Review");
         removeReviewButton.addActionListener(new ActionListener() {
@@ -761,6 +764,7 @@ public class ChartMyCourseMainPage extends JFrame {
             reviewsTable.getColumnModel().getColumn(1).setPreferredWidth(50);
             reviewsTable.getColumnModel().getColumn(1).setMaxWidth(50);
         }
+        reviewsTable.setDefaultEditor(Object.class,null);
 
         Action viewReview = new AbstractAction () {
 
@@ -921,6 +925,7 @@ public class ChartMyCourseMainPage extends JFrame {
         );
         removeReviewButton.setVisible(false);
         planningPanel.setPreferredSize(new Dimension(589, 332));
+        planningPanel.setBackground(homeColor);
         planningPanel.setVisible(false);
 
         planningHeading.setFont(new Font("sansserif", 0, 36));
@@ -982,6 +987,7 @@ public class ChartMyCourseMainPage extends JFrame {
             courseListTable.getColumnModel().getColumn(0).setPreferredWidth(150);
             courseListTable.getColumnModel().getColumn(0).setMaxWidth(150);
         }
+        courseListTable.setDefaultEditor(Object.class, null);
 
         profListTable.setModel(new DefaultTableModel(
                 new Object [][] {
@@ -1008,6 +1014,7 @@ public class ChartMyCourseMainPage extends JFrame {
             profListTable.getColumnModel().getColumn(0).setPreferredWidth(150);
             profListTable.getColumnModel().getColumn(0).setMaxWidth(150);
         }
+        profListTable.setDefaultEditor(Object.class,null);
 
         GroupLayout planningPanelLayout = new GroupLayout(planningPanel);
         planningPanel.setLayout(planningPanelLayout);
@@ -1064,6 +1071,7 @@ public class ChartMyCourseMainPage extends JFrame {
         );
 
         qAndAPanel.setPreferredSize(new Dimension(589, 332));
+        qAndAPanel.setBackground(homeColor);
 
         //searchLabel.setFont(new Font("sansserif", 0, 24));
         //searchLabel.setText("Search:");
@@ -1093,6 +1101,7 @@ public class ChartMyCourseMainPage extends JFrame {
                 return types [columnIndex];
             }
         });
+        qAndATable.setDefaultEditor(Object.class,null);
         qAndATableScrollPane.setViewportView(qAndATable);
 
         /**
@@ -1130,13 +1139,18 @@ public class ChartMyCourseMainPage extends JFrame {
                             model.fireTableDataChanged();
                             removeUpvoteButton.setEnabled(true);
                             upvoteButton.setEnabled(false);
+                            curPost.getUpvotedUsers().add(curUser);
 
                             try {
                                 FileWriter myWriter = new FileWriter("posts.txt");
                                 for(int k = 0; k < postsArray.size(); k++) {
                                     Post p = postsArray.get(k);
                                     myWriter.write(p.getAuthor() + "," + p.getReplyCount() + "," +
-                                            p.getUpvotes() + "," + p.getPostContents() + "\n");
+                                            p.getUpvotes() + "," + p.getPostContents());
+                                    for (int j = 0; j < p.getUpvotedUsers().size(); j++) {
+                                        myWriter.write("," + p.getUpvotedUsers().get(j).getRealName());
+                                    }
+                                    myWriter.write("\n");
                                 }
 
                                 myWriter.close();
@@ -1173,7 +1187,11 @@ public class ChartMyCourseMainPage extends JFrame {
                                 for(int k = 0; k < postsArray.size(); k++) {
                                     Post p = postsArray.get(k);
                                     myWriter.write(p.getAuthor() + "," + p.getReplyCount() + "," +
-                                            p.getUpvotes() + "," + p.getPostContents() + "\n");
+                                            p.getUpvotes() + "," + p.getPostContents());
+                                    for (int j = 0; j < p.getUpvotedUsers().size(); j++) {
+                                        myWriter.write("," + p.getUpvotedUsers().get(j).getRealName());
+                                    }
+                                    myWriter.write("\n");
                                 }
                                 myWriter.close();
 
@@ -1184,7 +1202,11 @@ public class ChartMyCourseMainPage extends JFrame {
                                         Reply r = postsArray.get(i).getReplies().get(j);
                                         myWriter.write(postsArray.get(i).getAuthor() + "," +
                                                 postsArray.get(i).getPostContents() + "," + r.getAuthor() + ","
-                                                + r.getUpvotes() + "," + r.getPostContents() + "\n");
+                                                + r.getUpvotes() + "," + r.getPostContents());
+                                        for (int k = 0; k < r.getUpvotedUsers().size(); k++) {
+                                            myWriter.write("," + r.getUpvotedUsers().get(k).getRealName());
+                                        }
+                                        myWriter.write("\n");
                                     }
                                 }
                                 myWriter.close();
@@ -1202,13 +1224,18 @@ public class ChartMyCourseMainPage extends JFrame {
                             model.fireTableDataChanged();
                             upvoteButton.setEnabled(true);
                             removeUpvoteButton.setEnabled(false);
+                            curPost.getUpvotedUsers().remove(curUser);
 
                             try {
                                 FileWriter myWriter = new FileWriter("posts.txt");
                                 for(int k = 0; k < postsArray.size(); k++) {
                                     Post p = postsArray.get(k);
                                     myWriter.write(p.getAuthor() + "," + p.getReplyCount() + "," +
-                                            p.getUpvotes() + "," + p.getPostContents() + "\n");
+                                            p.getUpvotes() + "," + p.getPostContents());
+                                    for (int j = 0; j < p.getUpvotedUsers().size(); j++) {
+                                        myWriter.write("," + p.getUpvotedUsers().get(j).getRealName());
+                                    }
+                                    myWriter.write("\n");
                                 }
 
                                 myWriter.close();
@@ -1222,10 +1249,19 @@ public class ChartMyCourseMainPage extends JFrame {
                     postDialog.add(addReplyButton);
                     postDialog.add(removeUpvoteButton);
 
-                    removeUpvoteButton.setEnabled(false);
                     if (!loggedIn) {
+                        removeUpvoteButton.setEnabled(false);
                         upvoteButton.setEnabled(false);
                         addReplyButton.setEnabled(false);
+                    } else {
+                        if (curPost.getUpvotedUsers().contains(curUser)) {
+                            removeUpvoteButton.setEnabled(true);
+                            upvoteButton.setEnabled(false);
+                        } else {
+                            removeUpvoteButton.setEnabled(false);
+                            upvoteButton.setEnabled(true);
+                        }
+                        addReplyButton.setEnabled(true);
                     }
 
                     postDialog.setSize(250,300);
@@ -1245,87 +1281,104 @@ public class ChartMyCourseMainPage extends JFrame {
                 int index = replyTable.getSelectedRow();
                 Reply reply = curPost.getReplies().get(index);
 
-                    replyDialog = new JDialog(replyDialog, "View Post");
-                    replyDialog.setLayout(new GridLayout(3, 1));
-                    JTextArea postContents = new JTextArea();
-                    postContents.setColumns(50);
-                    postContents.setRows(3);
-                    postContents.append(reply.getPostContents());
-                    postContents.setEditable(false);
-                    replyDialog.add(postContents);
+                replyDialog = new JDialog(replyDialog, "View Post");
+                replyDialog.setLayout(new GridLayout(3, 1));
+                JTextArea postContents = new JTextArea();
+                postContents.setColumns(50);
+                postContents.setRows(3);
+                postContents.append(reply.getPostContents());
+                postContents.setEditable(false);
+                replyDialog.add(postContents);
 
-                    JButton upvoteButton = new JButton("Upvote");
-                    JButton removeUpvoteButton = new JButton("Remove Upvote");
+                JButton upvoteButton = new JButton("Upvote");
+                JButton removeUpvoteButton = new JButton("Remove Upvote");
 
-                    upvoteButton.addActionListener(new ActionListener() {
-                        @Override
-                        public void actionPerformed(ActionEvent e) {
-                            reply.setUpvotes(reply.getUpvotes() + 1);
-                            curPost.getReplies().get(index).setUpvotes(reply.getUpvotes());
-                            replyTable.getModel().setValueAt(reply.getUpvotes(), index, 1);
-                            model.fireTableDataChanged();
-                            removeUpvoteButton.setEnabled(true);
-                            upvoteButton.setEnabled(false);
-
-                            try {
-                                FileWriter myWriter = new FileWriter("replies.txt");
-                                for (int i = 0; i < postsArray.size(); i++) {
-                                    for(int j = 0; j < postsArray.get(i).getReplies().size(); j++) {
-
-                                        Reply r = postsArray.get(i).getReplies().get(j);
-                                        myWriter.write(postsArray.get(i).getAuthor() + "," +
-                                                postsArray.get(i).getPostContents() + "," + r.getAuthor() + ","
-                                                + r.getUpvotes() + "," + r.getPostContents() + "\n");
-                                    }
-                                }
-                                myWriter.close();
-
-                            } catch (IOException ex) {
-                                ex.printStackTrace();
-                            }
-                        }
-                    });
-
-                    removeUpvoteButton.addActionListener(new ActionListener() {
-                        @Override
-                        public void actionPerformed(ActionEvent e) {
-                            reply.setUpvotes(reply.getUpvotes() - 1);
-                            curPost.getReplies().get(index).setUpvotes(reply.getUpvotes());
-                            replyTable.getModel().setValueAt(reply.getUpvotes(), index, 1);
-                            model.fireTableDataChanged();
-                            upvoteButton.setEnabled(true);
-                            removeUpvoteButton.setEnabled(false);
-
-                            try {
-                                FileWriter myWriter = new FileWriter("replies.txt");
-                                for (int i = 0; i < postsArray.size(); i++) {
-                                    for(int j = 0; j < postsArray.get(i).getReplies().size(); j++) {
-
-                                        Reply r = postsArray.get(i).getReplies().get(j);
-                                        myWriter.write(postsArray.get(i).getAuthor() + "," +
-                                                postsArray.get(i).getPostContents() + "," + r.getAuthor() + ","
-                                                + r.getUpvotes() + "," + r.getPostContents() + "\n");
-                                    }
-                                }
-                                myWriter.close();
-
-                            } catch (IOException ex) {
-                                ex.printStackTrace();
-                            }
-                        }
-                    });
-
-                    replyDialog.add(upvoteButton);
-                    replyDialog.add(removeUpvoteButton);
-
-                    removeUpvoteButton.setEnabled(false);
-                    if (!loggedIn) {
+                upvoteButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        reply.setUpvotes(reply.getUpvotes() + 1);
+                        curPost.getReplies().get(index).setUpvotes(reply.getUpvotes());
+                        replyTable.getModel().setValueAt(reply.getUpvotes(), index, 1);
+                        model.fireTableDataChanged();
+                        removeUpvoteButton.setEnabled(true);
                         upvoteButton.setEnabled(false);
-                    }
+                        curPost.getReplies().get(index).getUpvotedUsers().add(curUser);
 
-                    replyDialog.setSize(250,300);
-                    replyDialog.pack();
-                    replyDialog.setVisible(true);
+                        try {
+                            FileWriter myWriter = new FileWriter("replies.txt");
+                            for (int i = 0; i < postsArray.size(); i++) {
+                                for(int j = 0; j < postsArray.get(i).getReplies().size(); j++) {
+
+                                    Reply r = postsArray.get(i).getReplies().get(j);
+                                    myWriter.write(postsArray.get(i).getAuthor() + "," +
+                                            postsArray.get(i).getPostContents() + "," + r.getAuthor() + ","
+                                            + r.getUpvotes() + "," + r.getPostContents());
+                                    for (int k = 0; k < r.getUpvotedUsers().size(); k++) {
+                                        myWriter.write("," + r.getUpvotedUsers().get(k).getRealName());
+                                    }
+                                    myWriter.write("\n");
+                                }
+                            }
+                            myWriter.close();
+
+                        } catch (IOException ex) {
+                            ex.printStackTrace();
+                        }
+                    }
+                });
+
+                removeUpvoteButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        reply.setUpvotes(reply.getUpvotes() - 1);
+                        curPost.getReplies().get(index).setUpvotes(reply.getUpvotes());
+                        replyTable.getModel().setValueAt(reply.getUpvotes(), index, 1);
+                        model.fireTableDataChanged();
+                        upvoteButton.setEnabled(true);
+                        removeUpvoteButton.setEnabled(false);
+                        curPost.getReplies().get(index).getUpvotedUsers().remove(curUser);
+
+                        try {
+                            FileWriter myWriter = new FileWriter("replies.txt");
+                            for (int i = 0; i < postsArray.size(); i++) {
+                                for(int j = 0; j < postsArray.get(i).getReplies().size(); j++) {
+
+                                    Reply r = postsArray.get(i).getReplies().get(j);
+                                    myWriter.write(postsArray.get(i).getAuthor() + "," +
+                                            postsArray.get(i).getPostContents() + "," + r.getAuthor() + ","
+                                            + r.getUpvotes() + "," + r.getPostContents());
+                                    for (int k = 0; k < r.getUpvotedUsers().size(); k++) {
+                                        myWriter.write("," + r.getUpvotedUsers().get(k).getRealName());
+                                    }
+                                    myWriter.write("\n");
+                                }
+                            }
+                            myWriter.close();
+
+                        } catch (IOException ex) {
+                            ex.printStackTrace();
+                        }
+                    }
+                });
+
+                replyDialog.add(upvoteButton);
+                replyDialog.add(removeUpvoteButton);
+
+                if (!loggedIn) {
+                    removeUpvoteButton.setEnabled(false);
+                    upvoteButton.setEnabled(false);
+                } else {
+                    if (curPost.getReplies().get(replyTable.getSelectedRow()).getUpvotedUsers().contains(curUser)) {
+                        removeUpvoteButton.setEnabled(true);
+                        upvoteButton.setEnabled(false);
+                    } else {
+                        removeUpvoteButton.setEnabled(false);
+                        upvoteButton.setEnabled(true);
+                    }
+                }
+                replyDialog.setSize(250,300);
+                replyDialog.pack();
+                replyDialog.setVisible(true);
             }
         };
 
@@ -1361,7 +1414,11 @@ public class ChartMyCourseMainPage extends JFrame {
                                 for(int k = 0; k < postsArray.size(); k++) {
                                     Post p = postsArray.get(k);
                                     myWriter.write(p.getAuthor() + "," + p.getReplyCount() + "," +
-                                            p.getUpvotes() + "," + p.getPostContents() + "\n");
+                                            p.getUpvotes() + "," + p.getPostContents());
+                                    for (int j = 0; j < p.getUpvotedUsers().size(); j++) {
+                                        myWriter.write("," + p.getUpvotedUsers().get(j).getRealName());
+                                    }
+                                    myWriter.write("\n");
                                 }
                                 myWriter.close();
 
@@ -1372,7 +1429,11 @@ public class ChartMyCourseMainPage extends JFrame {
                                         Reply r = postsArray.get(i).getReplies().get(j);
                                         myWriter.write(postsArray.get(i).getAuthor() + "," +
                                                 postsArray.get(i).getPostContents() + "," + r.getAuthor() + ","
-                                                + r.getUpvotes() + "," + r.getPostContents() + "\n");
+                                                + r.getUpvotes() + "," + r.getPostContents());
+                                        for (int k = 0; k < r.getUpvotedUsers().size(); k++) {
+                                            myWriter.write("," + r.getUpvotedUsers().get(k).getRealName());
+                                        }
+                                        myWriter.write("\n");
                                     }
                                 }
                                 myWriter.close();
@@ -1424,6 +1485,7 @@ public class ChartMyCourseMainPage extends JFrame {
                     }
                 });
                 JScrollPane replyScrollPane = new JScrollPane();
+                replyTable.setDefaultEditor(Object.class,null);
                 replyScrollPane.setViewportView(replyTable);
 
                 ButtonColumn buttonColumn3 = new ButtonColumn(replyTable, viewReply,2);
@@ -1947,7 +2009,7 @@ public class ChartMyCourseMainPage extends JFrame {
         }
     }
 
-    private void addReviewButtonActionPerformed(ActionEvent eventHappens){
+    public void addReviewButtonActionPerformed(ActionEvent eventHappens){
         if(loggedIn) {
             addReviewText.setColumns(50);
             Object[] message = {
@@ -1981,7 +2043,7 @@ public class ChartMyCourseMainPage extends JFrame {
             temp.setCRN(addReviewCRN.getText());
             temp.setProfessor(addReviewProfessor.getText());
             temp.setReviewBody(addReviewText.getText());
-            temp.setRating(Integer.parseInt(addReview.getText()));
+            temp.setRating(Integer.parseInt(addReviewRating.getText()));
             reviewArray.add(temp);
 
             try {
@@ -2102,7 +2164,11 @@ public class ChartMyCourseMainPage extends JFrame {
                     for(int k = 0; k < postsArray.size(); k++) {
                         Post p = postsArray.get(k);
                         myWriter.write(p.getAuthor() + "," + p.getReplyCount() + "," +
-                                p.getUpvotes() + "," + p.getPostContents() + "\n");
+                                p.getUpvotes() + "," + p.getPostContents());
+                        for (int j = 0; j < p.getUpvotedUsers().size(); j++) {
+                            myWriter.write("," + p.getUpvotedUsers().get(j).getRealName());
+                        }
+                        myWriter.write("\n");
                     }
                     myWriter.close();
                 } catch (Exception e) {
@@ -2142,7 +2208,11 @@ public class ChartMyCourseMainPage extends JFrame {
                         for(int k = 0; k < postsArray.size(); k++) {
                             Post p = postsArray.get(k);
                             myWriter.write(p.getAuthor() + "," + p.getReplyCount() + "," +
-                                    p.getUpvotes() + "," + p.getPostContents() + "\n");
+                                    p.getUpvotes() + "," + p.getPostContents());
+                            for (int j = 0; j < p.getUpvotedUsers().size(); j++) {
+                                myWriter.write("," + p.getUpvotedUsers().get(j).getRealName());
+                            }
+                            myWriter.write("\n");
                         }
                         myWriter.close();
                     } catch (Exception e) {
@@ -2165,7 +2235,7 @@ public class ChartMyCourseMainPage extends JFrame {
 
     //This is the event for when the register button is pressed
     private void registerButtonActionPerformed(ActionEvent eventHappens) {
-    	
+    	Boolean allSet = true;
     	//Initialize variables to hold the values of the text fields.
     	String readRealName, readUserName, readEmail, readPassword;
     	
@@ -2184,41 +2254,49 @@ public class ChartMyCourseMainPage extends JFrame {
         else {
         	
         	//Create new User with given fields
-        	User userToRegister = new User(readRealName, readUserName, readEmail, readPassword);
         	
-        	//We start by assuming the user is unique.
-        	boolean isUniqueUser = true;
-        	
-        	//Iterate through the known users, making sure we don't already have this user
-        	//registered.
-        	for (User iterUser : userArray) {
-        		//If we find it, it must not be a unique user. Tell the user this.
-        		if (iterUser.equals(userToRegister)) {
-                	JOptionPane.showMessageDialog(null, "Error: user already exists!");
-                	isUniqueUser = false;
-                	break;
-        		}
-        	}
-        	//If it is indeed unique, add it to the user array.
-        	//NOTE: this does not add the user to the users.txt file!
-        	//TODO: add user persistence
-        	if (isUniqueUser) {
-        		userArray.add(userToRegister);
-		try {
-            		FileWriter myWriter = new FileWriter("users.txt", true);
-			myWriter.write("\n");
-            		myWriter.write(readRealName + "," + readUserName + "," + readEmail + "," + readPassword);
-        
-            		myWriter.close();
-            	}
-            	catch (Exception e) {
-        			e.printStackTrace();
-        		}
-            	JOptionPane.showMessageDialog(null, "User created successfully!");
-                signupDialog.setVisible(false);
-                loginDialog.setVisible(true);
-        	}
-        	
+        	User userToRegister = null;
+			try {
+				userToRegister = new User(readRealName, readUserName, readEmail, readPassword);
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				JOptionPane.showMessageDialog(null, "Error: please enter a valid baylor email");
+				allSet = false;
+			}
+			if(allSet) {
+				//We start by assuming the user is unique.
+	        	boolean isUniqueUser = true;
+	        	
+	        	//Iterate through the known users, making sure we don't already have this user
+	        	//registered.
+	        	for (User iterUser : userArray) {
+	        		//If we find it, it must not be a unique user. Tell the user this.
+	        		if (iterUser.equals(userToRegister)) {
+	                	JOptionPane.showMessageDialog(null, "Error: user already exists!");
+	                	isUniqueUser = false;
+	                	break;
+	        		}
+	        	}
+	        	//If it is indeed unique, add it to the user array.
+	        	//NOTE: this does not add the user to the users.txt file!
+	        	//TODO: add user persistence
+	        	if (isUniqueUser) {
+	        		userArray.add(userToRegister);
+			try {
+	            		FileWriter myWriter = new FileWriter("users.txt", true);
+				myWriter.write("\n");
+	            		myWriter.write(readRealName + "," + readUserName + "," + readEmail + "," + readPassword);
+	        
+	            		myWriter.close();
+	            	}
+	            	catch (Exception e) {
+	        			e.printStackTrace();
+	        		}
+	            	JOptionPane.showMessageDialog(null, "User created successfully!");
+	                signupDialog.setVisible(false);
+	                loginDialog.setVisible(true);
+	        	}
+			}	
         	
         }
     }
@@ -2434,6 +2512,14 @@ public class ChartMyCourseMainPage extends JFrame {
                         reply.setUpvotes(Integer.parseInt(split[3]));
                         reply.setPostContents(split[4]);
                         postsArray.get(i).getReplies().add(reply);
+                        for (int j = 0; j < reply.getUpvotes(); j++) {
+                            for (int k = 0; k < userArray.size(); k++) {
+                                if (userArray.get(k).getRealName().equals(split[j + 5])) {
+                                    postsArray.get(i).getReplies().get(j).getUpvotedUsers().add(userArray.get(k));
+                                    break;
+                                }
+                            }
+                        }
                         break;
                     }
                 }
@@ -2452,6 +2538,14 @@ public class ChartMyCourseMainPage extends JFrame {
     	readPost.setReplyCount(Integer.parseInt(result.get(1)));
     	readPost.setUpvotes(Integer.parseInt(result.get(2)));
     	readPost.setPostContents(result.get(3));
+        for (int i = 0; i < readPost.getUpvotes(); i++) {
+            for (int j = 0; j < userArray.size(); j++) {
+                if (userArray.get(j).getRealName().equals(result.get(i + 4))) {
+                    readPost.getUpvotedUsers().add(userArray.get(j));
+                    break;
+                }
+            }
+        }
 
     	return readPost;
     }

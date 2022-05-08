@@ -5,3 +5,4 @@ Warren Burrus,CS3471,112236,Tomas Cerny,10,Straight up easiest class I ever took
 Warren Burrus,CS3344,112237,Matthew Fendt,6,We learned some pretty cool algorithms but could have gone over better examples in class.,0
 Warren Burrus,CS2350,112238,Cindy Fry,7,If you love doing proofs you'll fit right in.,0
 Warren Burrus,CS2334,112239,Cindy Fry,9,I loved learning about how the computer works and getting to program in Assembly!,0
+Mia Gortney,CSI1430,12345,Bill Booth,5,It was okay.,0

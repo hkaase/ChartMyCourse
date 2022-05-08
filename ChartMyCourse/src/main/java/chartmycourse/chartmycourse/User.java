@@ -35,7 +35,10 @@ public class User {
 		return false;
 	}
 	
-	public User(String realName, String userName, String email, String password) {
+	public User(String realName, String userName, String email, String password) throws Exception {
+		if(!email.endsWith("@baylor.edu")) {
+			throw new Exception("Invalid emial");
+		}
 		this.realName = realName;
 		this.userName = userName;
 		this.email = email;

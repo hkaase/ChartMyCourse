@@ -8,6 +8,7 @@ import java.util.Objects;
 public class Post {
 	String author, postContents;
 	int replyCount, upvotes;
+	ArrayList<User> upvotedUsers = new ArrayList<>();
 
 	ArrayList<Reply> replies = new ArrayList<>();
 
@@ -51,15 +52,25 @@ public class Post {
 		return replies;
 	}
 
+	public ArrayList<User> getUpvotedUsers() {
+		return upvotedUsers;
+	}
+
+	public void setUpvotedUsers(ArrayList<User> upvotedUsers) {
+		this.upvotedUsers = upvotedUsers;
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (!(o instanceof Post post)) return false;
-		return replyCount == post.replyCount && upvotes == post.upvotes && Objects.equals(author, post.author) && Objects.equals(postContents, post.postContents) && Objects.equals(replies, post.replies);
+		return replyCount == post.replyCount && upvotes == post.upvotes
+				&& Objects.equals(author, post.author) && Objects.equals(postContents, post.postContents)
+				&& Objects.equals(replies, post.replies) && Objects.equals(upvotedUsers, post.upvotedUsers);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(author, postContents, replyCount, upvotes, replies);
+		return Objects.hash(author, postContents, replyCount, upvotes, replies, upvotedUsers);
 	}
 }
