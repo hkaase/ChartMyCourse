@@ -2227,7 +2227,7 @@ public class ChartMyCourseMainPage extends JFrame {
 
     //This is the event for when the register button is pressed
     private void registerButtonActionPerformed(ActionEvent eventHappens) {
-    	
+    	Boolean allSet = true;
     	//Initialize variables to hold the values of the text fields.
     	String readRealName, readUserName, readEmail, readPassword;
     	
@@ -2246,47 +2246,49 @@ public class ChartMyCourseMainPage extends JFrame {
         else {
         	
         	//Create new User with given fields
+        	
         	User userToRegister = null;
-		try {
-			userToRegister = new User(readRealName, readUserName, readEmail, readPassword);
-		} catch (Exception e1) {
-			// TODO Auto-generated catch block
-			JOptionPane.showMessageDialog(null, "Error: please enter a valid baylor email");
-		}
-        	
-        	//We start by assuming the user is unique.
-        	boolean isUniqueUser = true;
-        	
-        	//Iterate through the known users, making sure we don't already have this user
-        	//registered.
-        	for (User iterUser : userArray) {
-        		//If we find it, it must not be a unique user. Tell the user this.
-        		if (iterUser.equals(userToRegister)) {
-                	JOptionPane.showMessageDialog(null, "Error: user already exists!");
-                	isUniqueUser = false;
-                	break;
-        		}
-        	}
-        	//If it is indeed unique, add it to the user array.
-        	//NOTE: this does not add the user to the users.txt file!
-        	//TODO: add user persistence
-        	if (isUniqueUser) {
-        		userArray.add(userToRegister);
-		try {
-            		FileWriter myWriter = new FileWriter("users.txt", true);
-			myWriter.write("\n");
-            		myWriter.write(readRealName + "," + readUserName + "," + readEmail + "," + readPassword);
-        
-            		myWriter.close();
-            	}
-            	catch (Exception e) {
-        			e.printStackTrace();
-        		}
-            	JOptionPane.showMessageDialog(null, "User created successfully!");
-                signupDialog.setVisible(false);
-                loginDialog.setVisible(true);
-        	}
-        	
+			try {
+				userToRegister = new User(readRealName, readUserName, readEmail, readPassword);
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				JOptionPane.showMessageDialog(null, "Error: please enter a valid baylor email");
+				allSet = false;
+			}
+			if(allSet) {
+				//We start by assuming the user is unique.
+	        	boolean isUniqueUser = true;
+	        	
+	        	//Iterate through the known users, making sure we don't already have this user
+	        	//registered.
+	        	for (User iterUser : userArray) {
+	        		//If we find it, it must not be a unique user. Tell the user this.
+	        		if (iterUser.equals(userToRegister)) {
+	                	JOptionPane.showMessageDialog(null, "Error: user already exists!");
+	                	isUniqueUser = false;
+	                	break;
+	        		}
+	        	}
+	        	//If it is indeed unique, add it to the user array.
+	        	//NOTE: this does not add the user to the users.txt file!
+	        	//TODO: add user persistence
+	        	if (isUniqueUser) {
+	        		userArray.add(userToRegister);
+			try {
+	            		FileWriter myWriter = new FileWriter("users.txt", true);
+				myWriter.write("\n");
+	            		myWriter.write(readRealName + "," + readUserName + "," + readEmail + "," + readPassword);
+	        
+	            		myWriter.close();
+	            	}
+	            	catch (Exception e) {
+	        			e.printStackTrace();
+	        		}
+	            	JOptionPane.showMessageDialog(null, "User created successfully!");
+	                signupDialog.setVisible(false);
+	                loginDialog.setVisible(true);
+	        	}
+			}	
         	
         }
     }
