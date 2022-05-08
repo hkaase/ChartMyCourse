@@ -211,8 +211,8 @@ public class ChartMyCourseMainPage extends JFrame {
 		    return editorValue;
         }
 
-	public Component getTableCellRendererComponent(
-		JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+	    public Component getTableCellRendererComponent(
+                JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
 
 		    if (isSelected) {
 			    renderButton.setForeground(table.getSelectionForeground());
@@ -281,7 +281,6 @@ public class ChartMyCourseMainPage extends JFrame {
     public ChartMyCourseMainPage() {
     	
         createInteractables();
-        
         initialize();
     }
 
@@ -291,7 +290,6 @@ public class ChartMyCourseMainPage extends JFrame {
      * @version 1.0
      * @since 1.0
      */
-	
     private void createInteractables() {
 
         loginDialog = new JDialog();
@@ -347,8 +345,6 @@ public class ChartMyCourseMainPage extends JFrame {
         removeCourseButton = new JButton();
         removeProfButton = new JButton();
         qAndAPanel = new JPanel();
-        //searchLabel = new JLabel();
-        //searchText = new JTextField();
         qAndATableScrollPane = new JScrollPane();
         qAndATable = new JTable();
         addReviewAuthor = new JTextField();
@@ -365,8 +361,6 @@ public class ChartMyCourseMainPage extends JFrame {
         String[] Questions ={"What was the name of your elementary school?","What was the color of your first car?",
                 "What month were you born in?"};
         QuestionList = new JComboBox(Questions);
-        //public static List<String> Questions = Arrays.asList("What was the name of your elementary school?","What was the color of your first car?",
-         //       "What month were you born in?");
         loginDialog.setTitle("login");
         loginDialog.setBackground(new Color(0, 88, 5));
         loginDialog.setForeground(new Color(40, 151, 21));
@@ -391,7 +385,6 @@ public class ChartMyCourseMainPage extends JFrame {
             }
         });
 
-        
         //Set text of label for login field.
         emailLabel.setText("email:");
 
@@ -470,17 +463,11 @@ public class ChartMyCourseMainPage extends JFrame {
         signupDialog.setSize(new Dimension(400, 300));
 
         emailLabelSignup.setText("email:");
-
         passwordLabelSignup.setText("password:");
-
         passwordField1.setText("jPasswordField1");
-
         emailField.setText("tomas_cerny@baylor.edu");
-
         usernameLabel.setText("username:");
-
         nameLabel.setText("name:");
-
         usernameTextField.setText("BuffTommyC");
 
         nameTextField.setText("Tomas Cerny");
@@ -654,13 +641,12 @@ public class ChartMyCourseMainPage extends JFrame {
         reviewsPanel.setPreferredSize(new Dimension(589, 332));
         reviewsPanel.setBackground(homeColor);
 	    
-	removeReviewButton.setText("Remove Review");
+	    removeReviewButton.setText("Remove Review");
         removeReviewButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent eventHappens) {
                 removeReviewActionPerformed(eventHappens);
             }
         });
-
 
         addReview.setText("Add Review");
         addReview.addActionListener(new ActionListener() {
@@ -1022,16 +1008,6 @@ public class ChartMyCourseMainPage extends JFrame {
 
         qAndAPanel.setPreferredSize(new Dimension(589, 332));
         qAndAPanel.setBackground(homeColor);
-
-        //searchLabel.setFont(new Font("sansserif", 0, 24));
-        //searchLabel.setText("Search:");
-
-        /*searchText.setText("search text");
-        searchText.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent eventHappens) {
-                searchTextActionPerformed(eventHappens);
-            }
-        });*/
 
         qAndATable.setAutoCreateRowSorter(true);
 
@@ -1459,7 +1435,6 @@ public class ChartMyCourseMainPage extends JFrame {
         ButtonColumn buttonColumn = new ButtonColumn(qAndATable, view, 3);
         ButtonColumn buttonColumn2 = new ButtonColumn(qAndATable, viewReplies, 4);
 
-        // TODO render buttons correctly in table
         qAndATable.setDefaultRenderer(JButton.class, new JTableButtonRenderer());
 
         new TableFilterHeader(qAndATable, AutoChoices.ENABLED);
@@ -1599,13 +1574,11 @@ public class ChartMyCourseMainPage extends JFrame {
      * @version 1.0
      * @since 1.0
      */
-
     private void homeButtonActionPerformed(ActionEvent eventHappens) {
         hideAll();
         homePanel.setVisible(true);
     }
 
-    
     /**
      * This is the forgot password listener
      * @author Harm Drenth
@@ -1716,37 +1689,29 @@ public class ChartMyCourseMainPage extends JFrame {
                 }
                 int value = -1;
 
-                if(yearList.getSelectedItem() == null || yearList.getSelectedItem().equals("--")) {
+                if (yearList.getSelectedItem() == null || yearList.getSelectedItem().equals("--")) {
                     courses.add(new JLabel("Please select a Year"));
-                }
-                else if(yearList.getSelectedItem().equals("Freshman")) {
+                } else if (yearList.getSelectedItem().equals("Freshman")) {
                     value = 1;
-                }
-                else if(yearList.getSelectedItem().equals("Sophmore")) {
+                } else if (yearList.getSelectedItem().equals("Sophmore")) {
                     value = 2;
-                }
-                else if(yearList.getSelectedItem().equals("Junior")) {
+                } else if (yearList.getSelectedItem().equals("Junior")) {
                     value = 3;
-                }
-                else if(yearList.getSelectedItem().equals("Senior")) {
+                } else if (yearList.getSelectedItem().equals("Senior")) {
                     value = 4;
                 }
-
 
                 if(semList.getSelectedItem() == null || semList.getSelectedItem().equals("--")) {
                     courses.add(new JLabel("Please select a Semester"));
                     value = -1;
-                }
-                else if(semList.getSelectedItem().equals("Fall")) {
+                } else if(semList.getSelectedItem().equals("Fall")) {
                     value = value*2 - 1;
-                }
-                else if(semList.getSelectedItem().equals("Spring")) {
+                } else if(semList.getSelectedItem().equals("Spring")) {
                     value = value*2;
                 }
 
                 if(value >= 1) {
                     try {
-
 
                         BufferedReader reader = new BufferedReader(new FileReader("RecCourses.csv"));
                         String line = "";
@@ -1757,16 +1722,14 @@ public class ChartMyCourseMainPage extends JFrame {
 
                         String[] split = line.split(",");
 
-                        for(int i = 0; i < Integer.parseInt(split[1]); i++) {
+                        for (int i = 0; i < Integer.parseInt(split[1]); i++) {
                             courses.add(new JLabel(split[2 + i]));
                         }
 
-                    }
-                    catch (IOException e2) {
+                    } catch (IOException e2) {
                         System.out.println("IO Error");
                         e2.printStackTrace();
-                    }
-                    catch (IndexOutOfBoundsException e2) {
+                    } catch (IndexOutOfBoundsException e2) {
                         System.out.println("Index error");
                         e2.printStackTrace();
                     }
@@ -1776,7 +1739,6 @@ public class ChartMyCourseMainPage extends JFrame {
                     coursePanel.add(courses.get(i));
                 }
                 coursePanel.updateUI();
-
             }
         });
 
@@ -1808,8 +1770,7 @@ public class ChartMyCourseMainPage extends JFrame {
                     courses.add(split[0]);
                 }
             }
-        }
-        catch (IOException e2) {
+        } catch (IOException e2) {
             e2.printStackTrace();
         }
 
@@ -1850,8 +1811,7 @@ public class ChartMyCourseMainPage extends JFrame {
                     if(profs.size() == 0) {
                         profs.add(new JLabel("Please select a course"));
                     }
-                }
-                catch (IOException e2) {
+                } catch (IOException e2) {
                     e2.printStackTrace();
                 }
                 for(int i = 0; i < profs.size(); i++) {
@@ -1863,9 +1823,7 @@ public class ChartMyCourseMainPage extends JFrame {
 
         recommendedProfessorDialog.setSize(250,300);
         recommendedProfessorDialog.setVisible(true);
-
     }
-
 
     private void planningButtonActionPerformed(ActionEvent eventHappens) {
         hideAll();
@@ -1910,7 +1868,6 @@ public class ChartMyCourseMainPage extends JFrame {
         else {
             JOptionPane.showMessageDialog(null, "No professor selected!");
         }
-
     }
 
     // Save a course that the user selects from the reviews table
@@ -1930,8 +1887,7 @@ public class ChartMyCourseMainPage extends JFrame {
                     courseModel.addRow(new Object[] {course});
                 }
             }
-        }
-        else {
+        } else {
             JOptionPane.showMessageDialog(null, "No course selected!");
         }
     }
@@ -1953,8 +1909,7 @@ public class ChartMyCourseMainPage extends JFrame {
                     profModel.addRow(new Object[] {professor});
                 }
             }
-        }
-        else {
+        } else {
             JOptionPane.showMessageDialog(null, "No professor selected!");
         }
     }
@@ -1976,8 +1931,7 @@ public class ChartMyCourseMainPage extends JFrame {
             Object message2 = new String[]{"Please enter a value between 1 and 10"};
             try{
                 int rating = Integer.parseInt(addReviewRating.getText());
-            }
-            catch(NumberFormatException nfe){
+            } catch(NumberFormatException nfe){
                JOptionPane.showMessageDialog(null, message1, "ERROR", JOptionPane.OK_CANCEL_OPTION);
                 return;
             }
@@ -2029,9 +1983,7 @@ public class ChartMyCourseMainPage extends JFrame {
     }
 	
     private void removeReviewActionPerformed(ActionEvent eventHappens){
-    	//TODO removeReview
-    	
-    	
+
     	int i = reviewsTable.getSelectedRow();
     	reviewtablemodel.removeRow(i);
         Review r = reviewArray.get(i);
@@ -2050,8 +2002,7 @@ public class ChartMyCourseMainPage extends JFrame {
                     myWriter.write("\n");
                 }
         		myWriter.close();
-        	}
-        	catch (Exception e) {
+        	} catch (Exception e) {
     			e.printStackTrace();
     		}	
     }	
@@ -2059,7 +2010,6 @@ public class ChartMyCourseMainPage extends JFrame {
     private void reviewsButtonActionPerformed(ActionEvent eventHappens) {
         hideAll();
         reviewsPanel.setVisible(true);
-        
     }
 
     private void nameTextFieldActionPerformed(ActionEvent eventHappens) {
@@ -2069,7 +2019,6 @@ public class ChartMyCourseMainPage extends JFrame {
     private void loginReturnButtonActionPerformed(ActionEvent eventHappens) {
         signupDialog.setVisible(false);
         loginDialog.setVisible(true);
-        
     }
 
     private void signupButtonActionPerformed(ActionEvent eventHappens) {
@@ -2079,7 +2028,6 @@ public class ChartMyCourseMainPage extends JFrame {
     private void signupFormButtonActionPerformed(ActionEvent eventHappens) {
         loginDialog.setVisible(false);
         signupDialog.setVisible(true);
-
     }
 
     /**
@@ -2204,7 +2152,6 @@ public class ChartMyCourseMainPage extends JFrame {
         else {
         	
         	//Create new User with given fields
-        	
         	User userToRegister = null;
 			try {
 				userToRegister = new User(readRealName, readUserName, readEmail, readPassword);
@@ -2232,22 +2179,20 @@ public class ChartMyCourseMainPage extends JFrame {
 	        	//TODO: add user persistence
 	        	if (isUniqueUser) {
 	        		userArray.add(userToRegister);
-			try {
+			        try {
 	            		FileWriter myWriter = new FileWriter("users.txt", true);
-				myWriter.write("\n");
+				        myWriter.write("\n");
 	            		myWriter.write(readRealName + "," + readUserName + "," + readEmail + "," + readPassword);
 	        
 	            		myWriter.close();
-	            	}
-	            	catch (Exception e) {
+	            	} catch (Exception e) {
 	        			e.printStackTrace();
 	        		}
 	            	JOptionPane.showMessageDialog(null, "User created successfully!");
 	                signupDialog.setVisible(false);
 	                loginDialog.setVisible(true);
 	        	}
-			}	
-        	
+			}
         }
     }
 
@@ -2261,7 +2206,6 @@ public class ChartMyCourseMainPage extends JFrame {
         initTestReviews();
         initTestPosts();
         initReplies();
-
         initCourseListTable();
         initProfListTable();
     }
@@ -2321,7 +2265,6 @@ public class ChartMyCourseMainPage extends JFrame {
     	}
     	//Make sure and tell the table we changed things
     	model.fireTableDataChanged();
-    	
     }
 
     // Create table of saved courses from the user's saved courses list
@@ -2336,7 +2279,6 @@ public class ChartMyCourseMainPage extends JFrame {
             // Tell the table we changed things
             model.fireTableDataChanged();
         }
-        
     }
 
     // Create table of saved professors from the user's saved professors list
@@ -2351,7 +2293,6 @@ public class ChartMyCourseMainPage extends JFrame {
             // Tell the table we changed things
             model.fireTableDataChanged();
         }
-        
     }
 
     //This function takes a line of input, and makes a review object from it.
@@ -2393,8 +2334,6 @@ public class ChartMyCourseMainPage extends JFrame {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-    	
-    	
     }
 
     // This class defines the button renderer.
@@ -2443,7 +2382,6 @@ public class ChartMyCourseMainPage extends JFrame {
     		model.insertRow(qAndATable.getRowCount(), new Object[] {iterPost.getAuthor(), iterPost.getReplyCount(), iterPost.getUpvotes(), "View Post", "View Replies"});
     	}
     	model.fireTableDataChanged();
-    	
     }
 
     public void initReplies() {
@@ -2499,6 +2437,4 @@ public class ChartMyCourseMainPage extends JFrame {
 
     	return readPost;
     }
-   
-
 }
