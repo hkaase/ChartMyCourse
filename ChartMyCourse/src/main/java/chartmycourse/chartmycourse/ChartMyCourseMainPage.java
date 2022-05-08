@@ -2001,7 +2001,7 @@ public class ChartMyCourseMainPage extends JFrame {
         }
     }
 
-    private void addReviewButtonActionPerformed(ActionEvent eventHappens){
+    public void addReviewButtonActionPerformed(ActionEvent eventHappens){
         if(loggedIn) {
             addReviewText.setColumns(50);
             Object[] message = {
