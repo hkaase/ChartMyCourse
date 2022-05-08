@@ -42,6 +42,19 @@ public class ChartMyCourseTester {
     void recCourse() {
         box.recommendedCoursesButtonActionPerformed(new ActionEvent("src", 2, "command"));
     }
+	
+      @Test
+  @DisplayName("Invalid Email")
+  void userEmailVerify() {
+  	Boolean caught = false;
+  	try {
+			User user = new User("abc", "abcd", "12", "ab");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			caught = true;
+		} 
+  	assertTrue(caught);
+   }
 
     /* example tests from lab 9
     @Test
