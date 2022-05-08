@@ -1,7 +1,8 @@
-Tomas Cerny,BuffTommyCerny,tomas_cerny@baylor.edu,doprdele!
-Mia,Mia,mia_gortney@baylor.edu,Eliza
-Admin,admin,admin@baylor.edu,admin12
-Varun,varunapte2,varunapte2@gmail.com,varunapte
-Ricardo,ricoboone1,ricoboone@gmail.com,secret
-Chase Harris,rubberbunny45,chase_harris@baylor.edu,happytoday
-Joe Momma ,JoeMomma<3,joe_momma1@baylor.edu,JoeMomma23
+Tomas Cerny,BuffTommyCerny,tomas_cerny@baylor.edu,doprdele!,Black
+Mia,Mia,mia_gortney@baylor.edu,Eliza,Orange
+Admin,admin,admin@baylor.edu,admin12,Red
+Varun,varunapte2,varunapte2@gmail.com,varunapte,Purple
+Ricardo,ricoboone1,ricoboone@gmail.com,secret,Blue
+Chase Harris,rubberbunny45,chase_harris@baylor.edu,happytoday,Pink
+Joe Momma ,JoeMomma<3,joe_momma1@baylor.edu,JoeMomma23,Tan
+test,test,dad@baylor.edu,test,green

@@ -1,20 +1,15 @@
 package chartmycourse.chartmycourse;
 
-import java.util.Arrays;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 public class User {
-
-	public int questionSelected;
-	public String answer;
-
-
+	
 	public String realName;
 	public String userName;
 	public String email;
 	public String password;
+	public String secQuestionAnswer;
 	int year;
 
 	public Set<String> professorList = new HashSet<String>();
@@ -35,7 +30,7 @@ public class User {
 		return false;
 	}
 	
-	public User(String realName, String userName, String email, String password) throws Exception {
+	public User(String realName, String userName, String email, String password, String answer) throws Exception {
 		if(!email.endsWith("@baylor.edu")) {
 			throw new Exception("Invalid emial");
 		}
@@ -45,6 +40,7 @@ public class User {
 		this.password = password;
 		this.professorList = new HashSet<>();
 		this.courseList = new HashSet<>();
+		this.secQuestionAnswer = answer;
 	}
 	
 	public User() {
@@ -123,19 +119,14 @@ public class User {
 		this.courseList.remove(courseName);
 	}
 
-	public int getQuestionSelected() {
-		return questionSelected;
+	public String getSecQuestionAnswer() {
+		return secQuestionAnswer;
 	}
 
-	public void setQuestionSelected(int questionSelected) {
-		this.questionSelected = questionSelected;
+	public void setSecQuestionAnswer(String secQuestionAnswer) {
+		this.secQuestionAnswer = secQuestionAnswer;
 	}
+	
+	
 
-	public String getAnswer() {
-		return answer;
-	}
-
-	public void setAnswer(String answer) {
-		this.answer = answer;
-	}
 }
