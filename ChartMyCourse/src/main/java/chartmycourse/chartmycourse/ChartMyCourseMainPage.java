@@ -105,7 +105,7 @@ public class ChartMyCourseMainPage extends JFrame {
     private Post curPost;
     private JDialog replyDialog;
     private JButton removeDiscussionButton;
-    public  JButton addReplyButton
+    public  JButton addReplyButton;
 
     //This array holds the list of reviews.
     private final ArrayList<Review> reviewArray = new ArrayList<>();
