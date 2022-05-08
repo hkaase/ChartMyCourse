@@ -2246,7 +2246,13 @@ public class ChartMyCourseMainPage extends JFrame {
         else {
         	
         	//Create new User with given fields
-        	User userToRegister = new User(readRealName, readUserName, readEmail, readPassword);
+        	User userToRegister = null;
+		try {
+			userToRegister = new User(readRealName, readUserName, readEmail, readPassword);
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			JOptionPane.showMessageDialog(null, "Error: please enter a valid baylor email");
+		}
         	
         	//We start by assuming the user is unique.
         	boolean isUniqueUser = true;
