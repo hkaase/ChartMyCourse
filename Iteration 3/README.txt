@@ -1,5 +1,7 @@
 It is recommended to have OpenJDK17 installed. Go to the root folder of the repo, then ChartMyCourse. Simply double click ChartMyCourse.jar and it will open.
 
+Note that all information is automatically exported to CSV files in the main folder when you run the jar. Check for .csv files.
+
 Complete application with User Interface and user input validation - Done
 
 Test documentation and JUnit testing - Done
