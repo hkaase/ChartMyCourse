@@ -75,6 +75,8 @@ public class ChartMyCourseMainPage extends JFrame {
     private JPanel reviewsPanel;
     private JTable reviewsTable;
     private JScrollPane reviewsTableScrollPane;
+    //private JLabel searchLabel;
+    //private JTextField searchText;
     private JButton saveCourseButton;
     private JButton saveProfButton;
     private JButton signupButton;
@@ -88,10 +90,18 @@ public class ChartMyCourseMainPage extends JFrame {
     private String curUserString = "not logged in";
     private JLabel qAndAHeader;
     private JDialog reviewDialog;
+    private JTextField answer;
     private JTable replyTable;
     private Post curPost;
     private JDialog replyDialog;
     private JButton removeDiscussionButton;
+
+    //This array holds the list of reviews.
+    private final ArrayList<Review> reviewArray = new ArrayList<>();
+    //This array holds the list of users.
+    private final ArrayList<User> userArray = new ArrayList<>();
+    //This array holds the list of posts.
+    private final ArrayList<Post> postsArray = new ArrayList<>();
     private Boolean loggedIn = false;
     private DefaultTableModel reviewtablemodel;
     private JButton removeReviewButton;
@@ -102,172 +112,216 @@ public class ChartMyCourseMainPage extends JFrame {
     private JTextField addDiscussionText;
     private JTextField addDiscussion;
 
-    //This array holds the list of reviews.
-    private final ArrayList<Review> reviewArray = new ArrayList<>();
-    //This array holds the list of users.
-    private final ArrayList<User> userArray = new ArrayList<>();
-    //This array holds the list of posts.
-    private final ArrayList<Post> postsArray = new ArrayList<>();
+    private JComboBox QuestionList;
     
-    public class ButtonColumn extends AbstractCellEditor implements
-            TableCellRenderer, TableCellEditor, ActionListener, MouseListener {
-	    private JTable table;
-	    private Action action;
-	    private int mnemonic;
-	    private Border originalBorder;
-	    private Border focusBorder;
-	    private JButton renderButton;
-	    private JButton editButton;
-	    private Object editorValue;
-	    private boolean isButtonColumnEditor;
+    public class ButtonColumn extends AbstractCellEditor
+	implements TableCellRenderer, TableCellEditor, ActionListener, MouseListener
+{
+	private JTable table;
+	private Action action;
+	private int mnemonic;
+	private Border originalBorder;
+	private Border focusBorder;
 
-	    /**
-	    *  Create the ButtonColumn to be used as a renderer and editor. The
-	    *  renderer and editor will automatically be installed on the TableColumn
-	    *  of the specified column.
-	    *
-	    *  @param table the table containing the button renderer/editor
-	    *  @param action the Action to be invoked when the button is invoked
-	    *  @param column the column to which the button renderer/editor is added
-	    */
-	    public ButtonColumn(JTable table, Action action, int column) {
-		    this.table = table;
-		    this.action = action;
-
-		    renderButton = new JButton("Action");
-		    editButton = new JButton("Action");
-		    editButton.setFocusPainted( false );
-		    editButton.addActionListener( this );
-		    originalBorder = editButton.getBorder();
-		    setFocusBorder( new LineBorder(Color.BLUE) );
-
-		    TableColumnModel columnModel = table.getColumnModel();
-		    columnModel.getColumn(column).setCellRenderer( this );
-		    columnModel.getColumn(column).setCellEditor( this );
-		    table.addMouseListener( this );
-	    }
+	private JButton renderButton;
+	private JButton editButton;
+	private Object editorValue;
+	private boolean isButtonColumnEditor;
 
 
-	    /**
-	    *  Get foreground color of the button when the cell has focus
-	    *
-	    *  @return the foreground color
-	    */
-	    public Border getFocusBorder()
+	/**
+	 *  Create the ButtonColumn to be used as a renderer and editor. The
+	 *  renderer and editor will automatically be installed on the TableColumn
+	 *  of the specified column.
+	 *
+	 *  @param table the table containing the button renderer/editor
+	 *  @param action the Action to be invoked when the button is invoked
+	 *  @param column the column to which the button renderer/editor is added
+	 */
+	public ButtonColumn(JTable table, Action action, int column)
+	{
+		this.table = table;
+		this.action = action;
+
+		renderButton = new JButton("Action");
+		editButton = new JButton("Action");
+		editButton.setFocusPainted( false );
+		editButton.addActionListener( this );
+		originalBorder = editButton.getBorder();
+		setFocusBorder( new LineBorder(Color.BLUE) );
+
+		TableColumnModel columnModel = table.getColumnModel();
+		columnModel.getColumn(column).setCellRenderer( this );
+		columnModel.getColumn(column).setCellEditor( this );
+		table.addMouseListener( this );
+	}
+
+
+	/**
+	 *  Get foreground color of the button when the cell has focus
+	 *
+	 *  @return the foreground color
+	 */
+	public Border getFocusBorder()
 	{
 		return focusBorder;
 	}
 
-	    /**
-	    *  The foreground color of the button when the cell has focus
-	    *
-	    *  @param focusBorder the foreground color
-	    */
-	    public void setFocusBorder(Border focusBorder) {
-		    this.focusBorder = focusBorder;
-		    editButton.setBorder( focusBorder );
-	    }
+	/**
+	 *  The foreground color of the button when the cell has focus
+	 *
+	 *  @param focusBorder the foreground color
+	 */
+	public void setFocusBorder(Border focusBorder)
+	{
+		this.focusBorder = focusBorder;
+		editButton.setBorder( focusBorder );
+	}
 
-	    public int getMnemonic()
+	public int getMnemonic()
 	{
 		return mnemonic;
 	}
 
-	    /**
-	    *  The mnemonic to activate the button when the cell has focus
-	    *
-	    *  @param mnemonic the mnemonic
-	    */
-	    public void setMnemonic(int mnemonic) {
-		    this.mnemonic = mnemonic;
-		    renderButton.setMnemonic(mnemonic);
-		    editButton.setMnemonic(mnemonic);
-	    }
+	/**
+	 *  The mnemonic to activate the button when the cell has focus
+	 *
+	 *  @param mnemonic the mnemonic
+	 */
+	public void setMnemonic(int mnemonic)
+	{
+		this.mnemonic = mnemonic;
+		renderButton.setMnemonic(mnemonic);
+		editButton.setMnemonic(mnemonic);
+	}
 
-	    @Override
-	    public Component getTableCellEditorComponent(
-		JTable table, Object value, boolean isSelected, int row, int column) {
-		    if (value == null) {
-			    editButton.setText( "" );
-			    editButton.setIcon( null );
-		    } else if (value instanceof Icon) {
-			    editButton.setText( "" );
-			    editButton.setIcon( (Icon)value );
-		    } else {
-			    editButton.setText( value.toString() );
-			    editButton.setIcon( null );
-		    }
+	@Override
+	public Component getTableCellEditorComponent(
+		JTable table, Object value, boolean isSelected, int row, int column)
+	{
+		if (value == null)
+		{
+			editButton.setText( "" );
+			editButton.setIcon( null );
+		}
+		else if (value instanceof Icon)
+		{
+			editButton.setText( "" );
+			editButton.setIcon( (Icon)value );
+		}
+		else
+		{
+			editButton.setText( value.toString() );
+			editButton.setIcon( null );
+		}
 
-		    this.editorValue = value;
-		    return editButton;
-	    }
+		this.editorValue = value;
+		return editButton;
+	}
 
-	    @Override
-	    public Object getCellEditorValue()
+	@Override
+	public Object getCellEditorValue()
 	{
 		return editorValue;
 	}
 
-	    public Component getTableCellRendererComponent(
-		JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-		    if (isSelected) {
-			    renderButton.setForeground(table.getSelectionForeground());
-	 		    renderButton.setBackground(table.getSelectionBackground());
-		    } else {
-			    renderButton.setForeground(table.getForeground());
-			    renderButton.setBackground(UIManager.getColor("Button.background"));
-		    }
+//
+//  Implement TableCellRenderer interface
+//
+	public Component getTableCellRendererComponent(
+		JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column)
+	{
+		if (isSelected)
+		{
+			renderButton.setForeground(table.getSelectionForeground());
+	 		renderButton.setBackground(table.getSelectionBackground());
+		}
+		else
+		{
+			renderButton.setForeground(table.getForeground());
+			renderButton.setBackground(UIManager.getColor("Button.background"));
+		}
 
-		    if (hasFocus) {
-			    renderButton.setBorder( focusBorder );
-		    } else {
-			    renderButton.setBorder( originalBorder );
-		    }
+		if (hasFocus)
+		{
+			renderButton.setBorder( focusBorder );
+		}
+		else
+		{
+			renderButton.setBorder( originalBorder );
+		}
 
-		    if (value == null) {
-			    renderButton.setText( "" );
-			    renderButton.setIcon( null );
-		    } else if (value instanceof Icon) {
-			    renderButton.setText( "" );
-			    renderButton.setIcon( (Icon)value );
-		    } else {
-			    renderButton.setText( value.toString() );
-			    renderButton.setIcon( null );
-		    }
+//		renderButton.setText( (value == null) ? "" : value.toString() );
+		if (value == null)
+		{
+			renderButton.setText( "" );
+			renderButton.setIcon( null );
+		}
+		else if (value instanceof Icon)
+		{
+			renderButton.setText( "" );
+			renderButton.setIcon( (Icon)value );
+		}
+		else
+		{
+			renderButton.setText( value.toString() );
+			renderButton.setIcon( null );
+		}
 
-		    return renderButton;
-	    }
+		return renderButton;
+	}
 
-	    /*
-	    *	The button has been pressed. Stop editing and invoke the custom Action
-	    */
-	    public void actionPerformed(ActionEvent e) {
-		    int row = table.convertRowIndexToModel( table.getEditingRow() );
-		    fireEditingStopped();
+//
+//  Implement ActionListener interface
+//
+	/*
+	 *	The button has been pressed. Stop editing and invoke the custom Action
+	 */
+	public void actionPerformed(ActionEvent e)
+	{
+		int row = table.convertRowIndexToModel( table.getEditingRow() );
+		fireEditingStopped();
 
-		    ActionEvent event = new ActionEvent(table, ActionEvent.ACTION_PERFORMED, "" + row);
-		    action.actionPerformed(event);
-	    }
+		//  Invoke the Action
 
-	    /*
-	    *  When the mouse is pressed the editor is invoked. If you then then drag
-	    *  the mouse to another cell before releasing it, the editor is still
-	    *  active. Make sure editing is stopped when the mouse is released.
-	    */
-        public void mousePressed(MouseEvent e) {
-    	    if (table.isEditing() && table.getCellEditor() == this) isButtonColumnEditor = true;
-        }
+		ActionEvent event = new ActionEvent(
+			table,
+			ActionEvent.ACTION_PERFORMED,
+			"" + row);
+		action.actionPerformed(event);
+	}
 
-        public void mouseReleased(MouseEvent e) {
-            if (isButtonColumnEditor &&  table.isEditing()) table.getCellEditor().stopCellEditing();
-            isButtonColumnEditor = false;
-        }
-
-        public void mouseClicked(MouseEvent e) {}
-	    public void mouseEntered(MouseEvent e) {}
-        public void mouseExited(MouseEvent e) {}
+//
+//  Implement MouseListener interface
+//
+	/*
+	 *  When the mouse is pressed the editor is invoked. If you then then drag
+	 *  the mouse to another cell before releasing it, the editor is still
+	 *  active. Make sure editing is stopped when the mouse is released.
+	 */
+    public void mousePressed(MouseEvent e)
+    {
+    	if (table.isEditing()
+		&&  table.getCellEditor() == this)
+			isButtonColumnEditor = true;
     }
 
+    public void mouseReleased(MouseEvent e)
+    {
+    	if (isButtonColumnEditor
+    	&&  table.isEditing())
+    		table.getCellEditor().stopCellEditing();
+
+		isButtonColumnEditor = false;
+    }
+
+    public void mouseClicked(MouseEvent e) {}
+	public void mouseEntered(MouseEvent e) {}
+    public void mouseExited(MouseEvent e) {}
+}
+	
+    
+    
     /**
      * Constructor function, makes declaration of instance display. 
      * @author Harm Drenth
@@ -277,6 +331,7 @@ public class ChartMyCourseMainPage extends JFrame {
     public ChartMyCourseMainPage() {
     	
         createInteractables();
+        
         initialize();
     }
 
@@ -286,6 +341,7 @@ public class ChartMyCourseMainPage extends JFrame {
      * @version 1.0
      * @since 1.0
      */
+	
     private void createInteractables() {
 
         loginDialog = new JDialog();
@@ -306,6 +362,7 @@ public class ChartMyCourseMainPage extends JFrame {
         nameLabel = new JLabel();
         usernameTextField = new JTextField();
         nameTextField = new JTextField();
+        answer = new JTextField();
         loginReturnButton = new JButton();
         registerButton = new JButton();
         homePanel = new JPanel();
@@ -355,11 +412,16 @@ public class ChartMyCourseMainPage extends JFrame {
         replyTable = new JTable();
         removeDiscussionButton = new JButton();
         qAndAHeader = new JLabel("Q&A");
-        
+        String[] Questions ={"What was the name of your elementary school?","What was the color of your first car?",
+                "What month were you born in?"};
+        QuestionList = new JComboBox(Questions);
+        //public static List<String> Questions = Arrays.asList("What was the name of your elementary school?","What was the color of your first car?",
+         //       "What month were you born in?");
         loginDialog.setTitle("login");
         loginDialog.setBackground(new Color(0, 88, 5));
         loginDialog.setForeground(new Color(40, 151, 21));
         loginDialog.setSize(new Dimension(400, 300));
+
         loginLabel.setText("login");
 
         //The text in this field is not visible, so it doesn't matter.
@@ -379,6 +441,7 @@ public class ChartMyCourseMainPage extends JFrame {
             }
         });
 
+        
         //Set text of label for login field.
         emailLabel.setText("email:");
 
@@ -457,11 +520,17 @@ public class ChartMyCourseMainPage extends JFrame {
         signupDialog.setSize(new Dimension(400, 300));
 
         emailLabelSignup.setText("email:");
+
         passwordLabelSignup.setText("password:");
+
         passwordField1.setText("jPasswordField1");
+
         emailField.setText("tomas_cerny@baylor.edu");
+
         usernameLabel.setText("username:");
+
         nameLabel.setText("name:");
+
         usernameTextField.setText("BuffTommyC");
 
         nameTextField.setText("Tomas Cerny");
@@ -635,12 +704,13 @@ public class ChartMyCourseMainPage extends JFrame {
         reviewsPanel.setPreferredSize(new Dimension(589, 332));
         reviewsPanel.setBackground(homeColor);
 	    
-	    removeReviewButton.setText("Remove Review");
+	removeReviewButton.setText("Remove Review");
         removeReviewButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent eventHappens) {
                 removeReviewActionPerformed(eventHappens);
             }
         });
+
 
         addReview.setText("Add Review");
         addReview.addActionListener(new ActionListener() {
@@ -1002,6 +1072,17 @@ public class ChartMyCourseMainPage extends JFrame {
 
         qAndAPanel.setPreferredSize(new Dimension(589, 332));
         qAndAPanel.setBackground(homeColor);
+
+        //searchLabel.setFont(new Font("sansserif", 0, 24));
+        //searchLabel.setText("Search:");
+
+        /*searchText.setText("search text");
+        searchText.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent eventHappens) {
+                searchTextActionPerformed(eventHappens);
+            }
+        });*/
+
         qAndATable.setAutoCreateRowSorter(true);
 
         qAndATable.setModel(new DefaultTableModel(
@@ -1427,6 +1508,8 @@ public class ChartMyCourseMainPage extends JFrame {
         
         ButtonColumn buttonColumn = new ButtonColumn(qAndATable, view, 3);
         ButtonColumn buttonColumn2 = new ButtonColumn(qAndATable, viewReplies, 4);
+
+        // TODO render buttons correctly in table
         qAndATable.setDefaultRenderer(JButton.class, new JTableButtonRenderer());
 
         new TableFilterHeader(qAndATable, AutoChoices.ENABLED);
@@ -1566,6 +1649,7 @@ public class ChartMyCourseMainPage extends JFrame {
      * @version 1.0
      * @since 1.0
      */
+
     private void homeButtonActionPerformed(ActionEvent eventHappens) {
         hideAll();
         homePanel.setVisible(true);
@@ -1579,7 +1663,7 @@ public class ChartMyCourseMainPage extends JFrame {
      * @since 1.0
      */
     private void forgotPasswordButtonActionPerformed(ActionEvent eventHappens) {
-        // TODO add forgot password functionality
+        int qIndex = curUser.getQuestionSelected();
     }
 
     /**
@@ -1628,6 +1712,8 @@ public class ChartMyCourseMainPage extends JFrame {
         } else {
         	JOptionPane.showMessageDialog(null, "Account information not found.");
         }
+    	
+        
     }
 
     /**
@@ -1682,13 +1768,17 @@ public class ChartMyCourseMainPage extends JFrame {
 
                 if(yearList.getSelectedItem() == null || yearList.getSelectedItem().equals("--")) {
                     courses.add(new JLabel("Please select a Year"));
-                } else if(yearList.getSelectedItem().equals("Freshman")) {
+                }
+                else if(yearList.getSelectedItem().equals("Freshman")) {
                     value = 1;
-                } else if(yearList.getSelectedItem().equals("Sophmore")) {
+                }
+                else if(yearList.getSelectedItem().equals("Sophmore")) {
                     value = 2;
-                } else if(yearList.getSelectedItem().equals("Junior")) {
+                }
+                else if(yearList.getSelectedItem().equals("Junior")) {
                     value = 3;
-                } else if(yearList.getSelectedItem().equals("Senior")) {
+                }
+                else if(yearList.getSelectedItem().equals("Senior")) {
                     value = 4;
                 }
 
@@ -1696,14 +1786,17 @@ public class ChartMyCourseMainPage extends JFrame {
                 if(semList.getSelectedItem() == null || semList.getSelectedItem().equals("--")) {
                     courses.add(new JLabel("Please select a Semester"));
                     value = -1;
-                } else if(semList.getSelectedItem().equals("Fall")) {
+                }
+                else if(semList.getSelectedItem().equals("Fall")) {
                     value = value*2 - 1;
-                } else if(semList.getSelectedItem().equals("Spring")) {
+                }
+                else if(semList.getSelectedItem().equals("Spring")) {
                     value = value*2;
                 }
 
                 if(value >= 1) {
                     try {
+
 
                         BufferedReader reader = new BufferedReader(new FileReader("RecCourses.csv"));
                         String line = "";
@@ -1717,10 +1810,13 @@ public class ChartMyCourseMainPage extends JFrame {
                         for(int i = 0; i < Integer.parseInt(split[1]); i++) {
                             courses.add(new JLabel(split[2 + i]));
                         }
-                    } catch (IOException e2) {
+
+                    }
+                    catch (IOException e2) {
                         System.out.println("IO Error");
                         e2.printStackTrace();
-                    } catch (IndexOutOfBoundsException e2) {
+                    }
+                    catch (IndexOutOfBoundsException e2) {
                         System.out.println("Index error");
                         e2.printStackTrace();
                     }
@@ -1730,6 +1826,7 @@ public class ChartMyCourseMainPage extends JFrame {
                     coursePanel.add(courses.get(i));
                 }
                 coursePanel.updateUI();
+
             }
         });
 
@@ -1761,7 +1858,8 @@ public class ChartMyCourseMainPage extends JFrame {
                     courses.add(split[0]);
                 }
             }
-        } catch (IOException e2) {
+        }
+        catch (IOException e2) {
             e2.printStackTrace();
         }
 
@@ -1802,10 +1900,10 @@ public class ChartMyCourseMainPage extends JFrame {
                     if(profs.size() == 0) {
                         profs.add(new JLabel("Please select a course"));
                     }
-                } catch (IOException e2) {
+                }
+                catch (IOException e2) {
                     e2.printStackTrace();
                 }
-
                 for(int i = 0; i < profs.size(); i++) {
                     professorPanel.add(profs.get(i));
                 }
@@ -1815,7 +1913,9 @@ public class ChartMyCourseMainPage extends JFrame {
 
         recommendedProfessorDialog.setSize(250,300);
         recommendedProfessorDialog.setVisible(true);
+
     }
+
 
     private void planningButtonActionPerformed(ActionEvent eventHappens) {
         hideAll();
@@ -1836,7 +1936,8 @@ public class ChartMyCourseMainPage extends JFrame {
                 model.removeRow(row);
                 curUser.removeCourse(course);
             }
-        } else {
+        }
+        else {
             JOptionPane.showMessageDialog(null, "No course selected!");
         }
     }
@@ -1855,9 +1956,11 @@ public class ChartMyCourseMainPage extends JFrame {
                 model.removeRow(row);
                 curUser.removeProfessor(professor);
             }
-        } else {
+        }
+        else {
             JOptionPane.showMessageDialog(null, "No professor selected!");
         }
+
     }
 
     // Save a course that the user selects from the reviews table
@@ -1877,7 +1980,8 @@ public class ChartMyCourseMainPage extends JFrame {
                     courseModel.addRow(new Object[] {course});
                 }
             }
-        } else {
+        }
+        else {
             JOptionPane.showMessageDialog(null, "No course selected!");
         }
     }
@@ -1899,12 +2003,13 @@ public class ChartMyCourseMainPage extends JFrame {
                     profModel.addRow(new Object[] {professor});
                 }
             }
-        } else {
+        }
+        else {
             JOptionPane.showMessageDialog(null, "No professor selected!");
         }
     }
 
-    private void addReviewButtonActionPerformed(ActionEvent eventHappens){
+    public void addReviewButtonActionPerformed(ActionEvent eventHappens){
         if(loggedIn) {
             addReviewText.setColumns(50);
             Object[] message = {
@@ -1919,15 +2024,14 @@ public class ChartMyCourseMainPage extends JFrame {
             //Input Validation:
             Object message1 = new String[]{"Please enter a numeric value for the course rating"};
             Object message2 = new String[]{"Please enter a value between 1 and 10"};
-
-            try {
+            try{
                 int rating = Integer.parseInt(addReviewRating.getText());
-            } catch (NumberFormatException nfe){
+            }
+            catch(NumberFormatException nfe){
                JOptionPane.showMessageDialog(null, message1, "ERROR", JOptionPane.OK_CANCEL_OPTION);
                 return;
             }
-
-            if (Integer.parseInt(addReviewRating.getText()) > 10 ||  Integer.parseInt(addReviewRating.getText()) < 1){
+            if(Integer.parseInt(addReviewRating.getText()) > 10 ||  Integer.parseInt(addReviewRating.getText()) < 1){
                 JOptionPane.showMessageDialog(null, message2, "ERROR", JOptionPane.OK_CANCEL_OPTION);
                 return;
             }
@@ -1975,7 +2079,9 @@ public class ChartMyCourseMainPage extends JFrame {
     }
 	
     private void removeReviewActionPerformed(ActionEvent eventHappens){
-
+    	//TODO removeReview
+    	
+    	
     	int i = reviewsTable.getSelectedRow();
     	reviewtablemodel.removeRow(i);
         Review r = reviewArray.get(i);
@@ -2003,6 +2109,7 @@ public class ChartMyCourseMainPage extends JFrame {
     private void reviewsButtonActionPerformed(ActionEvent eventHappens) {
         hideAll();
         reviewsPanel.setVisible(true);
+        
     }
 
     private void nameTextFieldActionPerformed(ActionEvent eventHappens) {
@@ -2012,6 +2119,7 @@ public class ChartMyCourseMainPage extends JFrame {
     private void loginReturnButtonActionPerformed(ActionEvent eventHappens) {
         signupDialog.setVisible(false);
         loginDialog.setVisible(true);
+        
     }
 
     private void signupButtonActionPerformed(ActionEvent eventHappens) {
@@ -2021,6 +2129,7 @@ public class ChartMyCourseMainPage extends JFrame {
     private void signupFormButtonActionPerformed(ActionEvent eventHappens) {
         loginDialog.setVisible(false);
         signupDialog.setVisible(true);
+
     }
 
     /**
@@ -2126,7 +2235,7 @@ public class ChartMyCourseMainPage extends JFrame {
 
     //This is the event for when the register button is pressed
     private void registerButtonActionPerformed(ActionEvent eventHappens) {
-    	
+    	Boolean allSet = true;
     	//Initialize variables to hold the values of the text fields.
     	String readRealName, readUserName, readEmail, readPassword;
     	
@@ -2145,46 +2254,50 @@ public class ChartMyCourseMainPage extends JFrame {
         else {
         	
         	//Create new User with given fields
+        	
         	User userToRegister = null;
-		try {
-			userToRegister = new User(readRealName, readUserName, readEmail, readPassword);
-		} catch (Exception e1) {
-			// TODO Auto-generated catch block
-			JOptionPane.showMessageDialog(null, "Error: please enter a valid baylor email");
-		}
+			try {
+				userToRegister = new User(readRealName, readUserName, readEmail, readPassword);
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				JOptionPane.showMessageDialog(null, "Error: please enter a valid baylor email");
+				allSet = false;
+			}
+			if(allSet) {
+				//We start by assuming the user is unique.
+	        	boolean isUniqueUser = true;
+	        	
+	        	//Iterate through the known users, making sure we don't already have this user
+	        	//registered.
+	        	for (User iterUser : userArray) {
+	        		//If we find it, it must not be a unique user. Tell the user this.
+	        		if (iterUser.equals(userToRegister)) {
+	                	JOptionPane.showMessageDialog(null, "Error: user already exists!");
+	                	isUniqueUser = false;
+	                	break;
+	        		}
+	        	}
+	        	//If it is indeed unique, add it to the user array.
+	        	//NOTE: this does not add the user to the users.txt file!
+	        	//TODO: add user persistence
+	        	if (isUniqueUser) {
+	        		userArray.add(userToRegister);
+			try {
+	            		FileWriter myWriter = new FileWriter("users.txt", true);
+				myWriter.write("\n");
+	            		myWriter.write(readRealName + "," + readUserName + "," + readEmail + "," + readPassword);
+	        
+	            		myWriter.close();
+	            	}
+	            	catch (Exception e) {
+	        			e.printStackTrace();
+	        		}
+	            	JOptionPane.showMessageDialog(null, "User created successfully!");
+	                signupDialog.setVisible(false);
+	                loginDialog.setVisible(true);
+	        	}
+			}	
         	
-        	//We start by assuming the user is unique.
-        	boolean isUniqueUser = true;
-        	
-        	//Iterate through the known users, making sure we don't already have this user
-        	//registered.
-        	for (User iterUser : userArray) {
-        		//If we find it, it must not be a unique user. Tell the user this.
-        		if (iterUser.equals(userToRegister)) {
-                	JOptionPane.showMessageDialog(null, "Error: user already exists!");
-                	isUniqueUser = false;
-                	break;
-        		}
-        	}
-        	//If it is indeed unique, add it to the user array.
-        	//NOTE: this does not add the user to the users.txt file!
-        	//TODO: add user persistence
-        	if (isUniqueUser) {
-        		userArray.add(userToRegister);
-		try {
-            		FileWriter myWriter = new FileWriter("users.txt", true);
-			myWriter.write("\n");
-            		myWriter.write(readRealName + "," + readUserName + "," + readEmail + "," + readPassword);
-        
-            		myWriter.close();
-            	}
-            	catch (Exception e) {
-        			e.printStackTrace();
-        		}
-            	JOptionPane.showMessageDialog(null, "User created successfully!");
-                signupDialog.setVisible(false);
-                loginDialog.setVisible(true);
-        	}
         }
     }
 
@@ -2198,6 +2311,7 @@ public class ChartMyCourseMainPage extends JFrame {
         initTestReviews();
         initTestPosts();
         initReplies();
+
         initCourseListTable();
         initProfListTable();
     }
@@ -2218,15 +2332,17 @@ public class ChartMyCourseMainPage extends JFrame {
 
         // used for recommended Course Dialog box
         // change made by Rico
-        if (recommendedCourseDialog != null){
+        if(recommendedCourseDialog != null){
             recommendedCourseDialog.setVisible(false);
         }
-        if (recommendedProfessorDialog != null) {
+        if(recommendedProfessorDialog != null) {
             recommendedProfessorDialog.setVisible(false);
         }
     }
     
-    //This function loads reviews from the reviews.txt file.
+    //This function loads reviews from the reviews.txt file. 
+    
+    //TODO: add "make a review" functionality
     public void initTestReviews() {
     	//Open the reviews file and a scanner for it.
     	File reviewFile = new File("reviews.txt");
@@ -2270,6 +2386,7 @@ public class ChartMyCourseMainPage extends JFrame {
             // Tell the table we changed things
             model.fireTableDataChanged();
         }
+        
     }
 
     // Create table of saved professors from the user's saved professors list
@@ -2284,6 +2401,7 @@ public class ChartMyCourseMainPage extends JFrame {
             // Tell the table we changed things
             model.fireTableDataChanged();
         }
+        
     }
 
     //This function takes a line of input, and makes a review object from it.
@@ -2325,6 +2443,8 @@ public class ChartMyCourseMainPage extends JFrame {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+    	
+    	
     }
 
     // This class defines the button renderer.
@@ -2373,6 +2493,7 @@ public class ChartMyCourseMainPage extends JFrame {
     		model.insertRow(qAndATable.getRowCount(), new Object[] {iterPost.getAuthor(), iterPost.getReplyCount(), iterPost.getUpvotes(), "View Post", "View Replies"});
     	}
     	model.fireTableDataChanged();
+    	
     }
 
     public void initReplies() {
@@ -2428,4 +2549,6 @@ public class ChartMyCourseMainPage extends JFrame {
 
     	return readPost;
     }
+   
+
 }
