@@ -9,6 +9,7 @@ public class User {
 	public String userName;
 	public String email;
 	public String password;
+	public String secQuestionAnswer;
 	int year;
 
 	public Set<String> professorList = new HashSet<String>();
@@ -29,7 +30,7 @@ public class User {
 		return false;
 	}
 	
-	public User(String realName, String userName, String email, String password) throws Exception {
+	public User(String realName, String userName, String email, String password, String answer) throws Exception {
 		if(!email.endsWith("@baylor.edu")) {
 			throw new Exception("Invalid emial");
 		}
@@ -39,6 +40,7 @@ public class User {
 		this.password = password;
 		this.professorList = new HashSet<>();
 		this.courseList = new HashSet<>();
+		this.secQuestionAnswer = answer;
 	}
 	
 	public User() {
@@ -116,5 +118,15 @@ public class User {
 	public void removeCourse(String courseName) {
 		this.courseList.remove(courseName);
 	}
+
+	public String getSecQuestionAnswer() {
+		return secQuestionAnswer;
+	}
+
+	public void setSecQuestionAnswer(String secQuestionAnswer) {
+		this.secQuestionAnswer = secQuestionAnswer;
+	}
+	
+	
 
 }

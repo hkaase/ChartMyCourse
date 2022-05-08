@@ -48,7 +48,7 @@ public class ChartMyCourseTester {
   void userEmailVerify() {
   	Boolean caught = false;
   	try {
-			User user = new User("abc", "abcd", "12", "ab");
+			User user = new User("abc", "abcd", "12", "ab", "ab");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			caught = true;

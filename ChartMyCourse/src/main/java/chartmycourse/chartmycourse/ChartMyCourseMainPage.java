@@ -41,7 +41,9 @@ public class ChartMyCourseMainPage extends JFrame {
     private JButton loginRequestButton;
     private JButton loginReturnButton;
     private JLabel nameLabel;
+    private JLabel securityQuestionLabel;
     private JTextField nameTextField;
+    private JTextField securityQuestionField;
     private JPasswordField passwordField;
     private JPasswordField passwordField1;
     private JLabel passwordLabel;
@@ -81,6 +83,7 @@ public class ChartMyCourseMainPage extends JFrame {
     private JButton saveProfButton;
     private JButton signupButton;
     private JDialog signupDialog;
+    private JDialog forgotPasswordDialog;
     private JButton signupFormButton;
     private JTextField usernameField;
     private JLabel usernameLabel;
@@ -351,6 +354,7 @@ public class ChartMyCourseMainPage extends JFrame {
         forgotPasswordButton = new JButton();
         signupFormButton = new JButton();
         signupDialog = new JDialog();
+        forgotPasswordDialog = new JDialog();
         emailLabelSignup = new JLabel();
         passwordLabelSignup = new JLabel();
         passwordField1 = new JPasswordField();
@@ -358,6 +362,8 @@ public class ChartMyCourseMainPage extends JFrame {
         usernameLabel = new JLabel();
         nameLabel = new JLabel();
         usernameTextField = new JTextField();
+        securityQuestionLabel = new JLabel();
+        securityQuestionField = new JTextField();
         nameTextField = new JTextField();
         loginReturnButton = new JButton();
         registerButton = new JButton();
@@ -434,8 +440,7 @@ public class ChartMyCourseMainPage extends JFrame {
         });
 
         
-        //Set text of label for login field.
-        emailLabel.setText("email:");
+
 
         //Set text of label for password field.
         passwordLabel.setText("password:");
@@ -525,6 +530,8 @@ public class ChartMyCourseMainPage extends JFrame {
 
         usernameTextField.setText("BuffTommyC");
 
+        securityQuestionLabel.setText("Fav color?");
+
         nameTextField.setText("Tomas Cerny");
         nameTextField.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent eventHappens) {
@@ -556,6 +563,7 @@ public class ChartMyCourseMainPage extends JFrame {
                     .addGroup(signupDialogLayout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
                         .addComponent(usernameLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(emailLabelSignup, GroupLayout.PREFERRED_SIZE, 41, GroupLayout.PREFERRED_SIZE)
+                        .addComponent(securityQuestionLabel, GroupLayout.PREFERRED_SIZE, 60, GroupLayout.PREFERRED_SIZE)
                         .addComponent(passwordLabelSignup, GroupLayout.DEFAULT_SIZE, 74, Short.MAX_VALUE))
                     .addComponent(nameLabel, GroupLayout.PREFERRED_SIZE, 41, GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
@@ -563,6 +571,7 @@ public class ChartMyCourseMainPage extends JFrame {
                     .addComponent(passwordField1, GroupLayout.Alignment.LEADING)
                     .addComponent(emailField, GroupLayout.DEFAULT_SIZE, 117, Short.MAX_VALUE)
                     .addComponent(nameTextField)
+                    .addComponent(securityQuestionField, GroupLayout.Alignment.LEADING)
                     .addComponent(usernameTextField, GroupLayout.Alignment.LEADING))
                 .addContainerGap(103, Short.MAX_VALUE))
             .addGroup(GroupLayout.Alignment.TRAILING, signupDialogLayout.createSequentialGroup()
@@ -588,6 +597,9 @@ public class ChartMyCourseMainPage extends JFrame {
                     .addComponent(emailField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                     .addComponent(emailLabelSignup))
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(signupDialogLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                        .addComponent(securityQuestionLabel, GroupLayout.PREFERRED_SIZE, 45, GroupLayout.PREFERRED_SIZE)
+                        .addComponent(securityQuestionField))
                 .addGroup(signupDialogLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                     .addComponent(passwordField1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                     .addComponent(passwordLabelSignup))
@@ -2229,16 +2241,17 @@ public class ChartMyCourseMainPage extends JFrame {
     private void registerButtonActionPerformed(ActionEvent eventHappens) {
     	
     	//Initialize variables to hold the values of the text fields.
-    	String readRealName, readUserName, readEmail, readPassword;
+    	String readRealName, readUserName, readEmail, readPassword, readAnswer;
     	
     	//We set the values of the variables to what is in the corresponding fields.
         readRealName = nameTextField.getText();
         readUserName = usernameTextField.getText();
         readEmail = emailField.getText();
         readPassword = (new String(passwordField1.getPassword()));
+        readAnswer = securityQuestionField.getText();
         
         //If any of them are empty, the user is alerted that they cannot continue.
-        if (readRealName.isEmpty() || readUserName.isEmpty() || readEmail.isEmpty() || readPassword.isEmpty()) {
+        if (readRealName.isEmpty() || readUserName.isEmpty() || readEmail.isEmpty() || readPassword.isEmpty() || readAnswer.isEmpty()) {
         	JOptionPane.showMessageDialog(null, "Error: no fields can be blank");
         }
         
@@ -2248,7 +2261,7 @@ public class ChartMyCourseMainPage extends JFrame {
         	//Create new User with given fields
         	User userToRegister = null;
 		try {
-			userToRegister = new User(readRealName, readUserName, readEmail, readPassword);
+			userToRegister = new User(readRealName, readUserName, readEmail, readPassword, readAnswer);
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
 			JOptionPane.showMessageDialog(null, "Error: please enter a valid baylor email");
@@ -2275,7 +2288,7 @@ public class ChartMyCourseMainPage extends JFrame {
 		try {
             		FileWriter myWriter = new FileWriter("users.txt", true);
 			myWriter.write("\n");
-            		myWriter.write(readRealName + "," + readUserName + "," + readEmail + "," + readPassword);
+            		myWriter.write(readRealName + "," + readUserName + "," + readEmail + "," + readPassword + "," + readAnswer);
         
             		myWriter.close();
             	}
@@ -2453,6 +2466,7 @@ public class ChartMyCourseMainPage extends JFrame {
     	readUser.setUserName(result.get(1));
     	readUser.setEmail(result.get(2));
     	readUser.setPassword(result.get(3));
+    	readUser.setSecQuestionAnswer(result.get(4));
 
     	return readUser;
     }
