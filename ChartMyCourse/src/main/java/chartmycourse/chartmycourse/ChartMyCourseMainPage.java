@@ -90,7 +90,7 @@ public class ChartMyCourseMainPage extends JFrame {
     private String curUserString = "not logged in";
     private JLabel qAndAHeader;
     private JDialog reviewDialog;
-
+    private JTextField answer;
     private JTable replyTable;
     private Post curPost;
     private JDialog replyDialog;
@@ -111,6 +111,8 @@ public class ChartMyCourseMainPage extends JFrame {
     private JTextField addReply;
     private JTextField addDiscussionText;
     private JTextField addDiscussion;
+
+    private JComboBox QuestionList;
     
     public class ButtonColumn extends AbstractCellEditor
 	implements TableCellRenderer, TableCellEditor, ActionListener, MouseListener
@@ -125,6 +127,7 @@ public class ChartMyCourseMainPage extends JFrame {
 	private JButton editButton;
 	private Object editorValue;
 	private boolean isButtonColumnEditor;
+
 
 	/**
 	 *  Create the ButtonColumn to be used as a renderer and editor. The
@@ -359,6 +362,7 @@ public class ChartMyCourseMainPage extends JFrame {
         nameLabel = new JLabel();
         usernameTextField = new JTextField();
         nameTextField = new JTextField();
+        answer = new JTextField();
         loginReturnButton = new JButton();
         registerButton = new JButton();
         homePanel = new JPanel();
@@ -408,7 +412,11 @@ public class ChartMyCourseMainPage extends JFrame {
         replyTable = new JTable();
         removeDiscussionButton = new JButton();
         qAndAHeader = new JLabel("Q&A");
-        
+        String[] Questions ={"What was the name of your elementary school?","What was the color of your first car?",
+                "What month were you born in?"};
+        QuestionList = new JComboBox(Questions);
+        //public static List<String> Questions = Arrays.asList("What was the name of your elementary school?","What was the color of your first car?",
+         //       "What month were you born in?");
         loginDialog.setTitle("login");
         loginDialog.setBackground(new Color(0, 88, 5));
         loginDialog.setForeground(new Color(40, 151, 21));
@@ -1593,7 +1601,7 @@ public class ChartMyCourseMainPage extends JFrame {
      * @since 1.0
      */
     private void forgotPasswordButtonActionPerformed(ActionEvent eventHappens) {
-        // TODO add forgot password functionality
+        int qIndex = curUser.getQuestionSelected();
     }
 
     /**

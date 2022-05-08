@@ -1,10 +1,16 @@
 package chartmycourse.chartmycourse;
 
+import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class User {
-	
+
+	public int questionSelected;
+	public String answer;
+
+
 	public String realName;
 	public String userName;
 	public String email;
@@ -114,4 +120,19 @@ public class User {
 		this.courseList.remove(courseName);
 	}
 
+	public int getQuestionSelected() {
+		return questionSelected;
+	}
+
+	public void setQuestionSelected(int questionSelected) {
+		this.questionSelected = questionSelected;
+	}
+
+	public String getAnswer() {
+		return answer;
+	}
+
+	public void setAnswer(String answer) {
+		this.answer = answer;
+	}
 }
