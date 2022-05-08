@@ -702,6 +702,12 @@ public class ChartMyCourseMainPage extends JFrame {
         }
         reviewsTable.setDefaultEditor(Object.class,null);
 
+        /**
+         * This is the functionality of viewing a review.
+         * @author Mia Gortney
+         * @version 1.0
+         * @Since 1.0
+         */
         Action viewReview = new AbstractAction () {
 
             @Override
@@ -728,6 +734,12 @@ public class ChartMyCourseMainPage extends JFrame {
                     JButton flagButton = new JButton("Flag");
                     JButton removeFlagButton = new JButton("Remove Flag");
 
+                    /**
+                     * This is the functionality of flagging a review.
+                     * @author Mia Gortney
+                     * @version 1.0
+                     * @Since 1.0
+                     */
                     flagButton.addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
@@ -761,6 +773,12 @@ public class ChartMyCourseMainPage extends JFrame {
                         }
                     });
 
+                    /**
+                     * This is the functionality of removing a flag from a review.
+                     * @author Mia Gortney
+                     * @version 1.0
+                     * @Since 1.0
+                     */
                     removeFlagButton.addActionListener(new ActionListener() {
 
                         @Override
@@ -1057,6 +1075,12 @@ public class ChartMyCourseMainPage extends JFrame {
 
                     postDialog.add(postContents);
 
+                /**
+                 * This is the functionality of upvoting a post.
+                 * @author Mia Gortney
+                 * @version 1.0
+                 * @Since 1.0
+                 */
                     upvoteButton.addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
@@ -1085,6 +1109,13 @@ public class ChartMyCourseMainPage extends JFrame {
                             }
                         }
                     });
+
+                /**
+                 * This is the functionality of adding a reply to a post.
+                 * @author Mia Gortney
+                 * @version 1.0
+                 * @Since 1.0
+                 */
                     addReplyButton.addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
@@ -1142,6 +1173,13 @@ public class ChartMyCourseMainPage extends JFrame {
                             }
                         }
                     });
+
+                /**
+                 * This is the functionality of removing an upvote from a post.
+                 * @author Mia Gortney
+                 * @version 1.0
+                 * @Since 1.0
+                 */
                     removeUpvoteButton.addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
@@ -1196,6 +1234,12 @@ public class ChartMyCourseMainPage extends JFrame {
             }
         };
 
+        /**
+         * This is the functionality of viewing a reply.
+         * @author Mia Gortney
+         * @version 1.0
+         * @Since 1.0
+         */
         Action viewReply = new AbstractAction() {
 
             @Override
@@ -1219,6 +1263,12 @@ public class ChartMyCourseMainPage extends JFrame {
                 JButton upvoteButton = new JButton("Upvote");
                 JButton removeUpvoteButton = new JButton("Remove Upvote");
 
+                /**
+                 * This is the functionality of upvoting a reply.
+                 * @author Mia Gortney
+                 * @version 1.0
+                 * @Since 1.0
+                 */
                 upvoteButton.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
@@ -1253,6 +1303,12 @@ public class ChartMyCourseMainPage extends JFrame {
                     }
                 });
 
+                /**
+                 * This is the functionality of removing an upvote from a reply.
+                 * @author Mia Gortney
+                 * @version 1.0
+                 * @Since 1.0
+                 */
                 removeUpvoteButton.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
@@ -1326,6 +1382,8 @@ public class ChartMyCourseMainPage extends JFrame {
 
                         int option = JOptionPane.showConfirmDialog(null,
                                 "Are you sure you want to remove this reply?");
+
+                        // The reply is removed from the table and database.
                         if (option == 0) {
                             ((DefaultTableModel) replyTable.getModel()).removeRow(replyTable.getSelectedRow());
                             curPost.getReplies().remove(reply);
@@ -1335,6 +1393,7 @@ public class ChartMyCourseMainPage extends JFrame {
                             DefaultTableModel model = (DefaultTableModel) replyTable.getModel();
                             model.fireTableDataChanged();
 
+                            // The file is rewritten to record the change.
                             try {
                                 FileWriter myWriter = new FileWriter("posts.txt");
                                 for(int k = 0; k < postsArray.size(); k++) {
@@ -1391,6 +1450,9 @@ public class ChartMyCourseMainPage extends JFrame {
 
             @Override
             public void actionPerformed(ActionEvent e) {
+
+                // The replies are displayed in a table.
+
                 replyDialog = new JDialog(replyDialog, "View Reply");
                 replyDialog.setLayout(new GridLayout(1, 1));
                 Post post = postsArray.get(qAndATable.getSelectedRow());
@@ -1981,14 +2043,22 @@ public class ChartMyCourseMainPage extends JFrame {
         notLogged.pack();
         notLogged.setVisible(true);
     }
-	
+
+    /**
+     * This is the functionality to remove a review.
+     * @Author Mia Gortney
+     * @version 1.0
+     * @since 1.0
+     */
     private void removeReviewActionPerformed(ActionEvent eventHappens){
 
+        // The review is removed from the table and database.
     	int i = reviewsTable.getSelectedRow();
     	reviewtablemodel.removeRow(i);
         Review r = reviewArray.get(i);
         reviewArray.remove(r);
 
+        // The file is rewritten to record this change.
     		try {
         		FileWriter myWriter = new FileWriter("reviews.txt");
                 for (int k = 0; k < reviewArray.size(); k++) {
