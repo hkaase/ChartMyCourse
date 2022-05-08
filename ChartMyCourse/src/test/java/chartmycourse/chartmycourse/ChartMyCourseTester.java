@@ -30,7 +30,6 @@ public class ChartMyCourseTester {
     	box = new ChartMyCourseMainPage();
     }
 
-
     @Test
     @DisplayName("Recommended Professor")
     void recProf() {
@@ -43,20 +42,20 @@ public class ChartMyCourseTester {
         box.recommendedCoursesButtonActionPerformed(new ActionEvent("src", 2, "command"));
     }
 	
-      @Test
-  @DisplayName("Invalid Email")
-  void userEmailVerify() {
-  	Boolean caught = false;
-  	try {
+    @Test
+    @DisplayName("Invalid Email")
+    void userEmailVerify() {
+  	    Boolean caught = false;
+  	    try {
 			User user = new User("abc", "abcd", "12", "ab");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			caught = true;
 		} 
-  	assertTrue(caught);
-   }
+  	    assertTrue(caught);
+    }
 	
-   @Test
+    @Test
     @DisplayName("Add Review")
     void addReviewTest() {
     	box.addReviewButtonActionPerformed(new ActionEvent("src", 3, "command"));

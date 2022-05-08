@@ -75,8 +75,6 @@ public class ChartMyCourseMainPage extends JFrame {
     private JPanel reviewsPanel;
     private JTable reviewsTable;
     private JScrollPane reviewsTableScrollPane;
-    //private JLabel searchLabel;
-    //private JTextField searchText;
     private JButton saveCourseButton;
     private JButton saveProfButton;
     private JButton signupButton;
@@ -95,13 +93,6 @@ public class ChartMyCourseMainPage extends JFrame {
     private Post curPost;
     private JDialog replyDialog;
     private JButton removeDiscussionButton;
-
-    //This array holds the list of reviews.
-    private final ArrayList<Review> reviewArray = new ArrayList<>();
-    //This array holds the list of users.
-    private final ArrayList<User> userArray = new ArrayList<>();
-    //This array holds the list of posts.
-    private final ArrayList<Post> postsArray = new ArrayList<>();
     private Boolean loggedIn = false;
     private DefaultTableModel reviewtablemodel;
     private JButton removeReviewButton;
@@ -112,216 +103,175 @@ public class ChartMyCourseMainPage extends JFrame {
     private JTextField addDiscussionText;
     private JTextField addDiscussion;
 
+    //This array holds the list of reviews.
+    private final ArrayList<Review> reviewArray = new ArrayList<>();
+    //This array holds the list of users.
+    private final ArrayList<User> userArray = new ArrayList<>();
+    //This array holds the list of posts.
+    private final ArrayList<Post> postsArray = new ArrayList<>();
+
     private JComboBox QuestionList;
     
     public class ButtonColumn extends AbstractCellEditor
-	implements TableCellRenderer, TableCellEditor, ActionListener, MouseListener
-{
-	private JTable table;
-	private Action action;
-	private int mnemonic;
-	private Border originalBorder;
-	private Border focusBorder;
-
-	private JButton renderButton;
-	private JButton editButton;
-	private Object editorValue;
-	private boolean isButtonColumnEditor;
+	implements TableCellRenderer, TableCellEditor, ActionListener, MouseListener {
+	    private JTable table;
+	    private Action action;
+	    private int mnemonic;
+	    private Border originalBorder;
+	    private Border focusBorder;
+	    private JButton renderButton;
+	    private JButton editButton;
+	    private Object editorValue;
+	    private boolean isButtonColumnEditor;
 
 
-	/**
-	 *  Create the ButtonColumn to be used as a renderer and editor. The
-	 *  renderer and editor will automatically be installed on the TableColumn
-	 *  of the specified column.
-	 *
-	 *  @param table the table containing the button renderer/editor
-	 *  @param action the Action to be invoked when the button is invoked
-	 *  @param column the column to which the button renderer/editor is added
-	 */
-	public ButtonColumn(JTable table, Action action, int column)
-	{
-		this.table = table;
-		this.action = action;
+	    /**
+	    *  Create the ButtonColumn to be used as a renderer and editor. The
+	    *  renderer and editor will automatically be installed on the TableColumn
+	    *  of the specified column.
+	    *
+	    *  @param table the table containing the button renderer/editor
+	    *  @param action the Action to be invoked when the button is invoked
+	    *  @param column the column to which the button renderer/editor is added
+	    */
+	    public ButtonColumn(JTable table, Action action, int column) {
 
-		renderButton = new JButton("Action");
-		editButton = new JButton("Action");
-		editButton.setFocusPainted( false );
-		editButton.addActionListener( this );
-		originalBorder = editButton.getBorder();
-		setFocusBorder( new LineBorder(Color.BLUE) );
+		    this.table = table;
+		    this.action = action;
 
-		TableColumnModel columnModel = table.getColumnModel();
-		columnModel.getColumn(column).setCellRenderer( this );
-		columnModel.getColumn(column).setCellEditor( this );
-		table.addMouseListener( this );
-	}
+		    renderButton = new JButton("Action");
+		    editButton = new JButton("Action");
+		    editButton.setFocusPainted( false );
+		    editButton.addActionListener( this );
+		    originalBorder = editButton.getBorder();
+		    setFocusBorder( new LineBorder(Color.BLUE) );
+
+		    TableColumnModel columnModel = table.getColumnModel();
+		    columnModel.getColumn(column).setCellRenderer( this );
+		    columnModel.getColumn(column).setCellEditor( this );
+		    table.addMouseListener( this );
+	    }
 
 
-	/**
-	 *  Get foreground color of the button when the cell has focus
-	 *
-	 *  @return the foreground color
-	 */
-	public Border getFocusBorder()
-	{
-		return focusBorder;
-	}
+	    /**
+	    *  Get foreground color of the button when the cell has focus
+	    *
+	    *  @return the foreground color
+	    */
+	    public Border getFocusBorder() {
+		    return focusBorder;
+	    }
 
-	/**
-	 *  The foreground color of the button when the cell has focus
-	 *
-	 *  @param focusBorder the foreground color
-	 */
-	public void setFocusBorder(Border focusBorder)
-	{
-		this.focusBorder = focusBorder;
-		editButton.setBorder( focusBorder );
-	}
+	    /**
+	    *  The foreground color of the button when the cell has focus
+	    *
+	    *  @param focusBorder the foreground color
+	    */
+	    public void setFocusBorder(Border focusBorder) {
+		    this.focusBorder = focusBorder;
+		    editButton.setBorder( focusBorder );
+	    }
 
-	public int getMnemonic()
-	{
-		return mnemonic;
-	}
+	    public int getMnemonic() {
+		    return mnemonic;
+	    }
 
-	/**
-	 *  The mnemonic to activate the button when the cell has focus
-	 *
-	 *  @param mnemonic the mnemonic
-	 */
-	public void setMnemonic(int mnemonic)
-	{
-		this.mnemonic = mnemonic;
-		renderButton.setMnemonic(mnemonic);
-		editButton.setMnemonic(mnemonic);
-	}
+	    /**
+	    *  The mnemonic to activate the button when the cell has focus
+	    *
+	    *  @param mnemonic the mnemonic
+	    */
+	    public void setMnemonic(int mnemonic) {
+		    this.mnemonic = mnemonic;
+		    renderButton.setMnemonic(mnemonic);
+		    editButton.setMnemonic(mnemonic);
+	    }
 
-	@Override
-	public Component getTableCellEditorComponent(
-		JTable table, Object value, boolean isSelected, int row, int column)
-	{
-		if (value == null)
-		{
-			editButton.setText( "" );
-			editButton.setIcon( null );
-		}
-		else if (value instanceof Icon)
-		{
-			editButton.setText( "" );
-			editButton.setIcon( (Icon)value );
-		}
-		else
-		{
-			editButton.setText( value.toString() );
-			editButton.setIcon( null );
-		}
+	    @Override
+	    public Component getTableCellEditorComponent(
+		    JTable table, Object value, boolean isSelected, int row, int column) {
 
-		this.editorValue = value;
-		return editButton;
-	}
+		    if (value == null) {
+			    editButton.setText( "" );
+			    editButton.setIcon( null );
+		    } else if (value instanceof Icon) {
+			    editButton.setText( "" );
+			    editButton.setIcon( (Icon)value );
+		    } else {
+			    editButton.setText( value.toString() );
+			    editButton.setIcon( null );
+		    }
 
-	@Override
-	public Object getCellEditorValue()
-	{
-		return editorValue;
-	}
+		    this.editorValue = value;
+		    return editButton;
+	    }
 
-//
-//  Implement TableCellRenderer interface
-//
+	    @Override
+	    public Object getCellEditorValue() {
+		    return editorValue;
+        }
+
 	public Component getTableCellRendererComponent(
-		JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column)
-	{
-		if (isSelected)
-		{
-			renderButton.setForeground(table.getSelectionForeground());
-	 		renderButton.setBackground(table.getSelectionBackground());
-		}
-		else
-		{
-			renderButton.setForeground(table.getForeground());
-			renderButton.setBackground(UIManager.getColor("Button.background"));
-		}
+		JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
 
-		if (hasFocus)
-		{
-			renderButton.setBorder( focusBorder );
-		}
-		else
-		{
-			renderButton.setBorder( originalBorder );
-		}
+		    if (isSelected) {
+			    renderButton.setForeground(table.getSelectionForeground());
+	 		    renderButton.setBackground(table.getSelectionBackground());
+		    } else {
+			    renderButton.setForeground(table.getForeground());
+			    renderButton.setBackground(UIManager.getColor("Button.background"));
+		    }
 
-//		renderButton.setText( (value == null) ? "" : value.toString() );
-		if (value == null)
-		{
-			renderButton.setText( "" );
-			renderButton.setIcon( null );
-		}
-		else if (value instanceof Icon)
-		{
-			renderButton.setText( "" );
-			renderButton.setIcon( (Icon)value );
-		}
-		else
-		{
-			renderButton.setText( value.toString() );
-			renderButton.setIcon( null );
-		}
+		    if (hasFocus) {
+			    renderButton.setBorder( focusBorder );
+		    } else {
+			    renderButton.setBorder( originalBorder );
+		    }
 
-		return renderButton;
-	}
+		    if (value == null) {
+			    renderButton.setText( "" );
+			    renderButton.setIcon( null );
+		    } else if (value instanceof Icon) {
+			    renderButton.setText( "" );
+			    renderButton.setIcon( (Icon)value );
+		    } else {
+			    renderButton.setText( value.toString() );
+			    renderButton.setIcon( null );
+		    }
 
-//
-//  Implement ActionListener interface
-//
-	/*
-	 *	The button has been pressed. Stop editing and invoke the custom Action
-	 */
-	public void actionPerformed(ActionEvent e)
-	{
-		int row = table.convertRowIndexToModel( table.getEditingRow() );
-		fireEditingStopped();
+		    return renderButton;
+	    }
 
-		//  Invoke the Action
+	    /*
+	     *	The button has been pressed. Stop editing and invoke the custom Action
+	    */
+	    public void actionPerformed(ActionEvent e) {
+		    int row = table.convertRowIndexToModel( table.getEditingRow() );
+		    fireEditingStopped();
 
-		ActionEvent event = new ActionEvent(
-			table,
-			ActionEvent.ACTION_PERFORMED,
-			"" + row);
-		action.actionPerformed(event);
-	}
+		    ActionEvent event = new ActionEvent(table, ActionEvent.ACTION_PERFORMED, "" + row);
+		    action.actionPerformed(event);
+	    }
 
-//
-//  Implement MouseListener interface
-//
-	/*
-	 *  When the mouse is pressed the editor is invoked. If you then then drag
-	 *  the mouse to another cell before releasing it, the editor is still
-	 *  active. Make sure editing is stopped when the mouse is released.
-	 */
-    public void mousePressed(MouseEvent e)
-    {
-    	if (table.isEditing()
-		&&  table.getCellEditor() == this)
-			isButtonColumnEditor = true;
+	    /*
+	    *  When the mouse is pressed the editor is invoked. If you then then drag
+	    *  the mouse to another cell before releasing it, the editor is still
+	    *  active. Make sure editing is stopped when the mouse is released.
+	    */
+        public void mousePressed(MouseEvent e) {
+    	    if (table.isEditing() && table.getCellEditor() == this) isButtonColumnEditor = true;
+        }
+
+        public void mouseReleased(MouseEvent e) {
+    	    if (isButtonColumnEditor && table.isEditing()) table.getCellEditor().stopCellEditing();
+            isButtonColumnEditor = false;
+        }
+
+        public void mouseClicked(MouseEvent e) {}
+	    public void mouseEntered(MouseEvent e) {}
+        public void mouseExited(MouseEvent e) {}
     }
 
-    public void mouseReleased(MouseEvent e)
-    {
-    	if (isButtonColumnEditor
-    	&&  table.isEditing())
-    		table.getCellEditor().stopCellEditing();
-
-		isButtonColumnEditor = false;
-    }
-
-    public void mouseClicked(MouseEvent e) {}
-	public void mouseEntered(MouseEvent e) {}
-    public void mouseExited(MouseEvent e) {}
-}
-	
-    
-    
     /**
      * Constructor function, makes declaration of instance display. 
      * @author Harm Drenth
