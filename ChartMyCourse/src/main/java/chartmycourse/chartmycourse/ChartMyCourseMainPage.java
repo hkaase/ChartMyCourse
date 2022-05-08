@@ -44,6 +44,8 @@ public class ChartMyCourseMainPage extends JFrame {
     private JLabel securityQuestionLabel;
     private JTextField nameTextField;
     private JTextField securityQuestionField;
+    private JLabel forgotPasswordUserToResetLabel;
+    private JTextField forgotPasswordUserToReset;
     private JPasswordField passwordField;
     private JPasswordField passwordField1;
     private JLabel passwordLabel;
@@ -84,6 +86,11 @@ public class ChartMyCourseMainPage extends JFrame {
     private JButton signupButton;
     private JDialog signupDialog;
     private JDialog forgotPasswordDialog;
+    private JLabel forgotPasswordChallengePrompt;
+    private JTextField forgotPasswordChallengeAnswer;
+    private JLabel forgotPasswordNewPasswordLabel;
+    private JTextField forgotPasswordNewPassword;
+    private JButton forgotPasswordSubmitButton;
     private JButton signupFormButton;
     private JTextField usernameField;
     private JLabel usernameLabel;
@@ -415,6 +422,14 @@ public class ChartMyCourseMainPage extends JFrame {
         removeDiscussionButton = new JButton();
         qAndAHeader = new JLabel("Q&A");
         
+        forgotPasswordChallengePrompt = new JLabel();
+        forgotPasswordChallengeAnswer = new JTextField();
+        forgotPasswordNewPasswordLabel = new JLabel();
+        forgotPasswordNewPassword = new JTextField();
+        forgotPasswordSubmitButton = new JButton();
+        forgotPasswordUserToResetLabel = new JLabel();
+        forgotPasswordUserToReset = new JTextField();
+        
         loginDialog.setTitle("login");
         loginDialog.setBackground(new Color(0, 88, 5));
         loginDialog.setForeground(new Color(40, 151, 21));
@@ -440,7 +455,7 @@ public class ChartMyCourseMainPage extends JFrame {
         });
 
         
-
+        emailLabel.setText("email:");
 
         //Set text of label for password field.
         passwordLabel.setText("password:");
@@ -1639,6 +1654,31 @@ public class ChartMyCourseMainPage extends JFrame {
                     .addComponent(qAndAPanel, GroupLayout.PREFERRED_SIZE, 325, GroupLayout.PREFERRED_SIZE)
                     .addContainerGap(61, Short.MAX_VALUE)))
         );
+        
+        JPanel forgotPasswordPanel = new JPanel();
+        forgotPasswordChallengePrompt.setText("Enter favorite color:");
+        forgotPasswordChallengeAnswer.setText("Enter fav color");
+        forgotPasswordPanel.add(forgotPasswordChallengePrompt);
+        forgotPasswordPanel.add(forgotPasswordChallengeAnswer);
+        forgotPasswordNewPasswordLabel.setText("Type new password:");
+        forgotPasswordNewPassword.setText("Enter new password");
+        forgotPasswordPanel.add(forgotPasswordNewPasswordLabel);
+        forgotPasswordPanel.add(forgotPasswordNewPassword);
+        forgotPasswordUserToResetLabel.setText("Username to reset:");
+        forgotPasswordUserToReset.setText("Enter Username");
+        forgotPasswordPanel.add(forgotPasswordUserToResetLabel);
+        forgotPasswordPanel.add(forgotPasswordUserToReset);
+        forgotPasswordSubmitButton.setText("Submit");
+        forgotPasswordSubmitButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent eventHappens) {
+            	forgotPasswordSubmitButtonActionPerformed(eventHappens);
+            }
+        });
+        forgotPasswordPanel.add(forgotPasswordSubmitButton);
+
+        forgotPasswordDialog.setSize(new Dimension(600, 300));
+
+        forgotPasswordDialog.add(forgotPasswordPanel);
 
         reviewsPanel.setVisible(false);
         planningPanel.setVisible(false);
@@ -1667,7 +1707,49 @@ public class ChartMyCourseMainPage extends JFrame {
      * @since 1.0
      */
     private void forgotPasswordButtonActionPerformed(ActionEvent eventHappens) {
-        // TODO add forgot password functionality
+        forgotPasswordDialog.setVisible(true);
+    }
+    
+    /**
+     * This is the submit forgot password listener
+     * @author Harm Drenth
+     * @version 1.0
+     * @since 1.0
+     */
+    private void forgotPasswordSubmitButtonActionPerformed(ActionEvent eventHappens) {
+    	if (!(forgotPasswordChallengeAnswer.getText().equals("") ||  forgotPasswordNewPassword.getText().equals("") || forgotPasswordUserToReset.getText().equals(""))) {
+    		
+    		String correctAnswer = null;
+    		String userToSearch = forgotPasswordUserToReset.getText();
+    		User foundUser = null;
+    		
+    		for (User iter : userArray) {
+    			if (iter.getUserName().equals(userToSearch)) {
+    				foundUser = iter;
+    				correctAnswer = iter.getSecQuestionAnswer();
+    			}
+    		}
+    		
+    		if (foundUser == null) {
+            	JOptionPane.showMessageDialog(null, "Could not find that user!");
+    		}
+    		else {
+    			if (forgotPasswordChallengeAnswer.getText().equals(correctAnswer)) {
+        			foundUser.setPassword(forgotPasswordNewPassword.getText());
+                	JOptionPane.showMessageDialog(null, "Password reset!");
+                	forgotPasswordDialog.setVisible(false);
+
+        		}
+    			else {
+                	JOptionPane.showMessageDialog(null, "Incorrect security question answer!");
+    			}
+    		}
+    		
+    		
+    	}
+    	else {
+        	JOptionPane.showMessageDialog(null, "No fields can be empty.");
+    	}
     }
 
     /**
