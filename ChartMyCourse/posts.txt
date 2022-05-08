@@ -1,6 +1,6 @@
-Harm Drenth,1,0,What
-Ricardo Boone,1,1,What,Mia
-Warren Burrus,0,0,What
+Harm Drenth,1,0,Is booth a good teacher?
+Ricardo Boone,1,1,What,I think that Discrete Structures sucks
+Warren Burrus,0,0,Where should I live on campus?
 Chase Harris,0,1,Hi Mia!!,Chase Harris
 Mia,0,0,Hello. This is my discussion.
 Mia,0,0,This is my discussion post. Hello!
